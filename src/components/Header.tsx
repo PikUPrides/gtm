@@ -1,8 +1,8 @@
 import { user, Link } from '../api/sdk.js';
 import { useState, useEffect, useRef } from 'react';
 
-// Logo text - used in header (login page uses image logo)
-const LOGO_TEXT = "AYRO";
+// Logo image URL
+const LOGO_URL = "https://cdn.serenitiesai.com/users%2Fcmi4jt7ry000hac5w14sjqi0q%2Ffiles%2F3311a7527e1130b22957919e233c6c0b-Ayro_Primary_-_2.png?token=ImX7QJBG-FXH81gWQbF8mzLYIrhaHXL0d16fcWXtyrQ&expires=1773493152";
 
 export default function Header({ showBackLink = false }) {
   const [currentUser, setCurrentUser] = useState(null);
@@ -85,7 +85,7 @@ export default function Header({ showBackLink = false }) {
         <div className="flex items-center justify-between w-full sm:w-auto">
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
-              <span className="text-2xl font-bold" style={{color: '#423DF9'}}>{LOGO_TEXT}</span>
+              <img src={LOGO_URL} alt="AYRO" className="h-8 w-auto" />
             </Link>
             {/* Desktop Navigation - aligned left */}
             <nav className="hidden sm:flex items-center gap-1">
@@ -274,7 +274,7 @@ export default function Header({ showBackLink = false }) {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-4 px-4 sm:px-6 py-3 bg-white border-b border-gray-200">
       <div className="flex items-center gap-4">
-        <span className="text-2xl font-bold" style={{color: '#423DF9'}}>{LOGO_TEXT}</span>
+        <img src={LOGO_URL} alt="AYRO" className="h-8 w-auto" />
         <Link to="/" className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 text-sm">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
