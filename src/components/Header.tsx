@@ -124,8 +124,8 @@ export default function Header({ showBackLink = false }) {
           </div>
         </div>
         
-        {/* Desktop Navigation */}
-        <nav className="hidden sm:flex items-center gap-1 ml-6">
+        {/* Desktop Navigation - aligned left */}
+        <nav className="hidden sm:flex items-center gap-1">
           {navLinks.map((link) => (
             <Link
               key={link.href}
