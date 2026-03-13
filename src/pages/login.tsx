@@ -37,7 +37,7 @@ export default function Page() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <img 
-            src="https://minimax-algeng-chat-tts-us.oss-us-east-1.aliyuncs.com/ccv2%2F2026-03-13%2FMiniMax-M2.5%2F1928270917536846329%2F13d462df23deb3f5078793ad5bd37e73b9a7d0e931c32e1aeaf945e414c1397e..png?Expires=1773484016&OSSAccessKeyId=LTAI5tCpJNKCf5EkQHSuL9xg&Signature=N2CcNxSprBJdlCsi1nusC4ZPEvI%3D" 
+            src="https://minimax-algeng-chat-tts-us.oss-us-east-1.aliyuncs.com/ccv2%2F2026-03-13%2FMiniMax-M2.5%2F1928270917536846329%2F628b2f477ff8587e0103f91867aff48f9578fdf48d055b718c8d40734b7638d1..png?Expires=1773486238&OSSAccessKeyId=LTAI5tCpJNKCf5EkQHSuL9xg&Signature=ne8%2ByZHlWgYjS8xBOIrHeR3epeo%3D" 
             alt="AYRO" 
             className="h-20 w-auto mx-auto mb-4" 
           />
