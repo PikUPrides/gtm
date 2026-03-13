@@ -36,7 +36,7 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <div className="max-w-4xl mx-auto p-6 pt-36">
+      <div className="max-w-4xl mx-auto p-6 pt-40">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-extrabold text-gray-900 mb-2">1 Million Downloads in 90 Days</h2>
           <p className="text-gray-500 text-base">From Soft Launch to Full Launch &mdash; a month-by-month playbook.</p>

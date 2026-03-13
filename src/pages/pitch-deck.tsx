@@ -32,7 +32,7 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <div className="max-w-4xl mx-auto p-6 pt-20">
+      <div className="max-w-4xl mx-auto p-6 pt-40">
         <div className="text-center mb-10">
           <div className="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3" style={{background:'#f3eeff',color:'#6b21a8',border:'1px solid #d8ccf5'}}>Full Research Guide</div>
           <h2 className="text-3xl font-extrabold text-gray-900 mb-2">How to Craft a Pitch Deck for Angel Investors & Seed Funding</h2>
