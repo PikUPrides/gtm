@@ -13,7 +13,7 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10 pt-56">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10 pt-72">
         <h2 className="text-gray-900 text-xl sm:text-2xl font-bold mb-1">Marketing Assets</h2>
         <p className="text-gray-500 text-sm mb-8">Browse strategy decks and marketing materials.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
