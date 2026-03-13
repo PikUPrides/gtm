@@ -13,8 +13,8 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <div className="max-w-4xl mx-auto px-6 py-10">
-        <h2 className="text-gray-900 text-xl font-bold mb-1">Marketing Assets</h2>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+        <h2 className="text-gray-900 text-xl sm:text-2xl font-bold mb-1">Marketing Assets</h2>
         <p className="text-gray-500 text-sm mb-8">Browse strategy decks and marketing materials.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {items.map(item => (

@@ -6,11 +6,11 @@ export default function Page() {
   return (
     <div className="min-h-screen flex flex-col" style={{background:'#ffffff'}}>
       <Header />
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex items-center justify-center p-3 sm:p-6">
         <div className="w-full max-w-5xl rounded-xl overflow-hidden" style={{boxShadow:'0 30px 80px rgba(0,0,0,0.15)'}}>
-          <div className="px-9 py-4 flex items-center justify-between" style={{background:'linear-gradient(135deg,#0b1a30 0%,#1a3a6a 100%)'}}>
-            <div className="text-white text-xl font-extrabold">Go-to-<span style={{color:'#007aff'}}>Market Strategy</span></div>
-            <div className="flex items-center gap-2">
+          <div className="px-4 sm:px-9 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0" style={{background:'linear-gradient(135deg,#0b1a30 0%,#1a3a6a 100%)'}}>
+            <div className="text-white text-lg sm:text-xl font-extrabold text-center sm:text-left">Go-to-<span style={{color:'#007aff'}}>Market Strategy</span></div>
+            <div className="flex items-center justify-center sm:justify-end gap-2">
               <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-black" style={{background:'#007aff'}}>A</div>
               <div className="text-white text-sm font-bold opacity-85">AYRO Rides</div>
             </div>
