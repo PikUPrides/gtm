@@ -7,7 +7,7 @@ export default function Page() {
     <div className="min-h-screen bg-white">
       <Header />
       
-      <div className="max-w-4xl mx-auto p-4 sm:p-6 pt-24 pb-8">
+      <div className="max-w-4xl mx-auto p-4 sm:p-6 pt-32 pb-8">
         <div className="text-center mb-8">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">Ultimate Guide to Your First Pitch Deck</h2>
           <p className="text-gray-500 text-base">Ed Kang's proven 10-slide framework for early-stage founders</p>
