@@ -8,10 +8,12 @@ export default function Header({ showBackLink = false }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [showStrategyDropdown, setShowStrategyDropdown] = useState(false);
   const [showDataDropdown, setShowDataDropdown] = useState(false);
+  const [showDemoDropdown, setShowDemoDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const strategyDropdownRef = useRef(null);
   const dataDropdownRef = useRef(null);
+  const demoDropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
   const userButtonRef = useRef(null);
   const userButtonMobileRef = useRef(null);
@@ -36,6 +38,9 @@ export default function Header({ showBackLink = false }) {
       }
       if (dataDropdownRef.current && !dataDropdownRef.current.contains(event.target)) {
         setShowDataDropdown(false);
+      }
+      if (demoDropdownRef.current && !demoDropdownRef.current.contains(event.target)) {
+        setShowDemoDropdown(false);
       }
       // Don't close user dropdown if clicking on either profile button
       const isUserButtonClick = 
@@ -75,6 +80,13 @@ export default function Header({ showBackLink = false }) {
     { href: '/data', label: 'Data Overview' },
     { href: '/data/analytics', label: 'Analytics' },
     { href: '/data/reports', label: 'Reports' },
+  ];
+
+  // Demo dropdown items
+  const demoItems = [
+    { href: '/demo', label: 'Demo Overview' },
+    { href: '/demo/signup', label: 'Signup Flow' },
+    { href: '/demo/dashboard', label: 'Dashboard' },
   ];
 
   // Full header with navigation (for main pages)
