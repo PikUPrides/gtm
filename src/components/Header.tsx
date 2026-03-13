@@ -8,8 +8,10 @@ export default function Header({ showBackLink = false }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [showStrategyDropdown, setShowStrategyDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const strategyDropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
+  const mobileMenuRef = useRef(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -30,6 +32,9 @@ export default function Header({ showBackLink = false }) {
       }
       if (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) {
         setShowUserDropdown(false);
+      }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !event.target.closest('.mobile-menu-btn')) {
+        setIsMobileMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -64,12 +69,18 @@ export default function Header({ showBackLink = false }) {
           </Link>
           {/* Mobile menu button */}
           <button
-            onClick={() => setShowStrategyDropdown(!showStrategyDropdown)}
-            className="sm:hidden p-2 rounded-md hover:bg-gray-100"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="sm:hidden p-2 rounded-md hover:bg-gray-100 mobile-menu-btn"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            {isMobileMenuOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
           </button>
         </div>
         
@@ -113,13 +124,13 @@ export default function Header({ showBackLink = false }) {
         </nav>
 
         {/* Mobile Navigation Menu */}
-        {showStrategyDropdown && (
-          <nav className="sm:hidden flex flex-col gap-1 pb-2 border-t border-gray-100 pt-3">
+        {isMobileMenuOpen && (
+          <nav ref={mobileMenuRef} className="sm:hidden flex flex-col gap-1 pb-2 border-t border-gray-100 pt-3">
             {strategyItems.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
-                onClick={() => setShowStrategyDropdown(false)}
+                onClick={() => setIsMobileMenuOpen(false)}
                 className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
               >
                 {item.label}
