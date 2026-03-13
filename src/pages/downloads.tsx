@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from '../api/sdk.js';
+import Header from '../components/Header.jsx';
 
 const m1 = [
   { icon:'\u{1F697}', title:'Driver Supply First', side:'Driver', kpi:'500 active drivers before soft launch day', items:['Target 500+ active drivers in DFW before going public \u2014 no marketplace launches with empty supply','Post aggressively on Indeed, ZipRecruiter, iHire Transportation, Snagajob with "earn 60% more than Uber" headline','Infiltrate Uberpeople.net & rideshare Facebook groups \u2014 existing frustrated Uber/Lyft drivers are your #1 source','Offer first 500 drivers a 3-month platform fee waiver \u2014 removes all friction to signing up','Partner with Platinum Drivers & TransForce for pre-vetted driver pipelines'] },

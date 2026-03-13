@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from '../api/sdk.js';
+import Header from '../components/Header.jsx';
 
 const compare = [['Capital Source','Personal wealth','Pooled fund / LPs'],['Check Size','$10K-$500K','$1M-$20M+'],['Decision Driver','Founder + problem belief','Metrics, scale, exit path'],['Traction Required','MVP, waitlist, early validation','MRR, ARR, growth rates'],['Speed to Close','Weeks','Months'],['Deck Tone','Story-driven, founder-first','Data-heavy, investment memo']];
 
