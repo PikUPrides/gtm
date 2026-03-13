@@ -36,10 +36,12 @@ export default function Page() {
     <div className="min-h-screen flex items-center justify-center p-6 bg-gray-50">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="mx-auto w-48 h-16 flex items-center justify-center" style={{background: '#000000'}}>
-            <span className="font-bold" style={{fontSize: '42px', color: '#3B82F6', letterSpacing: '6px', fontFamily: 'system-ui, -apple-system, sans-serif'}}>AYRO</span>
-          </div>
-          <p className="text-gray-500 text-sm mt-4">Sign in to access assets</p>
+          <img 
+            src="https://minimax-algeng-chat-tts-us.oss-us-east-1.aliyuncs.com/ccv2%2F2026-03-13%2FMiniMax-M2.5%2F1928270917536846329%2F13d462df23deb3f5078793ad5bd37e73b9a7d0e931c32e1aeaf945e414c1397e..png?Expires=1773484016&OSSAccessKeyId=LTAI5tCpJNKCf5EkQHSuL9xg&Signature=N2CcNxSprBJdlCsi1nusC4ZPEvI%3D" 
+            alt="AYRO" 
+            className="h-20 w-auto mx-auto mb-4" 
+          />
+          <p className="text-gray-500 text-sm">Sign in to access assets</p>
         </div>
         <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
           {error && <div className="mb-4 p-3 rounded-lg bg-red-50 text-red-600 text-sm border border-red-200">{error}</div>}

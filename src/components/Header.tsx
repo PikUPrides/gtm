@@ -39,10 +39,11 @@ export default function Header({ showBackLink = false }) {
       <header className="border-b border-gray-200 px-4 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 bg-white">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center" style={{ width: '40px', height: '40px', background: 'linear-gradient(135deg, #423DF9 0%, #7742F1 100%)', borderRadius: '10px' }}>
-              <span className="text-white font-bold" style={{ fontSize: '20px' }}>A</span>
-            </div>
-            <span className="text-gray-900 font-bold text-xl" style={{ letterSpacing: '3px' }}>AYRO</span>
+            <img 
+              src="https://minimax-algeng-chat-tts-us.oss-us-east-1.aliyuncs.com/ccv2%2F2026-03-13%2FMiniMax-M2.5%2F1928270917536846329%2F13d462df23deb3f5078793ad5bd37e73b9a7d0e931c32e1aeaf945e414c1397e..png?Expires=1773484016&OSSAccessKeyId=LTAI5tCpJNKCf5EkQHSuL9xg&Signature=N2CcNxSprBJdlCsi1nusC4ZPEvI%3D" 
+              alt="AYRO" 
+              className="h-16 w-auto" 
+            />
           </div>
         </div>
         {currentUser && (
@@ -84,7 +85,7 @@ export default function Header({ showBackLink = false }) {
   return (
     <header className="flex items-center gap-4 px-6 py-3 bg-white border-b border-gray-200">
       <img 
-        src="https://minimax-algeng-chat-tts-us.oss-us-east-1.aliyuncs.com/ccv2%2F2026-03-09%2FMiniMax-M2.5%2F1928270917536846329%2F628b2f477ff8587e0103f91867aff48f9578fdf48d055b718c8d40734b7638d1..png?Expires=1773138871&OSSAccessKeyId=LTAI5tCpJNKCf5EkQHSuL9xg&Signature=mrnIqkws39CUzWsyKlL649U2wBY%3D" 
+        src="https://minimax-algeng-chat-tts-us.oss-us-east-1.aliyuncs.com/ccv2%2F2026-03-13%2FMiniMax-M2.5%2F1928270917536846329%2F13d462df23deb3f5078793ad5bd37e73b9a7d0e931c32e1aeaf945e414c1397e..png?Expires=1773484016&OSSAccessKeyId=LTAI5tCpJNKCf5EkQHSuL9xg&Signature=N2CcNxSprBJdlCsi1nusC4ZPEvI%3D" 
         alt="AYRO" 
         className="h-16 w-auto" 
       />
