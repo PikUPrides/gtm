@@ -85,7 +85,7 @@ export default function Header({ showBackLink = false }) {
         <div className="flex items-center justify-between w-full sm:w-auto">
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
-              <img src={LOGO_URL} alt="AYRO" className="h-8 w-auto" />
+              <img src={LOGO_URL} alt="AYRO" className="h-10 w-auto" />
             </Link>
             {/* Desktop Navigation - aligned left */}
             <nav className="hidden sm:flex items-center gap-1">
@@ -274,7 +274,7 @@ export default function Header({ showBackLink = false }) {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-4 px-4 sm:px-6 py-3 bg-white border-b border-gray-200">
       <div className="flex items-center gap-4">
-        <img src={LOGO_URL} alt="AYRO" className="h-8 w-auto" />
+        <img src={LOGO_URL} alt="AYRO" className="h-10 w-auto" />
         <Link to="/" className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 text-sm">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
