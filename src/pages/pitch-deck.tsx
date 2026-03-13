@@ -31,7 +31,7 @@ const mistakes = ['Sending the same deck to angels and VCs','Overloading with fi
 export default function Page() {
   return (
     <div className="min-h-screen bg-white">
-      <header className="flex items-center gap-4 px-6 py-3 bg-white border-b border-gray-200"><img src="https://minimax-algeng-chat-tts-us.oss-us-east-1.aliyuncs.com/ccv2%2F2026-03-13%2FMiniMax-M2.5%2F1928270917536846329%2F13d462df23deb3f5078793ad5bd37e73b9a7d0e931c32e1aeaf945e414c1397e..png?Expires=1773484016&OSSAccessKeyId=LTAI5tCpJNKCf5EkQHSuL9xg&Signature=N2CcNxSprBJdlCsi1nusC4ZPEvI%3D" alt="AYRO" className="h-12 w-auto" /><Link to="/" className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 text-sm"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>Back</Link></header>
+      <Header />
       <div className="max-w-4xl mx-auto p-6">
         <div className="text-center mb-10">
           <div className="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3" style={{background:'#f3eeff',color:'#6b21a8',border:'1px solid #d8ccf5'}}>Full Research Guide</div>
