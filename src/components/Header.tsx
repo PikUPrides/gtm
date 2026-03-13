@@ -12,6 +12,7 @@ export default function Header({ showBackLink = false }) {
   const strategyDropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
   const userButtonRef = useRef(null);
+  const userButtonMobileRef = useRef(null);
   const mobileMenuRef = useRef(null);
 
   useEffect(() => {
@@ -31,9 +32,11 @@ export default function Header({ showBackLink = false }) {
       if (strategyDropdownRef.current && !strategyDropdownRef.current.contains(event.target)) {
         setShowStrategyDropdown(false);
       }
-      // Don't close user dropdown if clicking on the profile button itself
-      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target) && 
-          !userButtonRef.current?.contains(event.target)) {
+      // Don't close user dropdown if clicking on either profile button
+      const isUserButtonClick = 
+        userButtonRef.current?.contains(event.target) || 
+        userButtonMobileRef.current?.contains(event.target);
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target) && !isUserButtonClick) {
         setShowUserDropdown(false);
       }
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !event.target.closest('.mobile-menu-btn')) {
@@ -75,8 +78,11 @@ export default function Header({ showBackLink = false }) {
             {currentUser && (
               <div className="relative" ref={userDropdownRef}>
                 <button
-                  ref={userButtonRef}
-                  onClick={() => setShowUserDropdown(!showUserDropdown)}
+                  ref={userButtonMobileRef}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowUserDropdown(!showUserDropdown);
+                  }}
                   className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
@@ -177,7 +183,10 @@ export default function Header({ showBackLink = false }) {
           <div className="relative hidden sm:block" ref={userDropdownRef}>
             <button
               ref={userButtonRef}
-              onClick={() => setShowUserDropdown(!showUserDropdown)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowUserDropdown(!showUserDropdown);
+              }}
               className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
             >
               <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
