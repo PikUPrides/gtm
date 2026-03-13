@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from '../api/sdk.js';
+import Header from '../components/Header.jsx';
 
 function AyroOrbitDiagram() {
   // Calculate equal spacing for 7 nodes around a circle

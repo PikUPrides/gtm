@@ -36,7 +36,16 @@ export default function Header({ showBackLink = false }) {
     window.location.href = '/login';
   };
 
-  // Full header with user dropdown (for Home page)
+  // Navigation links
+  const navLinks = [
+    { href: '/', label: 'Home' },
+    { href: '/gtm', label: 'GTM Strategy' },
+    { href: '/ayro-orbit', label: 'AYRO Orbit' },
+    { href: '/downloads', label: 'Downloads' },
+    { href: '/pitch-deck', label: 'Pitch Deck' },
+  ];
+
+  // Full header with navigation (for main pages)
   if (!showBackLink) {
     return (
       <header className="border-b border-gray-200 px-4 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 bg-white">
@@ -44,6 +53,17 @@ export default function Header({ showBackLink = false }) {
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold" style={{color: '#423DF9'}}>{LOGO_TEXT}</span>
           </div>
+          <nav className="hidden sm:flex items-center gap-1 ml-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                to={link.href}
+                className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 rounded-md hover:bg-gray-100 transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
         </div>
         {currentUser && (
           <div className="relative" ref={dropdownRef}>

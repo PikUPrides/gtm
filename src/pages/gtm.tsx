@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from '../api/sdk.js';
+import Header from '../components/Header.jsx';
 
 export default function Page() {
   return (
     <div className="min-h-screen flex flex-col" style={{background:'#ffffff'}}>
-      <header className="flex items-center gap-4 px-6 py-3 bg-white border-b border-gray-200">
-        <Link to="/" className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 text-sm"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>Back</Link>
-      </header>
+      <Header showBackLink={true} />
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-5xl rounded-xl overflow-hidden" style={{boxShadow:'0 30px 80px rgba(0,0,0,0.15)'}}>
           <div className="px-9 py-4 flex items-center justify-between" style={{background:'linear-gradient(135deg,#0b1a30 0%,#1a3a6a 100%)'}}>
