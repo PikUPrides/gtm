@@ -109,7 +109,7 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <div className="max-w-5xl mx-auto px-6 py-16">
+      <div className="max-w-5xl mx-auto px-6 py-16 pt-20">
         <div className="text-center mb-4">
           <h2 className="text-3xl font-extrabold text-gray-900 mb-3 tracking-wider">AYRO ORBIT</h2>
           <p className="text-gray-500 text-base max-w-2xl mx-auto leading-relaxed">
