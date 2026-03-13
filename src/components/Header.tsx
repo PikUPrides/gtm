@@ -43,8 +43,6 @@ export default function Header({ showBackLink = false }) {
 
   // Navigation links
   const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/downloads', label: 'Downloads' },
   ];
 
   // Strategy dropdown items
@@ -53,6 +51,7 @@ export default function Header({ showBackLink = false }) {
     { href: '/ayro-orbit', label: 'AYRO Orbit' },
     { href: '/pitch-deck', label: 'Pitch Deck' },
     { href: '/ed-kang-pitch-deck', label: 'Ed Kang Pitch Deck' },
+    { href: '/downloads', label: 'Downloads Strategy' },
   ];
 
   // Full header with navigation (for main pages)
@@ -79,11 +78,6 @@ export default function Header({ showBackLink = false }) {
                 onClick={() => setShowStrategyDropdown(!showStrategyDropdown)}
                 className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 rounded-md hover:bg-gray-100 transition-colors"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"/>
-                  <circle cx="12" cy="12" r="6"/>
-                  <circle cx="12" cy="12" r="2"/>
-                </svg>
                 Strategy
                 <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showStrategyDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
