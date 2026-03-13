@@ -7,9 +7,11 @@ const LOGO_TEXT = "AYRO";
 export default function Header({ showBackLink = false }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [showStrategyDropdown, setShowStrategyDropdown] = useState(false);
+  const [showDataDropdown, setShowDataDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const strategyDropdownRef = useRef(null);
+  const dataDropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
   const userButtonRef = useRef(null);
   const userButtonMobileRef = useRef(null);
@@ -31,6 +33,9 @@ export default function Header({ showBackLink = false }) {
     const handleClickOutside = (event) => {
       if (strategyDropdownRef.current && !strategyDropdownRef.current.contains(event.target)) {
         setShowStrategyDropdown(false);
+      }
+      if (dataDropdownRef.current && !dataDropdownRef.current.contains(event.target)) {
+        setShowDataDropdown(false);
       }
       // Don't close user dropdown if clicking on either profile button
       const isUserButtonClick = 
@@ -63,6 +68,13 @@ export default function Header({ showBackLink = false }) {
     { href: '/pitch-deck', label: 'Pitch Deck' },
     { href: '/ed-kang-pitch-deck', label: 'Ed Kang Pitch Deck' },
     { href: '/downloads', label: 'Downloads Strategy' },
+  ];
+
+  // Data dropdown items
+  const dataItems = [
+    { href: '/data', label: 'Data Overview' },
+    { href: '/data/analytics', label: 'Analytics' },
+    { href: '/data/reports', label: 'Reports' },
   ];
 
   // Full header with navigation (for main pages)
@@ -104,6 +116,32 @@ export default function Header({ showBackLink = false }) {
                         key={item.href}
                         to={item.href}
                         onClick={() => setShowStrategyDropdown(false)}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {/* Data Dropdown */}
+              <div className="relative" ref={dataDropdownRef}>
+                <button
+                  onClick={() => setShowDataDropdown(!showDataDropdown)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 rounded-md hover:bg-gray-100 transition-colors"
+                >
+                  Data
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showDataDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {showDataDropdown && (
+                  <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    {dataItems.map((item) => (
+                      <Link
+                        key={item.href}
+                        to={item.href}
+                        onClick={() => setShowDataDropdown(false)}
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                       >
                         {item.label}
@@ -168,7 +206,19 @@ export default function Header({ showBackLink = false }) {
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
           <nav ref={mobileMenuRef} className="sm:hidden flex flex-col gap-1 pb-2 border-t border-gray-100 pt-3">
+            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Strategy</div>
             {strategyItems.map((item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Data</div>
+            {dataItems.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
