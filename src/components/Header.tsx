@@ -162,6 +162,32 @@ export default function Header({ showBackLink = false }) {
                   </div>
                 )}
               </div>
+              {/* Demo Dropdown */}
+              <div className="relative" ref={demoDropdownRef}>
+                <button
+                  onClick={() => setShowDemoDropdown(!showDemoDropdown)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 rounded-md hover:bg-gray-100 transition-colors"
+                >
+                  Demo
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showDemoDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {showDemoDropdown && (
+                  <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    {demoItems.map((item) => (
+                      <Link
+                        key={item.href}
+                        to={item.href}
+                        onClick={() => setShowDemoDropdown(false)}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             </nav>
           </div>
           {/* Mobile: hamburger + profile on same line */}
@@ -231,6 +257,17 @@ export default function Header({ showBackLink = false }) {
             ))}
             <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Data</div>
             {dataItems.map((item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Demo</div>
+            {demoItems.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
