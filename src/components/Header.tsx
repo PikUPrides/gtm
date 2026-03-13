@@ -80,7 +80,7 @@ export default function Header({ showBackLink = false }) {
   // Full header with navigation (for main pages)
   if (!showBackLink) {
     return (
-      <header className="border-b border-gray-200 px-4 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 bg-white">
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 px-4 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 bg-white">
         {/* Left side: Logo + Navigation */}
         <div className="flex items-center justify-between w-full sm:w-auto">
           <div className="flex items-center gap-8">
@@ -272,7 +272,7 @@ export default function Header({ showBackLink = false }) {
 
   // Simple header with Back link (for other pages)
   return (
-    <header className="flex items-center justify-between gap-4 px-4 sm:px-6 py-3 bg-white border-b border-gray-200">
+    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-4 px-4 sm:px-6 py-3 bg-white border-b border-gray-200">
       <div className="flex items-center gap-4">
         <span className="text-2xl font-bold" style={{color: '#423DF9'}}>{LOGO_TEXT}</span>
         <Link to="/" className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 text-sm">
