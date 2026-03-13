@@ -5,7 +5,7 @@ import Header from '../components/Header.jsx';
 export default function Page() {
   return (
     <div className="min-h-screen flex flex-col" style={{background:'#ffffff'}}>
-      <Header showBackLink={true} />
+      <Header />
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-5xl rounded-xl overflow-hidden" style={{boxShadow:'0 30px 80px rgba(0,0,0,0.15)'}}>
           <div className="px-9 py-4 flex items-center justify-between" style={{background:'linear-gradient(135deg,#0b1a30 0%,#1a3a6a 100%)'}}>
