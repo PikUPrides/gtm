@@ -69,10 +69,51 @@ export default function Header({ showBackLink = false }) {
   if (!showBackLink) {
     return (
       <header className="border-b border-gray-200 px-4 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 bg-white">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="text-2xl font-bold" style={{color: '#423DF9'}}>{LOGO_TEXT}</span>
-          </Link>
+        {/* Left side: Logo + Navigation */}
+        <div className="flex items-center justify-between w-full sm:w-auto">
+          <div className="flex items-center gap-8">
+            <Link to="/" className="flex items-center gap-2">
+              <span className="text-2xl font-bold" style={{color: '#423DF9'}}>{LOGO_TEXT}</span>
+            </Link>
+            {/* Desktop Navigation - aligned left */}
+            <nav className="hidden sm:flex items-center gap-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 rounded-md hover:bg-gray-100 transition-colors"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              {/* Strategy Dropdown */}
+              <div className="relative" ref={strategyDropdownRef}>
+                <button
+                  onClick={() => setShowStrategyDropdown(!showStrategyDropdown)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 rounded-md hover:bg-gray-100 transition-colors"
+                >
+                  Strategy
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showStrategyDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {showStrategyDropdown && (
+                  <div className="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    {strategyItems.map((item) => (
+                      <Link
+                        key={item.href}
+                        to={item.href}
+                        onClick={() => setShowStrategyDropdown(false)}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </nav>
+          </div>
           {/* Mobile: hamburger + profile on same line */}
           <div className="flex items-center gap-2 sm:hidden">
             {currentUser && (
@@ -124,45 +165,6 @@ export default function Header({ showBackLink = false }) {
           </div>
         </div>
         
-        {/* Desktop Navigation - aligned left */}
-        <nav className="hidden sm:flex items-center gap-1">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              to={link.href}
-              className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 rounded-md hover:bg-gray-100 transition-colors"
-            >
-              {link.label}
-            </Link>
-          ))}
-          {/* Strategy Dropdown */}
-          <div className="relative" ref={strategyDropdownRef}>
-            <button
-              onClick={() => setShowStrategyDropdown(!showStrategyDropdown)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 rounded-md hover:bg-gray-100 transition-colors"
-            >
-              Strategy
-              <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showStrategyDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            {showStrategyDropdown && (
-              <div className="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                {strategyItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    to={item.href}
-                    onClick={() => setShowStrategyDropdown(false)}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        </nav>
-
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
           <nav ref={mobileMenuRef} className="sm:hidden flex flex-col gap-1 pb-2 border-t border-gray-100 pt-3">
