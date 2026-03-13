@@ -11,6 +11,7 @@ export default function Header({ showBackLink = false }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const strategyDropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
+  const userButtonRef = useRef(null);
   const mobileMenuRef = useRef(null);
 
   useEffect(() => {
@@ -30,7 +31,9 @@ export default function Header({ showBackLink = false }) {
       if (strategyDropdownRef.current && !strategyDropdownRef.current.contains(event.target)) {
         setShowStrategyDropdown(false);
       }
-      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) {
+      // Don't close user dropdown if clicking on the profile button itself
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target) && 
+          !userButtonRef.current?.contains(event.target)) {
         setShowUserDropdown(false);
       }
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !event.target.closest('.mobile-menu-btn')) {
@@ -70,8 +73,9 @@ export default function Header({ showBackLink = false }) {
           {/* Mobile: hamburger + profile on same line */}
           <div className="flex items-center gap-2 sm:hidden">
             {currentUser && (
-              <div className="relative">
+              <div className="relative" ref={userDropdownRef}>
                 <button
+                  ref={userButtonRef}
                   onClick={() => setShowUserDropdown(!showUserDropdown)}
                   className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
                 >
@@ -172,6 +176,7 @@ export default function Header({ showBackLink = false }) {
         {currentUser && (
           <div className="relative hidden sm:block" ref={userDropdownRef}>
             <button
+              ref={userButtonRef}
               onClick={() => setShowUserDropdown(!showUserDropdown)}
               className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
             >
