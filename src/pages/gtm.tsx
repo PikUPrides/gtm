@@ -6,7 +6,7 @@ export default function Page() {
   return (
     <div className="min-h-screen flex flex-col" style={{background:'#ffffff'}}>
       <Header />
-      <div className="flex-1 flex items-start justify-start p-3 sm:p-6 lg:pl-20 pt-16">
+      <div className="flex-1 flex items-start justify-start p-3 sm:p-6 lg:pl-20 pt-20">
         <div className="w-full max-w-5xl rounded-xl overflow-hidden" style={{boxShadow:'0 30px 80px rgba(0,0,0,0.15)'}}>
           <div className="px-4 sm:px-9 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0" style={{background:'linear-gradient(135deg,#0b1a30 0%,#1a3a6a 100%)'}}>
             <div className="text-white text-lg sm:text-xl font-extrabold text-center sm:text-left">Go-to-<span style={{color:'#007aff'}}>Market Strategy</span></div>
