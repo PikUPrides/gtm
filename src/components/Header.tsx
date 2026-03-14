@@ -2,7 +2,7 @@ import { user, Link } from '../api/sdk.js';
 import { useState, useEffect, useRef } from 'react';
 
 // Logo image URL
-const LOGO_URL = "https://cdn.serenitiesai.com/users%2Fcmi4jt7ry000hac5w14sjqi0q%2Ffiles%2F3311a7527e1130b22957919e233c6c0b-Ayro_Primary_-_2.png?token=ImX7QJBG-FXH81gWQbF8mzLYIrhaHXL0d16fcWXtyrQ&expires=1773493152";
+const LOGO_URL = "https://app.serenitiesai.com/api/files/public/3311a7527e1130b22957919e233c6c0b";
 
 export default function Header({ showBackLink = false }) {
   const [currentUser, setCurrentUser] = useState(null);
