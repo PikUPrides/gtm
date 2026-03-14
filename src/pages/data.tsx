@@ -11,6 +11,20 @@ const STATE_COLORS = [
   '#CAFFBF', '#FDFFB6', '#9BF6FF', '#FFB5A7', '#FCD5CE',
 ];
 
+const STATE_ABBR = {
+  'Alabama':'AL','Alaska':'AK','Arizona':'AZ','Arkansas':'AR','California':'CA',
+  'Colorado':'CO','Connecticut':'CT','Delaware':'DE','Florida':'FL','Georgia':'GA',
+  'Hawaii':'HI','Idaho':'ID','Illinois':'IL','Indiana':'IN','Iowa':'IA',
+  'Kansas':'KS','Kentucky':'KY','Louisiana':'LA','Maine':'ME','Maryland':'MD',
+  'Massachusetts':'MA','Michigan':'MI','Minnesota':'MN','Mississippi':'MS','Missouri':'MO',
+  'Montana':'MT','Nebraska':'NE','Nevada':'NV','New Hampshire':'NH','New Jersey':'NJ',
+  'New Mexico':'NM','New York':'NY','North Carolina':'NC','North Dakota':'ND','Ohio':'OH',
+  'Oklahoma':'OK','Oregon':'OR','Pennsylvania':'PA','Rhode Island':'RI','South Carolina':'SC',
+  'South Dakota':'SD','Tennessee':'TN','Texas':'TX','Utah':'UT','Vermont':'VT',
+  'Virginia':'VA','Washington':'WA','West Virginia':'WV','Wisconsin':'WI','Wyoming':'WY',
+  'District of Columbia':'DC',
+};
+
 function fmtNum(n) {
   if (n == null) return '\u2014';
   return Number(n).toLocaleString('en-US');
@@ -145,7 +159,7 @@ function MetroSection({ metros }) {
   );
 }
 
-function DemographicsSection({ stateName, data, stateMetros }) {
+function DemographicsSection({ stateName, data, stateMetros, cityMetric, onMetricChange }) {
   if (!data) return null;
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
@@ -260,12 +274,43 @@ function DemographicsSection({ stateName, data, stateMetros }) {
       </div>
 
       {/* Top Cities - only show if data available */}
-      {data.topCities && data.topCities.length > 0 && (
+      {data.topCities && data.topCities.length > 0 && (() => {
+          const metrics = [
+            { key: 'population', label: 'Population', getValue: c => c.rawPop, format: c => c.pop },
+            { key: 'income', label: 'Med. Income', getValue: c => Number(c.medianIncome) || 0, format: c => fmtCur(c.medianIncome) },
+            { key: 'age', label: 'Med. Age', getValue: c => Number(c.medianAge) || 0, format: c => c.medianAge != null ? String(c.medianAge) : '\u2014' },
+            { key: 'homeValue', label: 'Home Value', getValue: c => Number(c.medianHomeValue) || 0, format: c => fmtCur(c.medianHomeValue) },
+            { key: 'noVehicle', label: 'No Vehicle %', getValue: c => Number(c.noVehiclePct) || 0, format: c => fmtPct(c.noVehiclePct) },
+            { key: 'renter', label: 'Renter %', getValue: c => Number(c.renterPct) || 0, format: c => fmtPct(c.renterPct) },
+            { key: 'transit', label: 'Transit %', getValue: c => Number(c.transitPct) || 0, format: c => fmtPct(c.transitPct) },
+            { key: 'young', label: 'Young 18-34 %', getValue: c => Number(c.young1834Pct) || 0, format: c => fmtPct(c.young1834Pct) },
+            { key: 'hispanic', label: 'Hispanic %', getValue: c => Number(c.hispanicPct) || 0, format: c => fmtPct(c.hispanicPct) },
+            { key: 'bachelors', label: "Bachelor's %", getValue: c => Number(c.bachelorsPct) || 0, format: c => fmtPct(c.bachelorsPct) },
+            { key: 'unemployment', label: 'Unemp. Rate', getValue: c => Number(c.unemploymentRate) || 0, format: c => fmtPct(c.unemploymentRate) },
+            { key: 'rent', label: 'Med. Rent', getValue: c => Number(c.medianRent) || 0, format: c => fmtCur(c.medianRent) },
+          ];
+          const active = metrics.find(m => m.key === cityMetric) || metrics[0];
+          const sorted = [...data.topCities].sort((a, b) => active.getValue(b) - active.getValue(a));
+          const maxVal = sorted.length > 0 ? active.getValue(sorted[0]) : 1;
+          return (
           <div className="bg-white rounded-xl p-6 border border-gray-200 mb-8">
-            <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#3a0ca3]" />
-              Top Cities by Population
-            </h3>
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-[#3a0ca3]" />
+                Top Cities
+              </h3>
+              <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5 overflow-x-auto max-w-full">
+                {metrics.map(m => (
+                  <button
+                    key={m.key}
+                    onClick={() => onMetricChange(m.key)}
+                    className={`px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all whitespace-nowrap shrink-0 ${cityMetric === m.key ? 'bg-[#423DF9] text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                  >
+                    {m.label}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
@@ -273,16 +318,14 @@ function DemographicsSection({ stateName, data, stateMetros }) {
                     <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold w-8">#</th>
                     <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">City</th>
                     <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Population</th>
-                    <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">% of State</th>
-                    <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold hidden sm:table-cell">Med. Income</th>
-                    <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold hidden md:table-cell">Med. Age</th>
-                    <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold hidden lg:table-cell">Home Value</th>
-                    <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold w-24"></th>
+                    <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold text-[#423DF9]">{active.label}</th>
+                    <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold w-28"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.topCities.map((city, i) => {
-                    const maxPct = data.topCities[0].pct;
+                  {sorted.map((city, i) => {
+                    const val = active.getValue(city);
+                    const barPct = maxVal > 0 ? (val / maxVal) * 100 : 0;
                     return (
                       <tr key={city.name} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                         <td className="py-2.5 px-2">
@@ -292,13 +335,10 @@ function DemographicsSection({ stateName, data, stateMetros }) {
                         </td>
                         <td className="py-2.5 px-2 font-medium text-gray-800">{city.name}</td>
                         <td className="py-2.5 px-2 text-right text-gray-600">{city.pop}</td>
-                        <td className="py-2.5 px-2 text-right font-semibold text-[#423DF9]">{city.pct}%</td>
-                        <td className="py-2.5 px-2 text-right text-gray-600 hidden sm:table-cell">{city.medianIncome != null ? fmtCur(city.medianIncome) : '\u2014'}</td>
-                        <td className="py-2.5 px-2 text-right text-gray-600 hidden md:table-cell">{city.medianAge != null ? city.medianAge : '\u2014'}</td>
-                        <td className="py-2.5 px-2 text-right text-gray-600 hidden lg:table-cell">{city.medianHomeValue != null ? fmtCur(city.medianHomeValue) : '\u2014'}</td>
+                        <td className="py-2.5 px-2 text-right font-semibold text-[#423DF9]">{active.format(city)}</td>
                         <td className="py-2.5 px-2">
                           <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
-                            <div className="h-full rounded-full" style={{ width: `${(city.pct / maxPct) * 100}%`, backgroundColor: '#423DF9' }} />
+                            <div className="h-full rounded-full transition-all duration-300" style={{ width: `${barPct}%`, backgroundColor: '#423DF9' }} />
                           </div>
                         </td>
                       </tr>
@@ -308,7 +348,8 @@ function DemographicsSection({ stateName, data, stateMetros }) {
               </table>
             </div>
           </div>
-      )}
+          );
+      })()}
 
       {/* Metro Areas for this state */}
       <MetroSection metros={stateMetros} />
@@ -339,6 +380,7 @@ export default function Page() {
   const [citiesByState, setCitiesByState] = useState({});
   const [metroAreas, setMetroAreas] = useState([]);
   const [dataLoading, setDataLoading] = useState(true);
+  const [cityMetric, setCityMetric] = useState('population');
 
   // Fetch demographics from States, Cities, and Metro Areas tables
   useEffect(() => {
@@ -369,6 +411,14 @@ export default function Page() {
               medianIncome: row.MedianIncome,
               medianAge: row.MedianAge,
               medianHomeValue: row.MedianHomeValue,
+              noVehiclePct: row.NoVehiclePct,
+              renterPct: row.RenterPct,
+              transitPct: row.TransitPct,
+              young1834Pct: row.Young1834Pct,
+              hispanicPct: row.HispanicPct,
+              bachelorsPct: row.BachelorsPct,
+              unemploymentRate: row.UnemploymentRate,
+              medianRent: row.MedianRent,
             });
           }
         });
@@ -459,6 +509,7 @@ export default function Page() {
               opacity: 1,
             });
             setSelectedState(name);
+            setCityMetric('population');
             map.fitBounds(layer.getBounds(), { padding: [50, 50], maxZoom: 6 });
             setTimeout(() => {
               if (dataRef.current) {
@@ -559,6 +610,7 @@ export default function Page() {
       fillColor: '#423DF9', fillOpacity: 0.4, weight: 3, color: '#423DF9', opacity: 1,
     });
     setSelectedState(name);
+    setCityMetric('population');
     setSearchQuery('');
     setShowSearchDropdown(false);
     mapInstance.current.fitBounds(layer.getBounds(), { padding: [50, 50], maxZoom: 6 });
@@ -578,8 +630,9 @@ export default function Page() {
     topCities: citiesByState[selectedState] || [],
   } : null;
 
-  const stateMetros = selectedState ? metroAreas.filter(m =>
-    m.states && m.states.split(',').some(s => s.trim() === selectedState)
+  const stateAbbr = selectedState ? STATE_ABBR[selectedState] : null;
+  const stateMetros = selectedState && stateAbbr ? metroAreas.filter(m =>
+    m.states && m.states.split(',').some(s => s.trim() === stateAbbr)
   ) : [];
 
   return (
@@ -695,7 +748,7 @@ export default function Page() {
         <div ref={dataRef}>
           {selectedState && demographics && (
             <div>
-              <DemographicsSection stateName={selectedState} data={demographics} stateMetros={stateMetros} />
+              <DemographicsSection stateName={selectedState} data={demographics} stateMetros={stateMetros} cityMetric={cityMetric} onMetricChange={setCityMetric} />
             </div>
           )}
 
