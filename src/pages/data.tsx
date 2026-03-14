@@ -1,6 +1,7 @@
 
 import Header from '../components/Header.jsx';
 import { useState, useEffect, useRef } from 'react';
+import serenities from '../api/sdk';
 
 const GEOJSON_URL = 'https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json';
 
@@ -10,133 +11,66 @@ const STATE_COLORS = [
   '#CAFFBF', '#FDFFB6', '#9BF6FF', '#FFB5A7', '#FCD5CE',
 ];
 
-const DEMOGRAPHICS = {
-  'Texas': {
-    population: '30,503,000',
-    populationRank: '2nd',
-    medianAge: '35.1',
-    medianIncome: '$67,321',
-    genderSplit: { male: 49.7, female: 50.3 },
+function fmtNum(n) {
+  if (n == null) return '\u2014';
+  return Number(n).toLocaleString('en-US');
+}
+
+function fmtCur(n) {
+  if (n == null) return '\u2014';
+  return '\u0024' + Number(n).toLocaleString('en-US');
+}
+
+function fmtPct(n) {
+  if (n == null) return '\u2014';
+  return Number(n).toFixed(1) + '%';
+}
+
+function ordRank(n) {
+  if (n == null) return '\u2014';
+  const s = ['th','st','nd','rd'];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+function transformRow(row) {
+  const gr = Number(row.GrowthRate);
+  return {
+    population: fmtNum(row.Population),
+    populationRank: ordRank(row.PopulationRank),
+    medianAge: row.MedianAge != null ? String(row.MedianAge) : '\u2014',
+    medianIncome: fmtCur(row.MedianIncome),
+    genderSplit: { male: Number(row.MalePercent) || 50, female: Number(row.FemalePercent) || 50 },
+    unemploymentRate: fmtPct(row.UnemploymentRate),
+    bachelorsDegree: fmtPct(row.BachelorsDegree),
+    homeownershipRate: fmtPct(row.HomeownershipRate),
+    medianHomeValue: fmtCur(row.MedianHomeValue),
+    povertyRate: fmtPct(row.PovertyRate),
+    foreignBorn: fmtPct(row.ForeignBorn),
+    gdp: row.GDP || '\u2014',
+    averageCommute: row.AverageCommute != null ? row.AverageCommute + ' min' : '\u2014',
+    broadbandAccess: fmtPct(row.BroadbandAccess),
+    medianRent: fmtCur(row.MedianRent),
+    area: row.Area || '\u2014',
+    density: row.Density || '\u2014',
+    growthRate: row.GrowthRate != null ? (gr >= 0 ? '+' : '') + gr.toFixed(1) + '%' : '\u2014',
     ageGroups: [
-      { label: '0-17', pct: 25.5 },
-      { label: '18-34', pct: 22.8 },
-      { label: '35-54', pct: 26.1 },
-      { label: '55-64', pct: 11.8 },
-      { label: '65+', pct: 13.8 },
+      { label: '0-17', pct: Number(row.Age0to17) || 0 },
+      { label: '18-34', pct: Number(row.Age18to34) || 0 },
+      { label: '35-54', pct: Number(row.Age35to54) || 0 },
+      { label: '55-64', pct: Number(row.Age55to64) || 0 },
+      { label: '65+', pct: Number(row.Age65plus) || 0 },
     ],
     raceEthnicity: [
-      { label: 'Hispanic/Latino', pct: 40.2 },
-      { label: 'White (non-Hispanic)', pct: 39.4 },
-      { label: 'Black/African American', pct: 12.9 },
-      { label: 'Asian', pct: 5.5 },
-      { label: 'Other', pct: 2.0 },
+      { label: 'White (non-Hispanic)', pct: Number(row.White) || 0 },
+      { label: 'Hispanic/Latino', pct: Number(row.Hispanic) || 0 },
+      { label: 'Black', pct: Number(row.Black) || 0 },
+      { label: 'Asian', pct: Number(row.Asian) || 0 },
+      { label: 'Other', pct: Number(row.Other) || 0 },
     ],
-    topCities: ['Houston', 'San Antonio', 'Dallas', 'Austin', 'Fort Worth'],
-    area: '268,596 sq mi',
-    density: '113.6/sq mi',
-    growthRate: '+1.6%',
-  },
-  'California': {
-    population: '39,029,000',
-    populationRank: '1st',
-    medianAge: '37.0',
-    medianIncome: '$84,097',
-    genderSplit: { male: 49.7, female: 50.3 },
-    ageGroups: [
-      { label: '0-17', pct: 22.5 },
-      { label: '18-34', pct: 23.1 },
-      { label: '35-54', pct: 26.3 },
-      { label: '55-64', pct: 12.4 },
-      { label: '65+', pct: 15.7 },
-    ],
-    raceEthnicity: [
-      { label: 'Hispanic/Latino', pct: 39.4 },
-      { label: 'White (non-Hispanic)', pct: 34.7 },
-      { label: 'Asian', pct: 15.9 },
-      { label: 'Black/African American', pct: 6.5 },
-      { label: 'Other', pct: 3.5 },
-    ],
-    topCities: ['Los Angeles', 'San Diego', 'San Jose', 'San Francisco', 'Fresno'],
-    area: '163,696 sq mi',
-    density: '238.4/sq mi',
-    growthRate: '-0.3%',
-  },
-  'Florida': {
-    population: '22,610,000',
-    populationRank: '3rd',
-    medianAge: '42.4',
-    medianIncome: '$63,062',
-    genderSplit: { male: 48.9, female: 51.1 },
-    ageGroups: [
-      { label: '0-17', pct: 19.7 },
-      { label: '18-34', pct: 20.2 },
-      { label: '35-54', pct: 24.8 },
-      { label: '55-64', pct: 13.5 },
-      { label: '65+', pct: 21.8 },
-    ],
-    raceEthnicity: [
-      { label: 'White (non-Hispanic)', pct: 51.5 },
-      { label: 'Hispanic/Latino', pct: 26.8 },
-      { label: 'Black/African American', pct: 16.9 },
-      { label: 'Asian', pct: 3.0 },
-      { label: 'Other', pct: 1.8 },
-    ],
-    topCities: ['Jacksonville', 'Miami', 'Tampa', 'Orlando', 'St. Petersburg'],
-    area: '65,758 sq mi',
-    density: '343.8/sq mi',
-    growthRate: '+1.9%',
-  },
-  'New York': {
-    population: '19,677,000',
-    populationRank: '4th',
-    medianAge: '39.2',
-    medianIncome: '$74,314',
-    genderSplit: { male: 48.5, female: 51.5 },
-    ageGroups: [
-      { label: '0-17', pct: 20.4 },
-      { label: '18-34', pct: 22.6 },
-      { label: '35-54', pct: 25.7 },
-      { label: '55-64', pct: 13.4 },
-      { label: '65+', pct: 17.9 },
-    ],
-    raceEthnicity: [
-      { label: 'White (non-Hispanic)', pct: 52.5 },
-      { label: 'Hispanic/Latino', pct: 19.5 },
-      { label: 'Black/African American', pct: 17.6 },
-      { label: 'Asian', pct: 9.0 },
-      { label: 'Other', pct: 1.4 },
-    ],
-    topCities: ['New York City', 'Buffalo', 'Rochester', 'Yonkers', 'Syracuse'],
-    area: '54,555 sq mi',
-    density: '360.7/sq mi',
-    growthRate: '-0.9%',
-  },
-  'Illinois': {
-    population: '12,582,000',
-    populationRank: '6th',
-    medianAge: '38.7',
-    medianIncome: '$72,205',
-    genderSplit: { male: 49.1, female: 50.9 },
-    ageGroups: [
-      { label: '0-17', pct: 22.0 },
-      { label: '18-34', pct: 22.1 },
-      { label: '35-54', pct: 25.3 },
-      { label: '55-64', pct: 13.0 },
-      { label: '65+', pct: 17.6 },
-    ],
-    raceEthnicity: [
-      { label: 'White (non-Hispanic)', pct: 58.3 },
-      { label: 'Hispanic/Latino', pct: 18.2 },
-      { label: 'Black/African American', pct: 14.6 },
-      { label: 'Asian', pct: 6.1 },
-      { label: 'Other', pct: 2.8 },
-    ],
-    topCities: ['Chicago', 'Aurora', 'Joliet', 'Naperville', 'Rockford'],
-    area: '57,914 sq mi',
-    density: '217.3/sq mi',
-    growthRate: '-0.8%',
-  },
-};
+    topCities: [],
+  };
+}
 
 function BarChart({ items, color }) {
   const maxPct = Math.max(...items.map(i => i.pct));
@@ -178,12 +112,18 @@ function DemographicsSection({ stateName, data }) {
       </div>
 
       {/* Key Stats Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
         {[
           { label: 'Population', value: data.population, sub: `Rank: ${data.populationRank}`, color: '#423DF9' },
           { label: 'Median Age', value: data.medianAge, sub: 'years', color: '#7742F1' },
           { label: 'Median Income', value: data.medianIncome, sub: 'household', color: '#3a0ca3' },
           { label: 'Growth Rate', value: data.growthRate, sub: 'annual', color: '#08D9C4' },
+          { label: 'Unemployment', value: data.unemploymentRate, sub: 'rate', color: '#120E78' },
+          { label: "Bachelor's+", value: data.bachelorsDegree, sub: 'education', color: '#0B9F90' },
+          { label: 'Homeownership', value: data.homeownershipRate, sub: 'rate', color: '#423DF9' },
+          { label: 'Median Home', value: data.medianHomeValue, sub: 'value', color: '#7742F1' },
+          { label: 'Poverty Rate', value: data.povertyRate, sub: '', color: '#3a0ca3' },
+          { label: 'Foreign Born', value: data.foreignBorn, sub: 'of population', color: '#08D9C4' },
           { label: 'Area', value: data.area, sub: '', color: '#120E78' },
           { label: 'Density', value: data.density, sub: '', color: '#0B9F90' },
         ].map((stat) => (
@@ -217,7 +157,7 @@ function DemographicsSection({ stateName, data }) {
         </div>
       </div>
 
-      {/* Gender + Cities Row */}
+      {/* Gender + Additional Stats Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Gender Split */}
         <div className="bg-white rounded-xl p-6 border border-gray-200">
@@ -245,28 +185,102 @@ function DemographicsSection({ stateName, data }) {
           </div>
         </div>
 
-        {/* Top Cities */}
+        {/* Additional Stats */}
         <div className="bg-white rounded-xl p-6 border border-gray-200">
           <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-[#3a0ca3]" />
-            Top Cities
+            Additional Insights
           </h3>
-          <div className="space-y-2">
-            {data.topCities.map((city, i) => (
-              <div key={city} className="flex items-center gap-3">
-                <span className="w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-bold text-white" style={{ backgroundColor: ['#423DF9', '#7742F1', '#3a0ca3', '#08D9C4', '#0B9F90'][i] }}>
-                  {i + 1}
-                </span>
-                <span className="text-sm text-gray-700 font-medium">{city}</span>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { label: 'GDP', value: data.gdp },
+              { label: 'Avg Commute', value: data.averageCommute },
+              { label: 'Broadband', value: data.broadbandAccess },
+              { label: 'Median Rent', value: data.medianRent },
+            ].map(item => (
+              <div key={item.label} className="bg-gray-50 rounded-lg p-3">
+                <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">{item.label}</p>
+                <p className="text-sm font-bold text-[#1D0652] mt-1">{item.value}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
 
+      {/* Top Cities - only show if data available */}
+      {data.topCities && data.topCities.length > 0 && (
+        <>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-[#3a0ca3]" />
+                Top Cities
+              </h3>
+              <div className="space-y-2">
+                {data.topCities.slice(0, 5).map((city, i) => (
+                  <div key={city.name} className="flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-bold text-white shrink-0" style={{ backgroundColor: ['#423DF9', '#7742F1', '#3a0ca3', '#08D9C4', '#0B9F90'][i] }}>
+                      {i + 1}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm text-gray-700 font-medium">{city.name}</span>
+                      <span className="text-xs text-gray-400 ml-1.5">{city.pop}</span>
+                    </div>
+                    <span className="text-xs font-semibold text-[#423DF9] shrink-0">{city.pct}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Full Top 10 Cities Table */}
+          <div className="bg-white rounded-xl p-6 border border-gray-200 mb-8">
+            <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-[#3a0ca3]" />
+              Top 10 Cities by Population
+            </h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold w-8">#</th>
+                    <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">City</th>
+                    <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Population</th>
+                    <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">% of State</th>
+                    <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold w-32"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.topCities.map((city, i) => {
+                    const maxPct = data.topCities[0].pct;
+                    return (
+                      <tr key={city.name} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                        <td className="py-2.5 px-2">
+                          <span className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold text-white" style={{ backgroundColor: i < 3 ? '#423DF9' : i < 6 ? '#7742F1' : '#a57ff7' }}>
+                            {i + 1}
+                          </span>
+                        </td>
+                        <td className="py-2.5 px-2 font-medium text-gray-800">{city.name}</td>
+                        <td className="py-2.5 px-2 text-right text-gray-600">{city.pop}</td>
+                        <td className="py-2.5 px-2 text-right font-semibold text-[#423DF9]">{city.pct}%</td>
+                        <td className="py-2.5 px-2">
+                          <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                            <div className="h-full rounded-full" style={{ width: `${(city.pct / maxPct) * 100}%`, backgroundColor: '#423DF9' }} />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Data Sources */}
       <p className="text-xs text-gray-400 text-center pt-4 border-t border-gray-100">
-        Sources: U.S. Census Bureau, World Population Review, Statista. Data approximate.
+        Sources: U.S. Census Bureau ACS 2022 5-Year Estimates, Census QuickFacts.
       </p>
     </div>
   );
@@ -276,9 +290,37 @@ export default function Page() {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const dataRef = useRef(null);
+  const layersRef = useRef({});
+  const selectedLayerRef = useRef(null);
+  const stateColorsRef = useRef({});
   const [selectedState, setSelectedState] = useState(null);
   const [hoveredState, setHoveredState] = useState(null);
   const [mapReady, setMapReady] = useState(false);
+  const [stateNames, setStateNames] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const searchRef = useRef(null);
+  const [statesLookup, setStatesLookup] = useState({});
+  const [dataLoading, setDataLoading] = useState(true);
+
+  // Fetch demographics from States table
+  useEffect(() => {
+    serenities.entities.States.list()
+      .then(rows => {
+        const lookup = {};
+        rows.forEach(row => {
+          if (row.Name) {
+            lookup[row.Name] = transformRow(row);
+          }
+        });
+        setStatesLookup(lookup);
+        setDataLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load states data:', err);
+        setDataLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     if (mapInstance.current) return;
@@ -299,6 +341,7 @@ export default function Page() {
         maxZoom: 8,
         zoomControl: false,
         scrollWheelZoom: false,
+        boxZoom: false,
       });
 
       L.control.zoom({ position: 'bottomleft' }).addTo(map);
@@ -313,9 +356,42 @@ export default function Page() {
         .then(r => r.json())
         .then(geojson => {
           let colorIndex = 0;
+          const allNames = [];
+
+          const selectState = (layer, name) => {
+            // Reset previous selection
+            if (selectedLayerRef.current) {
+              const prevName = selectedLayerRef.current.feature.properties.name;
+              selectedLayerRef.current.setStyle({
+                fillColor: stateColorsRef.current[prevName],
+                weight: 1.5,
+                opacity: 1,
+                color: '#fff',
+                fillOpacity: 0.6,
+              });
+            }
+            // Highlight new selection
+            selectedLayerRef.current = layer;
+            layer.setStyle({
+              fillColor: '#423DF9',
+              fillOpacity: 0.4,
+              weight: 3,
+              color: '#423DF9',
+              opacity: 1,
+            });
+            setSelectedState(name);
+            map.fitBounds(layer.getBounds(), { padding: [50, 50], maxZoom: 6 });
+            setTimeout(() => {
+              if (dataRef.current) {
+                dataRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }, 300);
+          };
+
           const geojsonLayer = L.geoJSON(geojson, {
             style: (feature) => {
               const color = STATE_COLORS[colorIndex % STATE_COLORS.length];
+              stateColorsRef.current[feature.properties.name] = color;
               colorIndex++;
               return {
                 fillColor: color,
@@ -327,6 +403,9 @@ export default function Page() {
             },
             onEachFeature: (feature, layer) => {
               const name = feature.properties.name;
+              allNames.push(name);
+              layersRef.current[name] = layer;
+
               layer.bindTooltip(name, {
                 permanent: false,
                 direction: 'center',
@@ -335,27 +414,30 @@ export default function Page() {
 
               layer.on({
                 mouseover: (e) => {
-                  e.target.setStyle({ fillOpacity: 0.85, weight: 2.5, color: '#423DF9' });
-                  e.target.bringToFront();
+                  if (e.target !== selectedLayerRef.current) {
+                    e.target.setStyle({ fillOpacity: 0.85, weight: 2, color: '#888' });
+                  }
                   setHoveredState(name);
                 },
                 mouseout: (e) => {
-                  geojsonLayer.resetStyle(e.target);
+                  if (e.target !== selectedLayerRef.current) {
+                    e.target.setStyle({
+                      fillColor: stateColorsRef.current[name],
+                      weight: 1.5,
+                      opacity: 1,
+                      color: '#fff',
+                      fillOpacity: 0.6,
+                    });
+                  }
                   setHoveredState(null);
                 },
                 click: (e) => {
-                  const stateName = feature.properties.name;
-                  setSelectedState(stateName);
-                  map.fitBounds(e.target.getBounds(), { padding: [50, 50], maxZoom: 6 });
-                  setTimeout(() => {
-                    if (dataRef.current) {
-                      dataRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                  }, 300);
+                  selectState(e.target, name);
                 },
               });
             },
           }).addTo(map);
+          setStateNames(allNames.sort());
           setMapReady(true);
         });
 
@@ -371,7 +453,48 @@ export default function Page() {
     };
   }, []);
 
-  const demographics = selectedState ? DEMOGRAPHICS[selectedState] : null;
+  // Close search dropdown on outside click
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setShowSearchDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  const selectStateByName = (name) => {
+    const layer = layersRef.current[name];
+    if (!layer || !mapInstance.current) return;
+    // Reset previous
+    if (selectedLayerRef.current) {
+      const prevName = selectedLayerRef.current.feature.properties.name;
+      selectedLayerRef.current.setStyle({
+        fillColor: stateColorsRef.current[prevName],
+        weight: 1.5, opacity: 1, color: '#fff', fillOpacity: 0.6,
+      });
+    }
+    selectedLayerRef.current = layer;
+    layer.setStyle({
+      fillColor: '#423DF9', fillOpacity: 0.4, weight: 3, color: '#423DF9', opacity: 1,
+    });
+    setSelectedState(name);
+    setSearchQuery('');
+    setShowSearchDropdown(false);
+    mapInstance.current.fitBounds(layer.getBounds(), { padding: [50, 50], maxZoom: 6 });
+    setTimeout(() => {
+      if (dataRef.current) {
+        dataRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 300);
+  };
+
+  const filteredStates = stateNames.filter(s =>
+    s.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const demographics = selectedState ? statesLookup[selectedState] : null;
 
   return (
     <div className="min-h-screen bg-[#fafafe]" style={{ fontFamily: "'Open Sans', sans-serif" }}>
@@ -388,6 +511,9 @@ export default function Page() {
           box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
         }
         .state-tooltip::before { display: none !important; }
+        .leaflet-container { outline: none !important; }
+        .leaflet-container:focus { outline: none !important; }
+        .leaflet-interactive:focus { outline: none !important; }
         .leaflet-control-zoom a {
           background: white !important;
           color: #374151 !important;
@@ -409,12 +535,49 @@ export default function Page() {
             <p className="text-xs text-gray-500">Click any state to view demographics for GTM targeting</p>
           </div>
           <div className="flex items-center gap-3">
+            {/* Search */}
+            <div className="relative" ref={searchRef}>
+              <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg overflow-hidden focus-within:border-[#423DF9] focus-within:ring-1 focus-within:ring-[#423DF9]/30 transition-all">
+                <svg className="ml-2.5 h-4 w-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search state..."
+                  value={searchQuery}
+                  onChange={(e) => { setSearchQuery(e.target.value); setShowSearchDropdown(true); }}
+                  onFocus={() => setShowSearchDropdown(true)}
+                  className="w-36 sm:w-48 px-2 py-1.5 text-sm bg-transparent border-none outline-none placeholder-gray-400"
+                />
+              </div>
+              {showSearchDropdown && searchQuery && filteredStates.length > 0 && (
+                <div className="absolute top-full left-0 mt-1 w-full bg-white rounded-lg shadow-lg border border-gray-200 max-h-60 overflow-y-auto z-[9999]">
+                  {filteredStates.map(name => (
+                    <button
+                      key={name}
+                      onClick={() => selectStateByName(name)}
+                      className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-[#423DF9]/5 hover:text-[#423DF9] transition-colors"
+                    >
+                      {name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             {hoveredState && (
               <span className="text-sm text-gray-600 hidden sm:block">{hoveredState}</span>
             )}
             {selectedState && (
               <button
                 onClick={() => {
+                  if (selectedLayerRef.current) {
+                    const prevName = selectedLayerRef.current.feature.properties.name;
+                    selectedLayerRef.current.setStyle({
+                      fillColor: stateColorsRef.current[prevName],
+                      weight: 1.5, opacity: 1, color: '#fff', fillOpacity: 0.6,
+                    });
+                    selectedLayerRef.current = null;
+                  }
                   setSelectedState(null);
                   if (mapInstance.current) {
                     mapInstance.current.flyTo([39.8, -98.5], 4, { duration: 0.5 });
@@ -445,23 +608,26 @@ export default function Page() {
         {/* Demographics Section Below Map */}
         <div ref={dataRef}>
           {selectedState && demographics && (
-            <div className="border-t-4 border-[#423DF9]">
+            <div>
               <DemographicsSection stateName={selectedState} data={demographics} />
             </div>
           )}
 
           {selectedState && !demographics && (
-            <div className="border-t-4 border-gray-200 py-16">
+            <div className="py-16">
               <div className="text-center px-6">
                 <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
-                    <circle cx="12" cy="10" r="3"/>
-                  </svg>
+                  {dataLoading ? (
+                    <div className="w-8 h-8 border-2 border-[#423DF9] border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                  )}
                 </div>
                 <h3 className="text-lg font-bold text-[#1D0652] mb-1">{selectedState}</h3>
-                <p className="text-sm text-gray-500">Demographics data coming soon.</p>
-                <p className="text-xs text-gray-400 mt-1">Currently available: Texas, California, Florida, New York, Illinois</p>
+                <p className="text-sm text-gray-500">{dataLoading ? 'Loading demographics...' : 'Demographics data not available.'}</p>
               </div>
             </div>
           )}
@@ -469,17 +635,12 @@ export default function Page() {
           {!selectedState && (
             <div className="py-12 text-center">
               <p className="text-gray-400 text-sm">Select a state on the map above to view detailed demographics</p>
-              <div className="flex flex-wrap justify-center gap-2 mt-4">
-                {Object.keys(DEMOGRAPHICS).map(state => (
-                  <button
-                    key={state}
-                    onClick={() => setSelectedState(state)}
-                    className="px-3 py-1.5 bg-white border border-gray-200 text-sm text-gray-600 rounded-full hover:border-[#423DF9] hover:text-[#423DF9] transition-colors"
-                  >
-                    {state}
-                  </button>
-                ))}
-              </div>
+              {dataLoading && (
+                <div className="flex items-center justify-center gap-2 mt-3">
+                  <div className="w-4 h-4 border-2 border-[#423DF9] border-t-transparent rounded-full animate-spin" />
+                  <span className="text-xs text-gray-400">Loading data for all 50 states...</span>
+                </div>
+              )}
             </div>
           )}
         </div>
