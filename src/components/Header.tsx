@@ -8,12 +8,10 @@ export default function Header({ showBackLink = false }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [showStrategyDropdown, setShowStrategyDropdown] = useState(false);
   const [showDataDropdown, setShowDataDropdown] = useState(false);
-  const [showDemoDropdown, setShowDemoDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const strategyDropdownRef = useRef(null);
   const dataDropdownRef = useRef(null);
-  const demoDropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
   const userButtonRef = useRef(null);
   const userButtonMobileRef = useRef(null);
@@ -39,9 +37,7 @@ export default function Header({ showBackLink = false }) {
       if (dataDropdownRef.current && !dataDropdownRef.current.contains(event.target)) {
         setShowDataDropdown(false);
       }
-      if (demoDropdownRef.current && !demoDropdownRef.current.contains(event.target)) {
-        setShowDemoDropdown(false);
-      }
+
       // Don't close user dropdown if clicking on either profile button
       const isUserButtonClick = 
         userButtonRef.current?.contains(event.target) || 
@@ -77,27 +73,18 @@ export default function Header({ showBackLink = false }) {
 
   // Data dropdown items
   const dataItems = [
-    { href: '/data', label: 'Data Overview' },
-    { href: '/data/analytics', label: 'Analytics' },
-    { href: '/data/reports', label: 'Reports' },
-  ];
-
-  // Demo dropdown items
-  const demoItems = [
-    { href: '/demo', label: 'Demo Overview' },
-    { href: '/demo/signup', label: 'Signup Flow' },
-    { href: '/demo/dashboard', label: 'Dashboard' },
+    { href: '/data', label: 'US Market Data' },
   ];
 
   // Full header with navigation (for main pages)
   if (!showBackLink) {
     return (
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 px-4 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 bg-white">
+      <header className="fixed top-0 left-0 right-0 z-[10000] border-b-2 border-[#423DF9]/20 px-4 py-2 sm:px-6 sm:py-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 bg-white shadow-sm">
         {/* Left side: Logo + Navigation */}
         <div className="flex items-center justify-between w-full sm:w-auto">
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
-              <img src={LOGO_URL} alt="AYRO" className="h-10 w-auto" />
+              <img src={LOGO_URL} alt="AYRO" className="h-12 w-auto object-contain" style={{ clipPath: 'inset(15% 0 15% 0)' }} />
             </Link>
             {/* Desktop Navigation - aligned left */}
             <nav className="hidden sm:flex items-center gap-1">
@@ -111,10 +98,15 @@ export default function Header({ showBackLink = false }) {
                 </Link>
               ))}
               {/* Strategy Dropdown */}
-              <div className="relative" ref={strategyDropdownRef}>
+              <div
+                className="relative"
+                ref={strategyDropdownRef}
+                onMouseEnter={() => { setShowStrategyDropdown(true); setShowDataDropdown(false); }}
+                onMouseLeave={() => setShowStrategyDropdown(false)}
+              >
                 <button
                   onClick={() => setShowStrategyDropdown(!showStrategyDropdown)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 rounded-md hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#1D0652] hover:text-[#423DF9] rounded-md hover:bg-[#423DF9]/5 transition-colors"
                 >
                   Strategy
                   <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showStrategyDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -122,25 +114,32 @@ export default function Header({ showBackLink = false }) {
                   </svg>
                 </button>
                 {showStrategyDropdown && (
-                  <div className="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                    {strategyItems.map((item) => (
-                      <Link
-                        key={item.href}
-                        to={item.href}
-                        onClick={() => setShowStrategyDropdown(false)}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
+                  <div className="absolute left-0 mt-0 pt-2 w-56 z-[9999]">
+                    <div className="bg-white rounded-lg shadow-lg border border-gray-200 border-t-2 border-t-[#423DF9] py-2">
+                      {strategyItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          to={item.href}
+                          onClick={() => setShowStrategyDropdown(false)}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
               {/* Data Dropdown */}
-              <div className="relative" ref={dataDropdownRef}>
+              <div
+                className="relative"
+                ref={dataDropdownRef}
+                onMouseEnter={() => { setShowDataDropdown(true); setShowStrategyDropdown(false); }}
+                onMouseLeave={() => setShowDataDropdown(false)}
+              >
                 <button
                   onClick={() => setShowDataDropdown(!showDataDropdown)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 rounded-md hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#1D0652] hover:text-[#423DF9] rounded-md hover:bg-[#423DF9]/5 transition-colors"
                 >
                   Data
                   <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showDataDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -148,46 +147,23 @@ export default function Header({ showBackLink = false }) {
                   </svg>
                 </button>
                 {showDataDropdown && (
-                  <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                    {dataItems.map((item) => (
-                      <Link
-                        key={item.href}
-                        to={item.href}
-                        onClick={() => setShowDataDropdown(false)}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
+                  <div className="absolute left-0 mt-0 pt-2 w-48 z-[9999]">
+                    <div className="bg-white rounded-lg shadow-lg border border-gray-200 border-t-2 border-t-[#423DF9] py-2">
+                      {dataItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          to={item.href}
+                          onClick={() => setShowDataDropdown(false)}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
-              {/* Demo Dropdown */}
-              <div className="relative" ref={demoDropdownRef}>
-                <button
-                  onClick={() => setShowDemoDropdown(!showDemoDropdown)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 rounded-md hover:bg-gray-100 transition-colors"
-                >
-                  Demo
-                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showDemoDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {showDemoDropdown && (
-                  <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                    {demoItems.map((item) => (
-                      <Link
-                        key={item.href}
-                        to={item.href}
-                        onClick={() => setShowDemoDropdown(false)}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
+
             </nav>
           </div>
           {/* Mobile: hamburger + profile on same line */}
@@ -266,17 +242,7 @@ export default function Header({ showBackLink = false }) {
                 {item.label}
               </Link>
             ))}
-            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Demo</div>
-            {demoItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
+
           </nav>
         )}
 

@@ -195,10 +195,10 @@ function DemographicsPanel({ stateName, data, onClose }) {
         <div>
           <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Gender Split</h3>
           <div className="flex rounded-full overflow-hidden h-6">
-            <div className="flex items-center justify-center text-[10px] font-bold text-white" style={{ width: `${data.genderSplit.male}%`, backgroundColor: '#60A5FA' }}>
+            <div className="flex items-center justify-center text-[10px] font-bold text-white" style={{ width: `${data.genderSplit.male}%`, backgroundColor: '#423DF9' }}>
               Male {data.genderSplit.male}%
             </div>
-            <div className="flex items-center justify-center text-[10px] font-bold text-white" style={{ width: `${data.genderSplit.female}%`, backgroundColor: '#F472B6' }}>
+            <div className="flex items-center justify-center text-[10px] font-bold text-white" style={{ width: `${data.genderSplit.female}%`, backgroundColor: '#7742F1' }}>
               Female {data.genderSplit.female}%
             </div>
           </div>
@@ -207,13 +207,13 @@ function DemographicsPanel({ stateName, data, onClose }) {
         {/* Age Distribution */}
         <div>
           <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Age Distribution</h3>
-          <BarChart items={data.ageGroups} color="#6366F1" />
+          <BarChart items={data.ageGroups} color="#423DF9" />
         </div>
 
         {/* Race & Ethnicity */}
         <div>
           <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Race & Ethnicity</h3>
-          <BarChart items={data.raceEthnicity} color="#10B981" />
+          <BarChart items={data.raceEthnicity} color="#08D9C4" />
         </div>
 
         {/* Top Cities */}
@@ -378,7 +378,7 @@ export default function Page() {
               <span className="text-sm text-gray-600 hidden sm:block">{hoveredState}</span>
             )}
             {selectedState && (
-              <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-semibold rounded-full">
+              <span className="px-3 py-1 bg-[#423DF9]/10 text-[#423DF9] text-xs font-semibold rounded-full">
                 {selectedState}
               </span>
             )}
@@ -392,7 +392,7 @@ export default function Page() {
           {!mapReady && (
             <div className="absolute inset-0 flex items-center justify-center bg-white">
               <div className="flex flex-col items-center gap-3">
-                <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                <div className="w-8 h-8 border-2 border-[#423DF9] border-t-transparent rounded-full animate-spin" />
                 <p className="text-sm text-gray-500">Loading map...</p>
               </div>
             </div>
