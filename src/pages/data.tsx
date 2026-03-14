@@ -144,13 +144,13 @@ function BarChart({ items, color }) {
     <div className="space-y-2">
       {items.map((item) => (
         <div key={item.label} className="flex items-center gap-2">
-          <span className="text-xs text-gray-500 w-28 text-right shrink-0">{item.label}</span>
-          <div className="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+          <span className="text-xs text-gray-500 w-32 text-right shrink-0">{item.label}</span>
+          <div className="flex-1 bg-gray-100 rounded-full h-6 overflow-hidden">
             <div
               className="h-full rounded-full flex items-center justify-end pr-2 transition-all duration-500"
               style={{ width: `${(item.pct / maxPct) * 100}%`, backgroundColor: color }}
             >
-              <span className="text-[10px] font-semibold text-white">{item.pct}%</span>
+              <span className="text-[11px] font-semibold text-white">{item.pct}%</span>
             </div>
           </div>
         </div>
@@ -159,80 +159,115 @@ function BarChart({ items, color }) {
   );
 }
 
-function DemographicsPanel({ stateName, data, onClose }) {
+function DemographicsSection({ stateName, data }) {
   if (!data) return null;
   return (
-    <div className="absolute top-0 right-0 w-full sm:w-[420px] h-full bg-white border-l border-gray-200 shadow-2xl z-[1000] overflow-y-auto animate-slideIn">
-      <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between z-10">
-        <div>
-          <h2 className="text-lg font-bold text-gray-900">{stateName}</h2>
-          <p className="text-xs text-gray-500">Demographic Overview for GTM</p>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #423DF9, #7742F1)' }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
         </div>
-        <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M15 5L5 15M5 5l10 10" stroke="#6B7280" strokeWidth="2" strokeLinecap="round"/></svg>
-        </button>
+        <div>
+          <h2 className="text-2xl font-bold text-[#1D0652]">{stateName}</h2>
+          <p className="text-sm text-gray-500">Demographic Overview for GTM Targeting</p>
+        </div>
       </div>
-      <div className="px-5 py-4 space-y-6">
-        {/* Key Stats Grid */}
-        <div className="grid grid-cols-2 gap-3">
-          {[
-            { label: 'Population', value: data.population, sub: `Rank: ${data.populationRank}` },
-            { label: 'Median Age', value: data.medianAge, sub: 'years' },
-            { label: 'Median Income', value: data.medianIncome, sub: 'household' },
-            { label: 'Growth Rate', value: data.growthRate, sub: 'annual' },
-            { label: 'Area', value: data.area, sub: '' },
-            { label: 'Density', value: data.density, sub: '' },
-          ].map((stat) => (
-            <div key={stat.label} className="bg-gray-50 rounded-xl p-3">
-              <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">{stat.label}</p>
-              <p className="text-base font-bold text-gray-900 mt-0.5">{stat.value}</p>
-              {stat.sub && <p className="text-[10px] text-gray-400">{stat.sub}</p>}
-            </div>
-          ))}
-        </div>
 
-        {/* Gender Split */}
-        <div>
-          <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Gender Split</h3>
-          <div className="flex rounded-full overflow-hidden h-6">
-            <div className="flex items-center justify-center text-[10px] font-bold text-white" style={{ width: `${data.genderSplit.male}%`, backgroundColor: '#423DF9' }}>
-              Male {data.genderSplit.male}%
-            </div>
-            <div className="flex items-center justify-center text-[10px] font-bold text-white" style={{ width: `${data.genderSplit.female}%`, backgroundColor: '#7742F1' }}>
-              Female {data.genderSplit.female}%
-            </div>
+      {/* Key Stats Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+        {[
+          { label: 'Population', value: data.population, sub: `Rank: ${data.populationRank}`, color: '#423DF9' },
+          { label: 'Median Age', value: data.medianAge, sub: 'years', color: '#7742F1' },
+          { label: 'Median Income', value: data.medianIncome, sub: 'household', color: '#3a0ca3' },
+          { label: 'Growth Rate', value: data.growthRate, sub: 'annual', color: '#08D9C4' },
+          { label: 'Area', value: data.area, sub: '', color: '#120E78' },
+          { label: 'Density', value: data.density, sub: '', color: '#0B9F90' },
+        ].map((stat) => (
+          <div key={stat.label} className="bg-white rounded-xl p-4 border border-gray-200 hover:shadow-md transition-shadow">
+            <div className="w-8 h-1 rounded-full mb-3" style={{ backgroundColor: stat.color }} />
+            <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">{stat.label}</p>
+            <p className="text-lg font-bold text-[#1D0652] mt-1">{stat.value}</p>
+            {stat.sub && <p className="text-[11px] text-gray-400 mt-0.5">{stat.sub}</p>}
           </div>
-        </div>
+        ))}
+      </div>
 
+      {/* Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Age Distribution */}
-        <div>
-          <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Age Distribution</h3>
+        <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-[#423DF9]" />
+            Age Distribution
+          </h3>
           <BarChart items={data.ageGroups} color="#423DF9" />
         </div>
 
         {/* Race & Ethnicity */}
-        <div>
-          <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Race & Ethnicity</h3>
+        <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-[#08D9C4]" />
+            Race & Ethnicity
+          </h3>
           <BarChart items={data.raceEthnicity} color="#08D9C4" />
         </div>
+      </div>
 
-        {/* Top Cities */}
-        <div>
-          <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Top Cities</h3>
-          <div className="flex flex-wrap gap-2">
-            {data.topCities.map((city, i) => (
-              <span key={city} className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full font-medium">
-                {i + 1}. {city}
-              </span>
-            ))}
+      {/* Gender + Cities Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* Gender Split */}
+        <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-[#7742F1]" />
+            Gender Split
+          </h3>
+          <div className="flex rounded-xl overflow-hidden h-10 mb-3">
+            <div className="flex items-center justify-center text-xs font-bold text-white" style={{ width: `${data.genderSplit.male}%`, backgroundColor: '#423DF9' }}>
+              Male {data.genderSplit.male}%
+            </div>
+            <div className="flex items-center justify-center text-xs font-bold text-white" style={{ width: `${data.genderSplit.female}%`, backgroundColor: '#7742F1' }}>
+              Female {data.genderSplit.female}%
+            </div>
+          </div>
+          <div className="flex justify-between text-xs text-gray-500 mt-2">
+            <div className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#423DF9]" />
+              Male
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#7742F1]" />
+              Female
+            </div>
           </div>
         </div>
 
-        {/* Data Sources Note */}
-        <p className="text-[10px] text-gray-400 pt-2 border-t border-gray-100">
-          Sources: U.S. Census Bureau, World Population Review, Statista. Data approximate.
-        </p>
+        {/* Top Cities */}
+        <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-[#3a0ca3]" />
+            Top Cities
+          </h3>
+          <div className="space-y-2">
+            {data.topCities.map((city, i) => (
+              <div key={city} className="flex items-center gap-3">
+                <span className="w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-bold text-white" style={{ backgroundColor: ['#423DF9', '#7742F1', '#3a0ca3', '#08D9C4', '#0B9F90'][i] }}>
+                  {i + 1}
+                </span>
+                <span className="text-sm text-gray-700 font-medium">{city}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
+
+      {/* Data Sources */}
+      <p className="text-xs text-gray-400 text-center pt-4 border-t border-gray-100">
+        Sources: U.S. Census Bureau, World Population Review, Statista. Data approximate.
+      </p>
     </div>
   );
 }
@@ -240,6 +275,7 @@ function DemographicsPanel({ stateName, data, onClose }) {
 export default function Page() {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
+  const dataRef = useRef(null);
   const [selectedState, setSelectedState] = useState(null);
   const [hoveredState, setHoveredState] = useState(null);
   const [mapReady, setMapReady] = useState(false);
@@ -247,13 +283,11 @@ export default function Page() {
   useEffect(() => {
     if (mapInstance.current) return;
 
-    // Load Leaflet CSS
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
     document.head.appendChild(link);
 
-    // Load Leaflet JS
     const script = document.createElement('script');
     script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
     script.onload = () => {
@@ -264,7 +298,7 @@ export default function Page() {
         minZoom: 3,
         maxZoom: 8,
         zoomControl: false,
-        scrollWheelZoom: true,
+        scrollWheelZoom: false,
       });
 
       L.control.zoom({ position: 'bottomleft' }).addTo(map);
@@ -275,7 +309,6 @@ export default function Page() {
         maxZoom: 19,
       }).addTo(map);
 
-      // Load GeoJSON
       fetch(GEOJSON_URL)
         .then(r => r.json())
         .then(geojson => {
@@ -304,14 +337,21 @@ export default function Page() {
                 mouseover: (e) => {
                   e.target.setStyle({ fillOpacity: 0.85, weight: 2.5, color: '#423DF9' });
                   e.target.bringToFront();
+                  setHoveredState(name);
                 },
                 mouseout: (e) => {
                   geojsonLayer.resetStyle(e.target);
+                  setHoveredState(null);
                 },
                 click: (e) => {
                   const stateName = feature.properties.name;
                   setSelectedState(stateName);
                   map.fitBounds(e.target.getBounds(), { padding: [50, 50], maxZoom: 6 });
+                  setTimeout(() => {
+                    if (dataRef.current) {
+                      dataRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }, 300);
                 },
               });
             },
@@ -334,9 +374,9 @@ export default function Page() {
   const demographics = selectedState ? DEMOGRAPHICS[selectedState] : null;
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
+    <div className="min-h-screen bg-[#fafafe]" style={{ fontFamily: "'Open Sans', sans-serif" }}>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap');
         .state-tooltip {
           background: rgba(0,0,0,0.8) !important;
           color: white !important;
@@ -348,11 +388,6 @@ export default function Page() {
           box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
         }
         .state-tooltip::before { display: none !important; }
-        @keyframes slideIn {
-          from { transform: translateX(100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
-        .animate-slideIn { animation: slideIn 0.3s ease-out forwards; }
         .leaflet-control-zoom a {
           background: white !important;
           color: #374151 !important;
@@ -362,15 +397,15 @@ export default function Page() {
           line-height: 32px !important;
           font-size: 16px !important;
         }
-        .leaflet-control-zoom a:hover {
-          background: #F3F4F6 !important;
-        }
+        .leaflet-control-zoom a:hover { background: #F3F4F6 !important; }
       `}</style>
-      <div className="pt-[72px] flex flex-col h-screen">
+      <Header />
+
+      <div className="pt-[72px]">
         {/* Top Bar */}
-        <div className="px-4 sm:px-6 py-3 border-b border-gray-100 flex items-center justify-between bg-white">
+        <div className="px-4 sm:px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-white">
           <div>
-            <h1 className="text-lg font-bold text-gray-900">US Market Data</h1>
+            <h1 className="text-xl font-bold text-[#1D0652]">US Market Data</h1>
             <p className="text-xs text-gray-500">Click any state to view demographics for GTM targeting</p>
           </div>
           <div className="flex items-center gap-3">
@@ -378,17 +413,25 @@ export default function Page() {
               <span className="text-sm text-gray-600 hidden sm:block">{hoveredState}</span>
             )}
             {selectedState && (
-              <span className="px-3 py-1 bg-[#423DF9]/10 text-[#423DF9] text-xs font-semibold rounded-full">
+              <button
+                onClick={() => {
+                  setSelectedState(null);
+                  if (mapInstance.current) {
+                    mapInstance.current.flyTo([39.8, -98.5], 4, { duration: 0.5 });
+                  }
+                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#423DF9]/10 text-[#423DF9] text-xs font-semibold rounded-full hover:bg-[#423DF9]/20 transition-colors"
+              >
                 {selectedState}
-              </span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M9 3L3 9M3 3l6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              </button>
             )}
           </div>
         </div>
 
-        {/* Map + Panel */}
-        <div className="flex-1 relative overflow-hidden">
+        {/* Map */}
+        <div className="relative" style={{ height: '65vh', minHeight: '400px' }}>
           <div ref={mapRef} className="w-full h-full" />
-
           {!mapReady && (
             <div className="absolute inset-0 flex items-center justify-center bg-white">
               <div className="flex flex-col items-center gap-3">
@@ -397,34 +440,18 @@ export default function Page() {
               </div>
             </div>
           )}
+        </div>
 
-          {selectedState && (
-            <DemographicsPanel
-              stateName={selectedState}
-              data={demographics}
-              onClose={() => {
-                setSelectedState(null);
-                if (mapInstance.current) {
-                  mapInstance.current.flyTo([39.8, -98.5], 4, { duration: 0.5 });
-                }
-              }}
-            />
+        {/* Demographics Section Below Map */}
+        <div ref={dataRef}>
+          {selectedState && demographics && (
+            <div className="border-t-4 border-[#423DF9]">
+              <DemographicsSection stateName={selectedState} data={demographics} />
+            </div>
           )}
 
-          {/* No data message for states without demographics */}
           {selectedState && !demographics && (
-            <div className="absolute top-0 right-0 w-full sm:w-[420px] h-full bg-white border-l border-gray-200 shadow-2xl z-[1000] flex flex-col items-center justify-center animate-slideIn">
-              <button
-                onClick={() => {
-                  setSelectedState(null);
-                  if (mapInstance.current) {
-                    mapInstance.current.flyTo([39.8, -98.5], 4, { duration: 0.5 });
-                  }
-                }}
-                className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M15 5L5 15M5 5l10 10" stroke="#6B7280" strokeWidth="2" strokeLinecap="round"/></svg>
-              </button>
+            <div className="border-t-4 border-gray-200 py-16">
               <div className="text-center px-6">
                 <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -432,13 +459,33 @@ export default function Page() {
                     <circle cx="12" cy="10" r="3"/>
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-1">{selectedState}</h3>
+                <h3 className="text-lg font-bold text-[#1D0652] mb-1">{selectedState}</h3>
                 <p className="text-sm text-gray-500">Demographics data coming soon.</p>
                 <p className="text-xs text-gray-400 mt-1">Currently available: Texas, California, Florida, New York, Illinois</p>
               </div>
             </div>
           )}
+
+          {!selectedState && (
+            <div className="py-12 text-center">
+              <p className="text-gray-400 text-sm">Select a state on the map above to view detailed demographics</p>
+              <div className="flex flex-wrap justify-center gap-2 mt-4">
+                {Object.keys(DEMOGRAPHICS).map(state => (
+                  <button
+                    key={state}
+                    onClick={() => setSelectedState(state)}
+                    className="px-3 py-1.5 bg-white border border-gray-200 text-sm text-gray-600 rounded-full hover:border-[#423DF9] hover:text-[#423DF9] transition-colors"
+                  >
+                    {state}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
+
+        {/* Footer accent */}
+        <div className="h-1" style={{ background: 'linear-gradient(90deg, #1D0652, #423DF9, #08D9C4)' }} />
       </div>
     </div>
   );

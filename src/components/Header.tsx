@@ -84,7 +84,7 @@ export default function Header({ showBackLink = false }) {
         <div className="flex items-center justify-between w-full sm:w-auto">
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
-              <img src={LOGO_URL} alt="AYRO" className="h-12 w-auto object-contain" style={{ clipPath: 'inset(15% 0 15% 0)' }} />
+              <img src={LOGO_URL} alt="AYRO" className="h-20 w-auto object-contain" style={{ clipPath: 'inset(20% 0 20% 0)', margin: '-1rem 0' }} />
             </Link>
             {/* Desktop Navigation - aligned left */}
             <nav className="hidden sm:flex items-center gap-1">
@@ -247,7 +247,12 @@ export default function Header({ showBackLink = false }) {
         )}
 
         {currentUser && (
-          <div className="relative hidden sm:block" ref={userDropdownRef}>
+          <div
+            className="relative hidden sm:block"
+            ref={userDropdownRef}
+            onMouseEnter={() => setShowUserDropdown(true)}
+            onMouseLeave={() => setShowUserDropdown(false)}
+          >
             <button
               ref={userButtonRef}
               onClick={(e) => {
@@ -266,17 +271,19 @@ export default function Header({ showBackLink = false }) {
               </svg>
             </button>
             {showUserDropdown && (
-              <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                <div className="px-4 py-2 border-b border-gray-100">
-                  <p className="text-xs text-gray-500">Signed in as</p>
-                  <p className="text-sm font-medium text-gray-900 truncate">{currentUser.email}</p>
+              <div className="absolute right-0 mt-0 pt-2 w-64 z-[9999]">
+                <div className="bg-white rounded-lg shadow-lg border border-gray-200 border-t-2 border-t-[#423DF9] py-2">
+                  <div className="px-4 py-2 border-b border-gray-100">
+                    <p className="text-xs text-gray-500">Signed in as</p>
+                    <p className="text-sm font-medium text-gray-900 truncate">{currentUser.email}</p>
+                  </div>
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  >
+                    Sign out
+                  </button>
                 </div>
-                <button
-                  onClick={handleSignOut}
-                  className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                >
-                  Sign out
-                </button>
               </div>
             )}
           </div>
