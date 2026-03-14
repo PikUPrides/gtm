@@ -261,35 +261,10 @@ function DemographicsSection({ stateName, data, stateMetros }) {
 
       {/* Top Cities - only show if data available */}
       {data.topCities && data.topCities.length > 0 && (
-        <>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
-              <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#3a0ca3]" />
-                Top Cities
-              </h3>
-              <div className="space-y-2">
-                {data.topCities.slice(0, 5).map((city, i) => (
-                  <div key={city.name} className="flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-bold text-white shrink-0" style={{ backgroundColor: ['#423DF9', '#7742F1', '#3a0ca3', '#08D9C4', '#0B9F90'][i] }}>
-                      {i + 1}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <span className="text-sm text-gray-700 font-medium">{city.name}</span>
-                      <span className="text-xs text-gray-400 ml-1.5">{city.pop}</span>
-                    </div>
-                    <span className="text-xs font-semibold text-[#423DF9] shrink-0">{city.pct}%</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Full Top 10 Cities Table */}
           <div className="bg-white rounded-xl p-6 border border-gray-200 mb-8">
             <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-[#3a0ca3]" />
-              Top 10 Cities by Population
+              Top Cities by Population
             </h3>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -333,7 +308,6 @@ function DemographicsSection({ stateName, data, stateMetros }) {
               </table>
             </div>
           </div>
-        </>
       )}
 
       {/* Metro Areas for this state */}
