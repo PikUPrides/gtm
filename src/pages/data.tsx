@@ -93,7 +93,59 @@ function BarChart({ items, color }) {
   );
 }
 
-function DemographicsSection({ stateName, data }) {
+function MetroSection({ metros }) {
+  if (!metros || metros.length === 0) return null;
+  return (
+    <div className="bg-white rounded-xl p-6 border border-gray-200 mb-8">
+      <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
+        <div className="w-3 h-3 rounded-full bg-[#08D9C4]" />
+        Metro Areas / DMA Markets
+      </h3>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-gray-200">
+              <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold w-8">#</th>
+              <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Metro Area</th>
+              <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Population</th>
+              <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold hidden sm:table-cell">Med. Income</th>
+              <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold hidden md:table-cell">Med. Age</th>
+              <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold hidden lg:table-cell">Home Value</th>
+              <th className="text-center py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold hidden sm:table-cell">DMA</th>
+              <th className="text-center py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Nat'l Rank</th>
+            </tr>
+          </thead>
+          <tbody>
+            {metros.map((m, i) => (
+              <tr key={m.name} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                <td className="py-2.5 px-2">
+                  <span className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold text-white" style={{ backgroundColor: '#08D9C4' }}>
+                    {i + 1}
+                  </span>
+                </td>
+                <td className="py-2.5 px-2 font-medium text-gray-800">{m.name}</td>
+                <td className="py-2.5 px-2 text-right text-gray-600">{m.popFormatted}</td>
+                <td className="py-2.5 px-2 text-right text-gray-600 hidden sm:table-cell">{m.medianIncome}</td>
+                <td className="py-2.5 px-2 text-right text-gray-600 hidden md:table-cell">{m.medianAge}</td>
+                <td className="py-2.5 px-2 text-right text-gray-600 hidden lg:table-cell">{m.medianHomeValue}</td>
+                <td className="py-2.5 px-2 text-center hidden sm:table-cell">
+                  {m.dmaCode ? (
+                    <span className="inline-block px-2 py-0.5 bg-[#08D9C4]/10 text-[#0B9F90] text-[10px] font-bold rounded-full">{m.dmaCode}</span>
+                  ) : (
+                    <span className="text-gray-300 text-xs">{'\u2014'}</span>
+                  )}
+                </td>
+                <td className="py-2.5 px-2 text-center font-semibold text-[#423DF9]">{ordRank(m.nationalRank)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function DemographicsSection({ stateName, data, stateMetros }) {
   if (!data) return null;
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
@@ -247,7 +299,10 @@ function DemographicsSection({ stateName, data }) {
                     <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">City</th>
                     <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Population</th>
                     <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">% of State</th>
-                    <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold w-32"></th>
+                    <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold hidden sm:table-cell">Med. Income</th>
+                    <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold hidden md:table-cell">Med. Age</th>
+                    <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold hidden lg:table-cell">Home Value</th>
+                    <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold w-24"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -263,6 +318,9 @@ function DemographicsSection({ stateName, data }) {
                         <td className="py-2.5 px-2 font-medium text-gray-800">{city.name}</td>
                         <td className="py-2.5 px-2 text-right text-gray-600">{city.pop}</td>
                         <td className="py-2.5 px-2 text-right font-semibold text-[#423DF9]">{city.pct}%</td>
+                        <td className="py-2.5 px-2 text-right text-gray-600 hidden sm:table-cell">{city.medianIncome != null ? fmtCur(city.medianIncome) : '\u2014'}</td>
+                        <td className="py-2.5 px-2 text-right text-gray-600 hidden md:table-cell">{city.medianAge != null ? city.medianAge : '\u2014'}</td>
+                        <td className="py-2.5 px-2 text-right text-gray-600 hidden lg:table-cell">{city.medianHomeValue != null ? fmtCur(city.medianHomeValue) : '\u2014'}</td>
                         <td className="py-2.5 px-2">
                           <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
                             <div className="h-full rounded-full" style={{ width: `${(city.pct / maxPct) * 100}%`, backgroundColor: '#423DF9' }} />
@@ -278,9 +336,12 @@ function DemographicsSection({ stateName, data }) {
         </>
       )}
 
+      {/* Metro Areas for this state */}
+      <MetroSection metros={stateMetros} />
+
       {/* Data Sources */}
       <p className="text-xs text-gray-400 text-center pt-4 border-t border-gray-100">
-        Sources: U.S. Census Bureau ACS 2022 5-Year Estimates, Census QuickFacts.
+        Sources: U.S. Census Bureau ACS 2022 5-Year Estimates, Census QuickFacts, Nielsen DMA.
       </p>
     </div>
   );
@@ -301,11 +362,13 @@ export default function Page() {
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const searchRef = useRef(null);
   const [statesLookup, setStatesLookup] = useState({});
+  const [citiesByState, setCitiesByState] = useState({});
+  const [metroAreas, setMetroAreas] = useState([]);
   const [dataLoading, setDataLoading] = useState(true);
 
-  // Fetch demographics from States table
+  // Fetch demographics from States, Cities, and Metro Areas tables
   useEffect(() => {
-    serenities.entities.States.list()
+    const loadStates = serenities.entities.States.list()
       .then(rows => {
         const lookup = {};
         rows.forEach(row => {
@@ -314,12 +377,54 @@ export default function Page() {
           }
         });
         setStatesLookup(lookup);
-        setDataLoading(false);
       })
-      .catch(err => {
-        console.error('Failed to load states data:', err);
-        setDataLoading(false);
-      });
+      .catch(err => console.error('Failed to load states data:', err));
+
+    const loadCities = serenities.entities.Cities.list('-createdAt', 600)
+      .then(rows => {
+        const grouped = {};
+        rows.forEach(row => {
+          if (row.State) {
+            if (!grouped[row.State]) grouped[row.State] = [];
+            grouped[row.State].push({
+              name: row.Name,
+              pop: fmtNum(row.Population),
+              rawPop: Number(row.Population) || 0,
+              pct: Number(row.PctOfState) || 0,
+              rank: Number(row.StateRank) || 99,
+              medianIncome: row.MedianIncome,
+              medianAge: row.MedianAge,
+              medianHomeValue: row.MedianHomeValue,
+            });
+          }
+        });
+        Object.keys(grouped).forEach(state => {
+          grouped[state].sort((a, b) => a.rank - b.rank);
+        });
+        setCitiesByState(grouped);
+      })
+      .catch(err => console.error('Failed to load cities data:', err));
+
+    const loadMetros = serenities.entities['Metro Areas'].list()
+      .then(rows => {
+        const metros = rows.map(row => ({
+          name: row.Name,
+          states: row.States,
+          population: Number(row.Population) || 0,
+          popFormatted: fmtNum(row.Population),
+          medianIncome: fmtCur(row.MedianIncome),
+          medianAge: row.MedianAge != null ? String(row.MedianAge) : '\u2014',
+          medianHomeValue: fmtCur(row.MedianHomeValue),
+          nationalRank: Number(row.NationalRank) || 0,
+          dmaCode: row.DMACode || null,
+        })).sort((a, b) => a.nationalRank - b.nationalRank);
+        setMetroAreas(metros);
+      })
+      .catch(err => console.error('Failed to load metro areas data:', err));
+
+    Promise.all([loadStates, loadCities, loadMetros]).then(() => {
+      setDataLoading(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -494,7 +599,14 @@ export default function Page() {
     s.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const demographics = selectedState ? statesLookup[selectedState] : null;
+  const demographics = selectedState && statesLookup[selectedState] ? {
+    ...statesLookup[selectedState],
+    topCities: citiesByState[selectedState] || [],
+  } : null;
+
+  const stateMetros = selectedState ? metroAreas.filter(m =>
+    m.states && m.states.split(',').some(s => s.trim() === selectedState)
+  ) : [];
 
   return (
     <div className="min-h-screen bg-[#fafafe]" style={{ fontFamily: "'Open Sans', sans-serif" }}>
@@ -609,7 +721,7 @@ export default function Page() {
         <div ref={dataRef}>
           {selectedState && demographics && (
             <div>
-              <DemographicsSection stateName={selectedState} data={demographics} />
+              <DemographicsSection stateName={selectedState} data={demographics} stateMetros={stateMetros} />
             </div>
           )}
 
