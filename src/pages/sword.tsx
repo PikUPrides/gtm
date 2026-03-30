@@ -7,11 +7,10 @@ export default function Page() {
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap');`}</style>
       <Header showBackLink />
       
-      <div className="pt-16 px-4 sm:px-6 max-w-4xl mx-auto pb-12">
+      <div className="pt-6 px-4 sm:px-6 max-w-4xl mx-auto pb-12">
         {/* Page Header */}
-        <div className="mb-6">
-          <h1 className="text-xl sm:text-2xl font-bold text-[#1D0652]">Sword</h1>
-          <p className="text-gray-500 text-sm mt-1">Powerful analytics and tracking tools</p>
+        <div className="mb-4">
+          <h1 className="text-lg font-bold text-[#1D0652]">Sword</h1>
         </div>
 
         /* Coming Soon Card */
