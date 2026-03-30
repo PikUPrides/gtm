@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import Header from '../components/Header.jsx';
 import serenities from '../api/sdk';
@@ -152,7 +151,6 @@ export default function Page() {
   };
 
   const execCmd = (cmd, value = null) => {
-    // Save current selection
     const selection = window.getSelection();
     let savedRange = null;
     
@@ -160,12 +158,10 @@ export default function Page() {
       savedRange = selection.getRangeAt(0).cloneRange();
     }
     
-    // Focus the editor
     if (editorRef.current) {
       editorRef.current.focus();
     }
     
-    // Restore selection after a small delay
     setTimeout(() => {
       if (savedRange) {
         selection.removeAllRanges();
@@ -227,13 +223,13 @@ export default function Page() {
         .sidebar-tab {
           display: flex;
           align-items: center;
-          justify-between;
           padding: 10px 16px;
           cursor: pointer;
           color: #374151;
           font-size: 14px;
-          transition: all 0.15s;
           border-left: 3px solid transparent;
+          min-height: 40px;
+          box-sizing: border-box;
         }
         
         .sidebar-tab.active {
@@ -242,7 +238,7 @@ export default function Page() {
           border-left-color: #4f46e5;
         }
         
-        .sidebar-tab:hover {
+        .sidebar-tab:hover:not(.active) {
           background-color: #f3f4f6;
         }
         
@@ -251,6 +247,35 @@ export default function Page() {
           height: 18px;
           margin-right: 12px;
           color: inherit;
+          flex-shrink: 0;
+        }
+        
+        .tab-title {
+          flex: 1;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        
+        .menu-btn {
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+          cursor: pointer;
+          opacity: 0;
+          flex-shrink: 0;
+          transition: opacity 0.15s, background-color 0.15s;
+        }
+        
+        .sidebar-tab:hover .menu-btn {
+          opacity: 1;
+        }
+        
+        .menu-btn:hover {
+          background-color: #e5e7eb;
         }
         
         .main-content {
@@ -383,19 +408,17 @@ export default function Page() {
                 onMouseLeave={() => { setHoveredTab(null); setMenuTabId(null); }}
                 className={`sidebar-tab ${isActive ? 'active' : ''}`}
               >
-                <div className="flex items-center">
-                  <svg className="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                  <span>{tab.title}</span>
-                </div>
+                <svg className="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span className="tab-title">{tab.title}</span>
                 
-                {/* Three dots menu */}
+                {/* Three dots menu - only show on hover and for non-path tabs */}
                 {isHovered && !tab.path && (
                   <div className="relative">
                     <button
                       onClick={(e) => { e.stopPropagation(); setMenuTabId(menuTabId === tab.id ? null : tab.id); }}
-                      className="p-1 rounded hover:bg-gray-200"
+                      className="menu-btn"
                     >
                       <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
                         <circle cx="12" cy="6" r="2" />
@@ -406,7 +429,7 @@ export default function Page() {
                     
                     {/* Dropdown Menu */}
                     {menuTabId === tab.id && (
-                      <div className="absolute right-2 top-6 bg-white border border-gray-200 rounded-md shadow-lg z-50 min-w-[120px]">
+                      <div className="absolute right-0 top-8 bg-white border border-gray-200 rounded-md shadow-lg z-50 min-w-[120px]">
                         <button
                           onClick={(e) => { e.stopPropagation(); setMenuTabId(null); setRenameDialog({ open: true, tabId: tab.id, tabTitle: tab.title }); setRenameInput(tab.title); }}
                           className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 text-gray-700 flex items-center gap-2"
@@ -467,10 +490,10 @@ export default function Page() {
               onClick={() => setIsAddingTab(true)}
               className="sidebar-tab text-gray-500 hover:text-gray-700"
             >
-              <svg className="w-4 h-4 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-4 h-4" style={{ marginRight: '12px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
               </svg>
-              <span>Add new tab</span>
+              <span className="tab-title">Add new tab</span>
             </div>
           )}
         </div>
@@ -588,7 +611,6 @@ export default function Page() {
             contentEditable
             onInput={handleInput}
             onMouseUp={() => {
-              // Update on mouse up to capture selection changes
               if (editorRef.current) {
                 setContent(editorRef.current.innerHTML);
               }
