@@ -26,9 +26,17 @@ export default function Page() {
   const [deleteDialog, setDeleteDialog] = useState({ open: false, tabId: null, tabTitle: '' });
   const [renameDialog, setRenameDialog] = useState({ open: false, tabId: null, tabTitle: '' });
   const [renameInput, setRenameInput] = useState('');
+  const [editableTitle, setEditableTitle] = useState('');
   
   const saveTimeoutRef = useRef(null);
   const activeTabData = tabs.find(t => t.id === activeTab);
+
+  // Update editable title when active tab changes
+  useEffect(() => {
+    if (activeTabData) {
+      setEditableTitle(activeTabData.title || '');
+    }
+  }, [activeTab, tabs]);
 
   // TipTap editor - reinitialize when activeTab changes
   const editor = useEditor({
@@ -665,8 +673,13 @@ export default function Page() {
             type="text"
             className="doc-title-input"
             placeholder="Untitled"
-            defaultValue={activeTabData?.title || ''}
-            onBlur={(e) => renameTab(activeTab, e.target.value)}
+            value={editableTitle}
+            onChange={(e) => setEditableTitle(e.target.value)}
+            onBlur={(e) => {
+              if (e.target.value.trim()) {
+                renameTab(activeTab, e.target.value);
+              }
+            }}
           />
 
           <div className="toolbar-divider"></div>
