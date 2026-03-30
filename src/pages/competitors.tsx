@@ -16,6 +16,11 @@ export default function Page() {
   const [tabContent, setTabContent] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [tabToDelete, setTabToDelete] = useState(null);
+  const [showRenameDialog, setShowRenameDialog] = useState(false);
+  const [tabToRename, setTabToRename] = useState(null);
+  const [newTabName, setNewTabName] = useState('');
 
   // Create TipTap editor
   const editor = useEditor({
@@ -108,15 +113,52 @@ export default function Page() {
     if (tabToDelete?.path) return; // Don't delete pages with paths
     if (!tabToDelete?.rowId) return;
     
+    // Show confirmation dialog instead of deleting directly
+    setTabToDelete(tabToDelete);
+    setShowDeleteDialog(true);
+  };
+
+  const confirmDeleteTab = async () => {
+    if (!tabToDelete?.rowId) return;
+    
     try {
       await serenities.entities['Document Tabs'].delete(tabToDelete.rowId);
-      const newTabs = tabs.filter(t => t.id !== tabId);
+      const newTabs = tabs.filter(t => t.id !== tabToDelete.id);
       setTabs(newTabs);
-      if (activeTab === tabId) {
+      if (activeTab === tabToDelete.id) {
         setActiveTab(newTabs[0]?.id || 0);
       }
     } catch (err) {
       console.error('Failed to delete tab:', err);
+    } finally {
+      setShowDeleteDialog(false);
+      setTabToDelete(null);
+    }
+  };
+
+  const openRenameDialog = (e, tab) => {
+    e.stopPropagation();
+    setTabToRename(tab);
+    setNewTabName(tab.title);
+    setShowRenameDialog(true);
+  };
+
+  const confirmRenameTab = async () => {
+    if (!tabToRename?.rowId || !newTabName.trim()) return;
+    
+    try {
+      await serenities.entities['Document Tabs'].update(tabToRename.rowId, {
+        Title: newTabName.trim(),
+      });
+      setTabs(tabs.map(t => 
+        t.id === tabToRename.id ? { ...t, title: newTabName.trim() } : t
+      ));
+    } catch (err) {
+      console.error('Failed to rename tab:', err);
+    } finally {
+      setShowRenameDialog(false);
+      setTabToRename(null);
+      setNewTabName('');
     }
   };
 
@@ -243,11 +285,49 @@ export default function Page() {
                 </div>
                 
                 {isActive ? (
-                  <button className="p-1 hover:bg-blue-200 rounded-full">
-                    <svg className="w-[18px] h-[18px] text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                    </svg>
-                  </button>
+                  <div className="relative">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const menu = document.getElementById(`menu-${tab.id}`);
+                        if (menu) menu.classList.toggle('hidden');
+                      }}
+                      className="p-1 hover:bg-blue-200 rounded-full"
+                    >
+                      <svg className="w-[18px] h-[18px] text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                      </svg>
+                    </button>
+                    {/* Dropdown Menu */}
+                    <div id={`menu-${tab.id}`} className="hidden absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50 min-w-[140px]">
+                      <button
+                        onClick={(e) => {
+                          document.getElementById(`menu-${tab.id}`).classList.add('hidden');
+                          openRenameDialog(e, tab);
+                        }}
+                        className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Rename
+                      </button>
+                      {!tab.path && (
+                        <button
+                          onClick={(e) => {
+                            document.getElementById(`menu-${tab.id}`).classList.add('hidden');
+                            deleteTab(e, tab.id);
+                          }}
+                          className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                          Delete
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 ) : (
                   <button 
                     onClick={(e) => deleteTab(e, tab.id)}
@@ -378,6 +458,71 @@ export default function Page() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {showDeleteDialog && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
+            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 mx-auto mb-4">
+              <svg className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">Delete Tab?</h3>
+            <p className="text-gray-500 text-center mb-6">
+              Are you sure you want to delete "{tabToDelete?.title}"? This action cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => { setShowDeleteDialog(false); setTabToDelete(null); }}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteTab}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rename Dialog */}
+      {showRenameDialog && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-900 text-center mb-4">Rename Tab</h3>
+            <input
+              type="text"
+              value={newTabName}
+              onChange={(e) => setNewTabName(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') confirmRenameTab(); if (e.key === 'Escape') { setShowRenameDialog(false); setTabToRename(null); setNewTabName(''); } }}
+              placeholder="Enter new name..."
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+              autoFocus
+            />
+            <div className="flex gap-3">
+              <button
+                onClick={() => { setShowRenameDialog(false); setTabToRename(null); setNewTabName(''); }}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmRenameTab}
+                disabled={!newTabName.trim()}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
