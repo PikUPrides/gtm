@@ -16,6 +16,7 @@ export default function Page() {
   const [lastSaved, setLastSaved] = useState(null);
   const [hoveredTab, setHoveredTab] = useState(null);
   const [menuTabId, setMenuTabId] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   
   // Dialogs
   const [deleteDialog, setDeleteDialog] = useState({ open: false, tabId: null, tabTitle: '' });
@@ -274,7 +275,13 @@ export default function Page() {
         .doc-container {
           max-width: 850px;
           margin: 0 auto;
-          padding: 40px 60px;
+          padding: 24px 16px;
+        }
+
+        .doc-header {
+          padding: 16px;
+          border-bottom: 1px solid #e5e7eb;
+          background: white;
         }
 
         .doc-title {
@@ -284,11 +291,73 @@ export default function Page() {
           border: none;
           outline: none;
           width: 100%;
-          margin-bottom: 24px;
+          padding: 8px 0;
         }
 
         .doc-title::placeholder {
           color: #9aa0a6;
+        }
+
+        .toolbar-wrapper {
+          background: white;
+          border-bottom: 1px solid #e5e7eb;
+        }
+
+        .toolbar-inner {
+          max-width: 850px;
+          margin: 0 auto;
+          padding: 10px 16px;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          flex-wrap: wrap;
+        }
+
+        /* Responsive toolbar */
+        @media (max-width: 768px) {
+          .sidebar {
+            width: 200px;
+          }
+          .main-content {
+            margin-left: 200px;
+          }
+          .toolbar-inner {
+            gap: 6px;
+          }
+          .toolbar-btn {
+            padding: 6px 8px;
+          }
+          .font-select {
+            min-width: 70px;
+            font-size: 12px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .sidebar {
+            position: fixed;
+            left: -200px;
+            transition: left 0.3s;
+            z-index: 50;
+          }
+          .sidebar.open {
+            left: 0;
+          }
+          .main-content {
+            margin-left: 0;
+          }
+          .doc-container {
+            padding: 16px;
+          }
+          .doc-title {
+            font-size: 22px;
+          }
+          .status-area {
+            width: 100%;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #e5e7eb;
+          }
         }
 
         /* TipTap Editor Styles */
@@ -419,7 +488,7 @@ export default function Page() {
       `}</style>
 
       {/* Left Sidebar */}
-      <div className="sidebar">
+      <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <div className="sidebar-title">Documents</div>
         </div>
@@ -522,9 +591,33 @@ export default function Page() {
 
       {/* Main Content */}
       <div className="main-content">
+        {/* Document Header with Title */}
+        <div className="doc-header">
+          <div className="doc-container">
+            <input
+              type="text"
+              className="doc-title"
+              placeholder="Untitled document"
+              defaultValue={activeTabData?.title || ''}
+              onBlur={(e) => renameTab(activeTab, e.target.value)}
+            />
+          </div>
+        </div>
+
         {/* Toolbar */}
-        <div className="border-b border-gray-200 sticky top-0 bg-white z-10">
-          <div className="doc-container py-3 px-0 flex items-center gap-1 flex-wrap">
+        <div className="toolbar-wrapper">
+          <div className="toolbar-inner">
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="toolbar-btn md:hidden"
+              title="Menu"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+
             {/* Font Size Selector */}
             <select 
               className="font-select"
@@ -678,7 +771,7 @@ export default function Page() {
             </button>
             
             {/* Save Status */}
-            <div className="ml-auto flex items-center gap-2 text-sm text-gray-500">
+            <div className="ml-auto flex items-center gap-2 text-sm text-gray-500 status-area">
               {isSaving ? (
                 <span className="text-blue-600">Saving...</span>
               ) : lastSaved ? (
@@ -691,17 +784,8 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Document Content */}
+        {/* Document Editor Content */}
         <div className="doc-container">
-          {/* Document Title */}
-          <input
-            type="text"
-            className="doc-title"
-            placeholder="Untitled document"
-            defaultValue={activeTabData?.title || ''}
-            onBlur={(e) => renameTab(activeTab, e.target.value)}
-          />
-          
           {/* TipTap Editor */}
           {editor && <EditorContent editor={editor} />}
         </div>
