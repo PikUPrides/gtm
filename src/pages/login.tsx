@@ -73,7 +73,7 @@ export default function Page() {
         {/* Mobile brand header */}
         <div className="lg:hidden h-32 flex items-center justify-center relative" style={{ background: 'linear-gradient(135deg, #1D0652 0%, #423DF9 100%)' }}>
           <img 
-            src="https://minimax-algeng-chat-tts-us.oss-us-east-1.aliyuncs.com/ccv2%2F2026-03-13%2FMiniMax-M2.5%2F1928270917536846329%2F628b2f477ff8587e0103f91867aff48f9578fdf48d055b718c8d40734b7638d1..png?Expires=1773486238&OSSAccessKeyId=LTAI5tCpJNKCf5EkQHSuL9xg&Signature=ne8%2ByZHlWgYjS8xBOIrHeR3epeo%3D" 
+            src={serenities.files.url('34596756816d350738f724c7494aa95d')} 
             alt="AYRO" 
             className="h-14 w-auto brightness-0 invert" 
           />
