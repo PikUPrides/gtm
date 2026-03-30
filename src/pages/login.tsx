@@ -50,7 +50,7 @@ export default function Page() {
         </div>
         <div className="relative z-10">
           <img 
-            src={serenities.files.url('34596756816d350738f724c7494aa95d')} 
+            src={serenities.files.url('3311a7527e1130b22957919e233c6c0b')} 
             alt="AYRO" 
             className="h-16 w-auto mb-4 brightness-0 invert" 
           />
@@ -73,7 +73,7 @@ export default function Page() {
         {/* Mobile brand header */}
         <div className="lg:hidden h-32 flex items-center justify-center relative" style={{ background: 'linear-gradient(135deg, #1D0652 0%, #423DF9 100%)' }}>
           <img 
-            src={serenities.files.url('34596756816d350738f724c7494aa95d')} 
+            src={serenities.files.url('3311a7527e1130b22957919e233c6c0b')} 
             alt="AYRO" 
             className="h-14 w-auto brightness-0 invert" 
           />
