@@ -8,10 +8,12 @@ export default function Header({ showBackLink = false }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [showStrategyDropdown, setShowStrategyDropdown] = useState(false);
   const [showDataDropdown, setShowDataDropdown] = useState(false);
+  const [showToolsDropdown, setShowToolsDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const strategyDropdownRef = useRef(null);
   const dataDropdownRef = useRef(null);
+  const toolsDropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
   const userButtonRef = useRef(null);
   const userButtonMobileRef = useRef(null);
@@ -36,6 +38,9 @@ export default function Header({ showBackLink = false }) {
       }
       if (dataDropdownRef.current && !dataDropdownRef.current.contains(event.target)) {
         setShowDataDropdown(false);
+      }
+      if (toolsDropdownRef.current && !toolsDropdownRef.current.contains(event.target)) {
+        setShowToolsDropdown(false);
       }
 
       // Don't close user dropdown if clicking on either profile button
@@ -74,6 +79,12 @@ export default function Header({ showBackLink = false }) {
   // Data dropdown items
   const dataItems = [
     { href: '/data', label: 'US Market Data' },
+  ];
+
+  // Tools dropdown items
+  const toolsItems = [
+    { href: '/competitors', label: 'Competitors' },
+    { href: '/sword', label: 'Sword' },
   ];
 
   // Full header with navigation (for main pages)
@@ -134,7 +145,7 @@ export default function Header({ showBackLink = false }) {
               <div
                 className="relative"
                 ref={dataDropdownRef}
-                onMouseEnter={() => { setShowDataDropdown(true); setShowStrategyDropdown(false); }}
+                onMouseEnter={() => { setShowDataDropdown(true); setShowStrategyDropdown(false); setShowToolsDropdown(false); }}
                 onMouseLeave={() => setShowDataDropdown(false)}
               >
                 <button
@@ -154,6 +165,39 @@ export default function Header({ showBackLink = false }) {
                           key={item.href}
                           to={item.href}
                           onClick={() => setShowDataDropdown(false)}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {/* Tools Dropdown */}
+              <div
+                className="relative"
+                ref={toolsDropdownRef}
+                onMouseEnter={() => { setShowToolsDropdown(true); setShowStrategyDropdown(false); setShowDataDropdown(false); }}
+                onMouseLeave={() => setShowToolsDropdown(false)}
+              >
+                <button
+                  onClick={() => setShowToolsDropdown(!showToolsDropdown)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#1D0652] hover:text-[#423DF9] rounded-md hover:bg-[#423DF9]/5 transition-colors"
+                >
+                  Tools
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showToolsDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {showToolsDropdown && (
+                  <div className="absolute left-0 mt-0 pt-2 w-48 z-[9999]">
+                    <div className="bg-white rounded-lg shadow-lg border border-gray-200 border-t-2 border-t-[#423DF9] py-2">
+                      {toolsItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          to={item.href}
+                          onClick={() => setShowToolsDropdown(false)}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                         >
                           {item.label}
@@ -233,6 +277,17 @@ export default function Header({ showBackLink = false }) {
             ))}
             <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Data</div>
             {dataItems.map((item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Tools</div>
+            {toolsItems.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
