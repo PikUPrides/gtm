@@ -4,7 +4,7 @@ import Header from '../components/Header.jsx';
 
 const items = [
   { title: 'US Market Data', desc: 'Interactive US demographic map for GTM targeting — population, age, income by state.', path: '/data', tag: 'Data', color: '#08D9C4', icon: 'M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7' },
-  { title: 'Documents', desc: 'Manage all your strategic documents, competitor analysis, and reference materials.', path: '/competitors', tag: 'Strategy', color: '#F97316', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
+  { title: 'Documents', desc: 'Manage all your strategic documents, competitor analysis, and reference materials.', path: '/documents', tag: 'Strategy', color: '#F97316', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
   { title: 'Go-to-Market Strategy', desc: '55+ channels across paid, organic, hyperlocal, community, CRM, and partnerships.', path: '/gtm', tag: 'Strategy', color: '#423DF9', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
   { title: 'The AYRO Orbit', desc: 'A self-reinforcing mobility ecosystem where drivers, riders, and platform growth continuously strengthen each other.', path: '/ayro-orbit', tag: 'Strategy', color: '#7742F1', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' },
   { title: '1 Million Downloads in 90 Days', desc: '3-month phased playbook from soft launch to viral Orbit.', path: '/downloads', tag: 'Growth', color: '#08D9C4', icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' },
