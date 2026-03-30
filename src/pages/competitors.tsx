@@ -1,21 +1,6 @@
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Header from '../components/Header.jsx';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Placeholder from '@tiptap/extension-placeholder';
-import Underline from '@tiptap/extension-underline';
-import TextAlign from '@tiptap/extension-text-align';
-import Highlight from '@tiptap/extension-highlight';
-import LinkExtension from '@tiptap/extension-link';
-import Image from '@tiptap/extension-image';
-import Table from '@tiptap/extension-table';
-import TableRow from '@tiptap/extension-table-row';
-import TableHeader from '@tiptap/extension-table-header';
-import TableCell from '@tiptap/extension-table-cell';
-import TaskList from '@tiptap/extension-task-list';
-import TaskItem from '@tiptap/extension-task-item';
-
 import serenities from '../api/sdk';
 
 export default function Page() {
@@ -24,46 +9,10 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [isAddingTab, setIsAddingTab] = useState(false);
   const [newTabTitle, setNewTabTitle] = useState('');
-  const [tabContent, setTabContent] = useState('');
+  const [content, setContent] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState(null);
-
-  // Create TipTap editor
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder.configure({
-        placeholder: 'Start writing your document...',
-      }),
-      Underline,
-      TextAlign.configure({
-        types: ['heading', 'paragraph'],
-      }),
-      Highlight.configure({
-        multicolor: true,
-      }),
-      LinkExtension.configure({
-        openOnClick: false,
-      }),
-      Image.configure({
-        inline: true,
-      }),
-      Table.configure({
-        resizable: true,
-      }),
-      TableRow,
-      TableHeader,
-      TableCell,
-      TaskList,
-      TaskItem.configure({
-        nested: true,
-      }),
-    ],
-    content: tabContent,
-    onUpdate: ({ editor }) => {
-      setTabContent(editor.getHTML());
-    },
-  });
+  const editorRef = useRef(null);
 
   // Load tabs from database
   useEffect(() => {
@@ -81,7 +30,7 @@ export default function Page() {
         setTabs(loadedTabs);
         if (loadedTabs.length > 0) {
           setActiveTab(loadedTabs[0].id);
-          setTabContent(loadedTabs[0].content || '');
+          setContent(loadedTabs[0].content || '');
         }
       } catch (err) {
         console.error('Failed to load tabs:', err);
@@ -94,14 +43,10 @@ export default function Page() {
   // Update content when active tab changes
   useEffect(() => {
     const activeTabData = tabs.find(t => t.id === activeTab);
-    if (activeTabData && editor) {
-      const newContent = activeTabData.content || '';
-      if (editor.getHTML() !== newContent) {
-        editor.commands.setContent(newContent);
-      }
-      setTabContent(newContent);
+    if (activeTabData) {
+      setContent(activeTabData.content || '');
     }
-  }, [activeTab, tabs, editor]);
+  }, [activeTab, tabs]);
 
   const addTab = async () => {
     if (newTabTitle.trim()) {
@@ -160,17 +105,17 @@ export default function Page() {
     }
   };
 
-  const saveContent = useCallback(async (content) => {
+  const saveContent = async (newContent) => {
     const activeTabData = tabs.find(t => t.id === activeTab);
     if (!activeTabData?.rowId || activeTabData.path) return;
     
     try {
       setIsSaving(true);
       await serenities.entities['Document Tabs'].update(activeTabData.rowId, {
-        Content: content,
+        Content: newContent,
       });
       setTabs(tabs.map(t => 
-        t.id === activeTab ? { ...t, content } : t
+        t.id === activeTab ? { ...t, content: newContent } : t
       ));
       setLastSaved(new Date());
     } catch (err) {
@@ -178,25 +123,38 @@ export default function Page() {
     } finally {
       setIsSaving(false);
     }
-  }, [activeTab, tabs]);
+  };
 
   // Auto-save with debounce
   useEffect(() => {
-    if (!tabContent || activeTab === 0) return;
+    if (!content || activeTab === 0) return;
     
     const activeTabData = tabs.find(t => t.id === activeTab);
     if (activeTabData?.path) return;
     
     const timer = setTimeout(() => {
-      saveContent(tabContent);
+      saveContent(content);
     }, 1000);
     
     return () => clearTimeout(timer);
-  }, [tabContent, activeTab, saveContent]);
+  }, [content, activeTab, tabs]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') addTab();
     if (e.key === 'Escape') setIsAddingTab(false);
+  };
+
+  const execCmd = (cmd, value = null) => {
+    document.execCommand(cmd, false, value);
+    if (editorRef.current) {
+      setContent(editorRef.current.innerHTML);
+    }
+  };
+
+  const handleInput = () => {
+    if (editorRef.current) {
+      setContent(editorRef.current.innerHTML);
+    }
   };
 
   const activeTabData = tabs.find(t => t.id === activeTab);
@@ -206,7 +164,6 @@ export default function Page() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
         
-        /* Google Docs-like styling */
         .doc-container {
           max-width: 850px;
           margin: 0 auto;
@@ -227,7 +184,7 @@ export default function Page() {
           color: #9aa0a6;
         }
         
-        .ProseMirror {
+        .editor {
           min-height: 600px;
           outline: none;
           font-size: 14px;
@@ -236,15 +193,7 @@ export default function Page() {
           font-family: 'Google Sans', 'Roboto', sans-serif;
         }
         
-        .ProseMirror p.is-editor-empty:first-child::before {
-          content: attr(data-placeholder);
-          float: left;
-          color: #9aa0a6;
-          pointer-events: none;
-          height: 0;
-        }
-        
-        .ProseMirror h1 {
+        .editor h1 {
           font-size: 26px;
           font-weight: 400;
           margin-top: 24px;
@@ -252,7 +201,7 @@ export default function Page() {
           color: #202124;
         }
         
-        .ProseMirror h2 {
+        .editor h2 {
           font-size: 20px;
           font-weight: 500;
           margin-top: 20px;
@@ -260,7 +209,7 @@ export default function Page() {
           color: #202124;
         }
         
-        .ProseMirror h3 {
+        .editor h3 {
           font-size: 16px;
           font-weight: 500;
           margin-top: 16px;
@@ -268,80 +217,31 @@ export default function Page() {
           color: #202124;
         }
         
-        .ProseMirror p {
+        .editor p {
           margin-bottom: 12px;
         }
         
-        .ProseMirror ul, .ProseMirror ol {
+        .editor ul, .editor ol {
           padding-left: 24px;
           margin: 8px 0;
         }
         
-        .ProseMirror li {
+        .editor li {
           margin: 4px 0;
         }
         
-        .ProseMirror blockquote {
+        .editor blockquote {
           border-left: 3px solid #dadce0;
           padding-left: 16px;
           margin: 16px 0;
           color: #5f6368;
         }
         
-        .ProseMirror code {
-          background-color: #f1f3f4;
-          padding: 2px 6px;
-          border-radius: 4px;
-          font-family: 'Google Sans', 'Roboto', sans-serif;
-          font-size: 13px;
-        }
-        
-        .ProseMirror pre {
-          background-color: #f1f3f4;
-          padding: 16px;
-          border-radius: 8px;
-          overflow-x: auto;
-          font-size: 13px;
-        }
-        
-        .ProseMirror mark {
-          background-color: #fef7e0;
-          padding: 2px 0;
-        }
-        
-        .ProseMirror a {
+        .editor a {
           color: #1a73e8;
           text-decoration: none;
         }
         
-        .ProseMirror a:hover {
-          text-decoration: underline;
-        }
-        
-        .ProseMirror table {
-          border-collapse: collapse;
-          width: 100%;
-          margin: 16px 0;
-        }
-        
-        .ProseMirror th, .ProseMirror td {
-          border: 1px solid #dadce0;
-          padding: 12px;
-          text-align: left;
-        }
-        
-        .ProseMirror th {
-          background-color: #f8f9fa;
-          font-weight: 500;
-        }
-        
-        .ProseMirror hr {
-          border: none;
-          border-top: 1px solid #dadce0;
-          margin: 24px 0;
-        }
-        
-        /* Tab bar styling */
         .tab-item {
           padding: 8px 16px;
           cursor: pointer;
@@ -360,12 +260,14 @@ export default function Page() {
           border-bottom-color: #1a73e8;
         }
         
-        /* Toolbar */
         .toolbar-btn {
           padding: 6px 12px;
           border-radius: 4px;
           color: #5f6368;
           transition: all 0.15s;
+          cursor: pointer;
+          border: none;
+          background: none;
         }
         
         .toolbar-btn:hover {
@@ -373,12 +275,6 @@ export default function Page() {
           color: #202124;
         }
         
-        .toolbar-btn.active {
-          background-color: #e8f0fe;
-          color: #1a73e8;
-        }
-        
-        /* Status indicator */
         .status-dot {
           width: 8px;
           height: 8px;
@@ -398,7 +294,7 @@ export default function Page() {
                 <div
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`tab-item flex items-center gap-2 ${isActive ? 'active' : ''}`}
+                  className={`tab-item flex items-center gap-2 group ${isActive ? 'active' : ''}`}
                 >
                   <span>{tab.title}</span>
                   {tabs.length > 1 && !tab.path && (
@@ -476,69 +372,37 @@ export default function Page() {
         </div>
         
         {/* Toolbar */}
-        <div className="doc-container py-2 px-0 flex items-center gap-1 border-b border-gray-100">
-          <button
-            onClick={() => editor?.chain().focus().toggleBold().run()}
-            className={`toolbar-btn ${editor?.isActive('bold') ? 'active' : ''}`}
-            title="Bold"
-          >
+        <div className="doc-container py-2 px-0 flex items-center gap-1 border-b border-gray-100 flex-wrap">
+          <button onClick={() => execCmd('bold')} className="toolbar-btn" title="Bold">
             <strong>B</strong>
           </button>
-          <button
-            onClick={() => editor?.chain().focus().toggleItalic().run()}
-            className={`toolbar-btn ${editor?.isActive('italic') ? 'active' : ''}`}
-            title="Italic"
-          >
+          <button onClick={() => execCmd('italic')} className="toolbar-btn" title="Italic">
             <em>I</em>
           </button>
-          <button
-            onClick={() => editor?.chain().focus().toggleUnderline().run()}
-            className={`toolbar-btn ${editor?.isActive('underline') ? 'active' : ''}`}
-            title="Underline"
-          >
+          <button onClick={() => execCmd('underline')} className="toolbar-btn" title="Underline">
             <u>U</u>
           </button>
           
           <div className="w-px h-5 bg-gray-300 mx-2"></div>
           
-          <button
-            onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
-            className={`toolbar-btn ${editor?.isActive('heading', { level: 1 }) ? 'active' : ''}`}
-            title="Heading 1"
-          >
+          <button onClick={() => execCmd('formatBlock', 'h1')} className="toolbar-btn" title="Heading 1">
             H1
           </button>
-          <button
-            onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-            className={`toolbar-btn ${editor?.isActive('heading', { level: 2 }) ? 'active' : ''}`}
-            title="Heading 2"
-          >
+          <button onClick={() => execCmd('formatBlock', 'h2')} className="toolbar-btn" title="Heading 2">
             H2
           </button>
-          <button
-            onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
-            className={`toolbar-btn ${editor?.isActive('heading', { level: 3 }) ? 'active' : ''}`}
-            title="Heading 3"
-          >
+          <button onClick={() => execCmd('formatBlock', 'h3')} className="toolbar-btn" title="Heading 3">
             H3
           </button>
           
           <div className="w-px h-5 bg-gray-300 mx-2"></div>
           
-          <button
-            onClick={() => editor?.chain().focus().toggleBulletList().run()}
-            className={`toolbar-btn ${editor?.isActive('bulletList') ? 'active' : ''}`}
-            title="Bullet list"
-          >
+          <button onClick={() => execCmd('insertUnorderedList')} className="toolbar-btn" title="Bullet list">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h.01M8 6h12M4 12h.01M8 12h12M4 18h.01M8 18h12" />
             </svg>
           </button>
-          <button
-            onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-            className={`toolbar-btn ${editor?.isActive('orderedList') ? 'active' : ''}`}
-            title="Numbered list"
-          >
+          <button onClick={() => execCmd('insertOrderedList')} className="toolbar-btn" title="Numbered list">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h10M7 16h10M4 4h.01M4 8h.01M4 12h.01M4 16h.01" />
             </svg>
@@ -546,11 +410,7 @@ export default function Page() {
           
           <div className="w-px h-5 bg-gray-300 mx-2"></div>
           
-          <button
-            onClick={() => editor?.chain().focus().toggleBlockquote().run()}
-            className={`toolbar-btn ${editor?.isActive('blockquote') ? 'active' : ''}`}
-            title="Quote"
-          >
+          <button onClick={() => execCmd('formatBlock', 'blockquote')} className="toolbar-btn" title="Quote">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M8 20h6a2 2 0 002-2V8a2 2 0 00-2-2H8a2 2 0 00-2 2v6a2 2 0 002 2z" />
             </svg>
@@ -558,24 +418,10 @@ export default function Page() {
           
           <div className="w-px h-5 bg-gray-300 mx-2"></div>
           
-          <button
-            onClick={() => editor?.chain().focus().toggleHighlight({ color: '#fef7e0' }).run()}
-            className={`toolbar-btn ${editor?.isActive('highlight') ? 'active' : ''}`}
-            title="Highlight"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
-          </button>
-          
-          <button
-            onClick={() => {
-              const url = window.prompt('Enter URL:');
-              if (url) editor?.chain().focus().setLink({ href: url }).run();
-            }}
-            className={`toolbar-btn ${editor?.isActive('link') ? 'active' : ''}`}
-            title="Add link"
-          >
+          <button onClick={() => {
+            const url = window.prompt('Enter URL:');
+            if (url) execCmd('createLink', url);
+          }} className="toolbar-btn" title="Add link">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
             </svg>
@@ -583,29 +429,17 @@ export default function Page() {
           
           <div className="w-px h-5 bg-gray-300 mx-2"></div>
           
-          <button
-            onClick={() => editor?.chain().focus().setTextAlign('left').run()}
-            className={`toolbar-btn ${editor?.isActive({ textAlign: 'left' }) ? 'active' : ''}`}
-            title="Align left"
-          >
+          <button onClick={() => execCmd('justifyLeft')} className="toolbar-btn" title="Align left">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h10M4 18h14" />
             </svg>
           </button>
-          <button
-            onClick={() => editor?.chain().focus().setTextAlign('center').run()}
-            className={`toolbar-btn ${editor?.isActive({ textAlign: 'center' }) ? 'active' : ''}`}
-            title="Align center"
-          >
+          <button onClick={() => execCmd('justifyCenter')} className="toolbar-btn" title="Align center">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M7 12h10M5 18h14" />
             </svg>
           </button>
-          <button
-            onClick={() => editor?.chain().focus().setTextAlign('right').run()}
-            className={`toolbar-btn ${editor?.isActive({ textAlign: 'right' }) ? 'active' : ''}`}
-            title="Align right"
-          >
+          <button onClick={() => execCmd('justifyRight')} className="toolbar-btn" title="Align right">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M10 12h10M6 18h14" />
             </svg>
@@ -625,7 +459,13 @@ export default function Page() {
         />
         
         {/* Editor */}
-        <EditorContent editor={editor} />
+        <div
+          ref={editorRef}
+          className="editor"
+          contentEditable
+          onInput={handleInput}
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
       </div>
     </div>
   );
