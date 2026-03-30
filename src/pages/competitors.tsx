@@ -20,7 +20,7 @@ export default function Page() {
   const [lastSaved, setLastSaved] = useState(null);
   const [hoveredTab, setHoveredTab] = useState(null);
   const [menuTabId, setMenuTabId] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   
   // Dialogs
   const [deleteDialog, setDeleteDialog] = useState({ open: false, tabId: null, tabTitle: '' });
@@ -664,7 +664,7 @@ export default function Page() {
             title={sidebarOpen ? "Hide menu" : "Show menu"}
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d={sidebarOpen ? "M13 7l5 5m0 0l-5 5m5-5H6" : "M4 6h16M4 12h16M4 18h16"} />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
 
