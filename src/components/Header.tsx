@@ -1,8 +1,8 @@
 import { user, Link } from '../api/sdk.js';
 import { useState, useEffect, useRef } from 'react';
 
-// Logo image URL
-const LOGO_URL = "https://app.serenitiesai.com/api/files/public/3311a7527e1130b22957919e233c6c0b";
+// Logo image URL - using the uploaded AYRO logo file ID
+const LOGO_FILE_ID = "34596756816d350738f724c7494aa95d"; // Ayro_Primary - 3.png
 
 export default function Header({ showBackLink = false }) {
   const [currentUser, setCurrentUser] = useState(null);
@@ -84,7 +84,7 @@ export default function Header({ showBackLink = false }) {
         <div className="flex items-center justify-between w-full sm:w-auto">
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
-              <img src={LOGO_URL} alt="AYRO" className="h-20 w-auto object-contain" style={{ clipPath: 'inset(20% 0 20% 0)', margin: '-1rem 0' }} />
+              <img src={serenities.files.url(LOGO_FILE_ID)} alt="AYRO" className="h-16 w-auto object-contain" />
             </Link>
             {/* Desktop Navigation - aligned left */}
             <nav className="hidden sm:flex items-center gap-1">
