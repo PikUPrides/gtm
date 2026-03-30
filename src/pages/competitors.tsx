@@ -16,8 +16,7 @@ import TableHeader from '@tiptap/extension-table-header';
 import TableCell from '@tiptap/extension-table-cell';
 import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
-import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
-import lowlight from 'lowlight';
+
 import serenities from '../api/sdk';
 
 export default function Page() {
@@ -66,9 +65,6 @@ export default function Page() {
       TaskList,
       TaskItem.configure({
         nested: true,
-      }),
-      CodeBlockLowlight.configure({
-        lowlight,
       }),
     ],
     content: tabContent,
