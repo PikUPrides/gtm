@@ -1,40 +1,80 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header.jsx';
 import { Link } from 'react-router-dom';
+import serenities from '../api/sdk';
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState(0);
-  const [tabs, setTabs] = useState([
-    { id: 0, title: 'Sword', path: '/sword' },
-    { id: 1, title: 'Slide' },
-    { id: 2, title: 'Ubers Moat' },
-    { id: 3, title: 'Counter' },
-    { id: 4, title: 'How Lyft survived' },
-    { id: 5, title: 'Empower NYC validation' },
-    { id: 6, title: 'How empower handles...' },
-  ]);
+  const [tabs, setTabs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [isAddingTab, setIsAddingTab] = useState(false);
   const [newTabTitle, setNewTabTitle] = useState('');
 
-  const addTab = () => {
+  // Load tabs from database on mount
+  useEffect(() => {
+    async function loadTabs() {
+      try {
+        const rows = await serenities.entities['Document Tabs'].list('Order', 100);
+        const loadedTabs = rows.map((row, idx) => ({
+          id: idx,
+          title: row.Title,
+          path: row.Path || null,
+          order: row.Order,
+          rowId: row.id,
+        }));
+        setTabs(loadedTabs);
+        if (loadedTabs.length > 0) {
+          setActiveTab(loadedTabs[0].id);
+        }
+      } catch (err) {
+        console.error('Failed to load tabs:', err);
+      }
+      setLoading(false);
+    }
+    loadTabs();
+  }, []);
+
+  const addTab = async () => {
     if (newTabTitle.trim()) {
-      const newId = Math.max(...tabs.map(t => t.id)) + 1;
-      setTabs([...tabs, { id: newId, title: newTabTitle.trim() }]);
-      setNewTabTitle('');
-      setIsAddingTab(false);
-      setActiveTab(newId);
+      try {
+        const maxOrder = tabs.length > 0 ? Math.max(...tabs.map(t => t.order)) + 1 : 0;
+        const newRow = await serenities.entities['Document Tabs'].create({
+          Title: newTabTitle.trim(),
+          Order: maxOrder,
+        });
+        const newTab = {
+          id: Math.max(...tabs.map(t => t.id), 0) + 1,
+          title: newTabTitle.trim(),
+          path: null,
+          order: maxOrder,
+          rowId: newRow.id,
+        };
+        setTabs([...tabs, newTab]);
+        setNewTabTitle('');
+        setIsAddingTab(false);
+        setActiveTab(newTab.id);
+      } catch (err) {
+        console.error('Failed to add tab:', err);
+      }
     }
   };
 
-  const deleteTab = (e, id) => {
+  const deleteTab = async (e, tabId) => {
     e.stopPropagation();
-    const tabToDelete = tabs.find(t => t.id === id);
+    const tabToDelete = tabs.find(t => t.id === tabId);
     if (tabToDelete?.path) return; // Don't delete pages with paths
-    const newTabs = tabs.filter(t => t.id !== id);
-    setTabs(newTabs);
-    if (activeTab === id) {
-      setActiveTab(newTabs[0]?.id || 0);
+    if (!tabToDelete?.rowId) return;
+    
+    try {
+      await serenities.entities['Document Tabs'].delete(tabToDelete.rowId);
+      const newTabs = tabs.filter(t => t.id !== tabId);
+      setTabs(newTabs);
+      if (activeTab === tabId) {
+        setActiveTab(newTabs[0]?.id || 0);
+      }
+    } catch (err) {
+      console.error('Failed to delete tab:', err);
     }
   };
 
@@ -42,6 +82,9 @@ export default function Page() {
     if (e.key === 'Enter') addTab();
     if (e.key === 'Escape') setIsAddingTab(false);
   };
+
+  // Handle empty tabs case
+  const activeTabData = tabs.find(t => t.id === activeTab) || tabs[0];
 
   return (
     <div className="min-h-screen bg-[#fafafe] flex" style={{ fontFamily: "'Open Sans', sans-serif" }}>
