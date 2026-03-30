@@ -12,6 +12,13 @@ export default function Page() {
   const [content, setContent] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState(null);
+  const [hoveredTab, setHoveredTab] = useState(null);
+  const [menuTabId, setMenuTabId] = useState(null);
+  
+  // Dialogs
+  const [deleteDialog, setDeleteDialog] = useState({ open: false, tabId: null, tabTitle: '' });
+  const [renameDialog, setRenameDialog] = useState({ open: false, tabId: null, tabTitle: '' });
+  const [renameInput, setRenameInput] = useState('');
   const editorRef = useRef(null);
 
   // Load tabs from database
@@ -145,12 +152,26 @@ export default function Page() {
   };
 
   const execCmd = (cmd, value = null) => {
-    // First ensure editor has focus
+    // Save current selection
+    const selection = window.getSelection();
+    let savedRange = null;
+    
+    if (selection && selection.rangeCount > 0) {
+      savedRange = selection.getRangeAt(0).cloneRange();
+    }
+    
+    // Focus the editor
     if (editorRef.current) {
       editorRef.current.focus();
     }
-    // Small delay to ensure focus is set
+    
+    // Restore selection after a small delay
     setTimeout(() => {
+      if (savedRange) {
+        selection.removeAllRanges();
+        selection.addRange(savedRange);
+      }
+      
       try {
         document.execCommand(cmd, false, value);
         if (editorRef.current) {
@@ -215,14 +236,14 @@ export default function Page() {
           border-left: 3px solid transparent;
         }
         
-        .sidebar-tab:hover {
-          background-color: #f3f4f6;
-        }
-        
         .sidebar-tab.active {
           background-color: #e0e7ff;
           color: #4f46e5;
           border-left-color: #4f46e5;
+        }
+        
+        .sidebar-tab:hover {
+          background-color: #f3f4f6;
         }
         
         .tab-icon {
@@ -353,10 +374,13 @@ export default function Page() {
         <div className="tab-list">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
+            const isHovered = hoveredTab === tab.id;
             return (
               <div
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
+                onMouseEnter={() => setHoveredTab(tab.id)}
+                onMouseLeave={() => { setHoveredTab(null); setMenuTabId(null); }}
                 className={`sidebar-tab ${isActive ? 'active' : ''}`}
               >
                 <div className="flex items-center">
@@ -365,20 +389,45 @@ export default function Page() {
                   </svg>
                   <span>{tab.title}</span>
                 </div>
-                {tabs.length > 1 && !tab.path && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (confirm(`Delete "${tab.title}"?`)) {
-                        deleteTab(tab.id);
-                      }
-                    }}
-                    className="p-1 rounded hover:bg-gray-200 opacity-0 group-hover:opacity-100"
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
+                
+                {/* Three dots menu */}
+                {isHovered && !tab.path && (
+                  <div className="relative">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setMenuTabId(menuTabId === tab.id ? null : tab.id); }}
+                      className="p-1 rounded hover:bg-gray-200"
+                    >
+                      <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="6" r="2" />
+                        <circle cx="12" cy="12" r="2" />
+                        <circle cx="12" cy="18" r="2" />
+                      </svg>
+                    </button>
+                    
+                    {/* Dropdown Menu */}
+                    {menuTabId === tab.id && (
+                      <div className="absolute right-2 top-6 bg-white border border-gray-200 rounded-md shadow-lg z-50 min-w-[120px]">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setMenuTabId(null); setRenameDialog({ open: true, tabId: tab.id, tabTitle: tab.title }); setRenameInput(tab.title); }}
+                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 text-gray-700 flex items-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                          Rename
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setMenuTabId(null); setDeleteDialog({ open: true, tabId: tab.id, tabTitle: tab.title }); }}
+                          className="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 flex items-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             );
@@ -548,6 +597,87 @@ export default function Page() {
           />
         </div>
       </div>
+
+      {/* Rename Dialog */}
+      {renameDialog.open && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Rename Tab</h3>
+            <input
+              type="text"
+              value={renameInput}
+              onChange={(e) => setRenameInput(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  renameTab(renameDialog.tabId, renameInput);
+                  setRenameDialog({ open: false, tabId: null, tabTitle: '' });
+                }
+                if (e.key === 'Escape') {
+                  setRenameDialog({ open: false, tabId: null, tabTitle: '' });
+                }
+              }}
+            />
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setRenameDialog({ open: false, tabId: null, tabTitle: '' })}
+                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  renameTab(renameDialog.tabId, renameInput);
+                  setRenameDialog({ open: false, tabId: null, tabTitle: '' });
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Rename
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Dialog */}
+      {deleteDialog.open && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                <svg className="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-medium text-gray-900">Delete Tab</h3>
+                <p className="text-sm text-gray-500">This action cannot be undone.</p>
+              </div>
+            </div>
+            <p className="text-gray-700 mb-6">
+              Are you sure you want to delete <strong>"{deleteDialog.tabTitle}"</strong>? All content in this tab will be permanently removed.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteDialog({ open: false, tabId: null, tabTitle: '' })}
+                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  deleteTab(deleteDialog.tabId);
+                  setDeleteDialog({ open: false, tabId: null, tabTitle: '' });
+                }}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
