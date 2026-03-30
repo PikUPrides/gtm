@@ -275,7 +275,7 @@ export default function Page() {
                     : 'text-gray-700 hover:bg-gray-50 rounded-lg'}
                 `}
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 flex-1">
                   <svg className={`w-[18px] h-[18px] ${isActive ? 'text-blue-700' : 'text-gray-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
@@ -284,60 +284,54 @@ export default function Page() {
                   </span>
                 </div>
                 
-                {isActive ? (
-                  <div className="relative">
-                    <button 
+                {/* Three dots menu on hover */}
+                <div className="relative">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Close all other menus first
+                      document.querySelectorAll('[id^="menu-"]').forEach(el => {
+                        if (el.id !== `menu-${tab.id}`) el.classList.add('hidden');
+                      });
+                      const menu = document.getElementById(`menu-${tab.id}`);
+                      if (menu) menu.classList.toggle('hidden');
+                    }}
+                    className="p-1 opacity-0 group-hover:opacity-100 hover:bg-gray-200 rounded-full transition-all"
+                  >
+                    <svg className="w-[18px] h-[18px] text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </button>
+                  {/* Dropdown Menu */}
+                  <div id={`menu-${tab.id}`} className="hidden absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50 min-w-[140px]">
+                    <button
                       onClick={(e) => {
-                        e.stopPropagation();
-                        const menu = document.getElementById(`menu-${tab.id}`);
-                        if (menu) menu.classList.toggle('hidden');
+                        document.getElementById(`menu-${tab.id}`).classList.add('hidden');
+                        openRenameDialog(e, tab);
                       }}
-                      className="p-1 hover:bg-blue-200 rounded-full"
+                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
                     >
-                      <svg className="w-[18px] h-[18px] text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
+                      Rename
                     </button>
-                    {/* Dropdown Menu */}
-                    <div id={`menu-${tab.id}`} className="hidden absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50 min-w-[140px]">
+                    {!tab.path && (
                       <button
                         onClick={(e) => {
                           document.getElementById(`menu-${tab.id}`).classList.add('hidden');
-                          openRenameDialog(e, tab);
+                          deleteTab(e, tab.id);
                         }}
-                        className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                        className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
-                        Rename
+                        Delete
                       </button>
-                      {!tab.path && (
-                        <button
-                          onClick={(e) => {
-                            document.getElementById(`menu-${tab.id}`).classList.add('hidden');
-                            deleteTab(e, tab.id);
-                          }}
-                          className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
-                        >
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                          Delete
-                        </button>
-                      )}
-                    </div>
+                    )}
                   </div>
-                ) : (
-                  <button 
-                    onClick={(e) => deleteTab(e, tab.id)}
-                    className="p-1 opacity-0 group-hover:opacity-100 hover:bg-red-100 rounded-full transition-all"
-                  >
-                    <svg className="w-[18px] h-[18px] text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                )}
+                </div>
               </div>
             );
           })}
