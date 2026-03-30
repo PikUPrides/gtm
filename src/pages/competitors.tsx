@@ -5,8 +5,7 @@ import { Link } from 'react-router-dom';
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState(0);
-
-  const tabs = [
+  const [tabs, setTabs] = useState([
     { id: 0, title: 'Sword', path: '/sword' },
     { id: 1, title: 'Slide' },
     { id: 2, title: 'Ubers Moat' },
@@ -14,7 +13,35 @@ export default function Page() {
     { id: 4, title: 'How Lyft survived' },
     { id: 5, title: 'Empower NYC validation' },
     { id: 6, title: 'How empower handles...' },
-  ];
+  ]);
+  const [isAddingTab, setIsAddingTab] = useState(false);
+  const [newTabTitle, setNewTabTitle] = useState('');
+
+  const addTab = () => {
+    if (newTabTitle.trim()) {
+      const newId = Math.max(...tabs.map(t => t.id)) + 1;
+      setTabs([...tabs, { id: newId, title: newTabTitle.trim() }]);
+      setNewTabTitle('');
+      setIsAddingTab(false);
+      setActiveTab(newId);
+    }
+  };
+
+  const deleteTab = (e, id) => {
+    e.stopPropagation();
+    const tabToDelete = tabs.find(t => t.id === id);
+    if (tabToDelete?.path) return; // Don't delete pages with paths
+    const newTabs = tabs.filter(t => t.id !== id);
+    setTabs(newTabs);
+    if (activeTab === id) {
+      setActiveTab(newTabs[0]?.id || 0);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') addTab();
+    if (e.key === 'Escape') setIsAddingTab(false);
+  };
 
   return (
     <div className="min-h-screen bg-[#fafafe] flex" style={{ fontFamily: "'Open Sans', sans-serif" }}>
@@ -27,12 +54,48 @@ export default function Page() {
         <div className="p-4 flex flex-col gap-6">
           <div className="flex items-center justify-between px-2">
             <h2 className="text-lg font-medium text-gray-800">Document tabs</h2>
-            <button className="p-1 hover:bg-gray-100 rounded-md transition-colors">
+            <button 
+              onClick={() => setIsAddingTab(true)}
+              className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+            >
               <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
               </svg>
             </button>
           </div>
+          
+          {/* Add New Tab Input */}
+          {isAddingTab && (
+            <div className="px-2">
+              <div className="flex items-center gap-2 bg-white border border-blue-300 rounded-lg p-2 shadow-sm">
+                <input
+                  type="text"
+                  value={newTabTitle}
+                  onChange={(e) => setNewTabTitle(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Tab name..."
+                  className="flex-1 text-sm outline-none bg-transparent"
+                  autoFocus
+                />
+                <button
+                  onClick={addTab}
+                  className="p-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => { setIsAddingTab(false); setNewTabTitle(''); }}
+                  className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+                >
+                  <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Tabs List */}
@@ -59,10 +122,19 @@ export default function Page() {
                   </span>
                 </div>
                 
-                {isActive && (
+                {isActive ? (
                   <button className="p-1 hover:bg-blue-200 rounded-full">
                     <svg className="w-[18px] h-[18px] text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </button>
+                ) : (
+                  <button 
+                    onClick={(e) => deleteTab(e, tab.id)}
+                    className="p-1 opacity-0 group-hover:opacity-100 hover:bg-red-100 rounded-full transition-all"
+                  >
+                    <svg className="w-[18px] h-[18px] text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                   </button>
                 )}
