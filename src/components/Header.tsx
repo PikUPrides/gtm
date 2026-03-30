@@ -69,7 +69,7 @@ export default function Header({ showBackLink = false }) {
     { href: '/pitch-deck', label: 'Pitch Deck' },
     { href: '/ed-kang-pitch-deck', label: 'Ed Kang Pitch Deck' },
     { href: '/downloads', label: 'Downloads Strategy' },
-    { href: '/documents', label: 'Documents' },
+    { href: '/competitors', label: 'Competitors & Sword' },
   ];
 
   // Data dropdown items
