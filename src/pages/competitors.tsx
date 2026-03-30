@@ -181,7 +181,7 @@ export default function Page() {
         @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
         
         .sidebar {
-          width: 240px;
+          width: 200px;
           background: white;
           border-right: 1px solid #e5e7eb;
           height: 100vh;
@@ -192,12 +192,12 @@ export default function Page() {
         }
 
         .sidebar-header {
-          padding: 12px 16px;
+          padding: 10px 12px;
           border-bottom: 1px solid #e5e7eb;
         }
 
         .sidebar-title {
-          font-size: 14px;
+          font-size: 12px;
           font-weight: 500;
           color: #6b7280;
           text-transform: uppercase;
@@ -205,18 +205,18 @@ export default function Page() {
         }
 
         .tab-list {
-          padding: 8px 0;
+          padding: 6px 0;
         }
 
         .sidebar-tab {
           display: flex;
           align-items: center;
-          padding: 8px 16px;
+          padding: 6px 12px;
           cursor: pointer;
           color: #374151;
-          font-size: 14px;
+          font-size: 13px;
           border-left: 3px solid transparent;
-          min-height: 36px;
+          min-height: 32px;
           box-sizing: border-box;
         }
 
@@ -231,9 +231,9 @@ export default function Page() {
         }
 
         .tab-icon {
-          width: 18px;
-          height: 18px;
-          margin-right: 12px;
+          width: 16px;
+          height: 16px;
+          margin-right: 10px;
           color: inherit;
           flex-shrink: 0;
         }
@@ -246,8 +246,8 @@ export default function Page() {
         }
 
         .menu-btn {
-          width: 24px;
-          height: 24px;
+          width: 20px;
+          height: 20px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -267,183 +267,64 @@ export default function Page() {
         }
 
         .main-content {
-          margin-left: 240px;
+          margin-left: 200px;
           min-height: 100vh;
           background: white;
         }
 
-        .doc-container {
-          max-width: 850px;
-          margin: 0 auto;
-          padding: 12px 16px;
-        }
-
-        .doc-header {
-          padding: 12px;
-          border-bottom: 1px solid #e5e7eb;
-          background: white;
-        }
-
-        .doc-title {
-          font-size: 22px;
-          font-weight: 400;
-          color: #202124;
-          border: none;
-          outline: none;
-          width: 100%;
-          padding: 4px 0;
-        }
-
-        .doc-title::placeholder {
-          color: #9aa0a6;
-        }
-
-        .toolbar-wrapper {
-          background: white;
-          border-bottom: 1px solid #e5e7eb;
-        }
-
-        .toolbar-inner {
-          max-width: 850px;
-          margin: 0 auto;
-          padding: 8px 16px;
+        .compact-header {
           display: flex;
           align-items: center;
-          gap: 4px;
+          padding: 8px 16px;
+          border-bottom: 1px solid #e5e7eb;
+          gap: 16px;
           flex-wrap: wrap;
         }
 
-        /* Responsive toolbar */
-        @media (max-width: 768px) {
-          .sidebar {
-            width: 200px;
-          }
-          .main-content {
-            margin-left: 200px;
-          }
-          .toolbar-inner {
-            gap: 6px;
-          }
-          .toolbar-btn {
-            padding: 6px 8px;
-          }
-          .font-select {
-            min-width: 70px;
-            font-size: 12px;
-          }
-        }
-
-        @media (max-width: 640px) {
-          .sidebar {
-            position: fixed;
-            left: -200px;
-            transition: left 0.3s;
-            z-index: 50;
-          }
-          .sidebar.open {
-            left: 0;
-          }
-          .main-content {
-            margin-left: 0;
-          }
-          .doc-container {
-            padding: 16px;
-          }
-          .doc-title {
-            font-size: 22px;
-          }
-          .status-area {
-            width: 100%;
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid #e5e7eb;
-          }
-        }
-
-        /* TipTap Editor Styles */
-        .tiptap {
-          min-height: 400px;
+        .doc-title-input {
+          font-size: 16px;
+          font-weight: 500;
+          color: #202124;
+          border: none;
           outline: none;
-          font-size: 14px;
-          line-height: 1.6;
-          color: #202124;
-          font-family: 'Google Sans', 'Roboto', sans-serif;
+          width: 180px;
+          padding: 4px 8px;
+          border-radius: 4px;
         }
 
-        .tiptap p {
-          margin-bottom: 8px;
+        .doc-title-input:hover {
+          background: #f8f9fa;
         }
 
-        .tiptap h1 {
-          font-size: 22px;
-          font-weight: 400;
-          margin-top: 16px;
-          margin-bottom: 6px;
-          color: #202124;
+        .doc-title-input:focus {
+          background: #e8f0fe;
         }
 
-        .tiptap h2 {
-          font-size: 18px;
-          font-weight: 500;
-          margin-top: 14px;
-          margin-bottom: 6px;
-          color: #202124;
-        }
-
-        .tiptap h3 {
-          font-size: 15px;
-          font-weight: 500;
-          margin-top: 12px;
-          margin-bottom: 6px;
-          color: #202124;
-        }
-
-        .tiptap ul, .tiptap ol {
-          padding-left: 24px;
-          margin: 8px 0;
-        }
-
-        .tiptap ul {
-          list-style-type: disc;
-        }
-
-        .tiptap ol {
-          list-style-type: decimal;
-        }
-
-        .tiptap li {
-          margin: 4px 0;
-        }
-
-        .tiptap blockquote {
-          border-left: 3px solid #dadce0;
-          padding-left: 16px;
-          margin: 16px 0;
-          color: #5f6368;
-        }
-
-        .tiptap a {
-          color: #1a73e8;
-          text-decoration: none;
-        }
-
-        .tiptap p.is-editor-empty:first-child::before {
+        .doc-title-input::placeholder {
           color: #9aa0a6;
-          content: attr(data-placeholder);
-          float: left;
-          height: 0;
-          pointer-events: none;
+        }
+
+        .toolbar-divider {
+          width: 1px;
+          height: 20px;
+          background: #e0e0e0;
+        }
+
+        .compact-toolbar {
+          display: flex;
+          align-items: center;
+          gap: 2px;
         }
 
         .toolbar-btn {
-          padding: 8px 12px;
+          padding: 6px 8px;
           border-radius: 4px;
           color: #5f6368;
           transition: all 0.15s;
           cursor: pointer;
           border: none;
           background: none;
-          font-size: 14px;
+          font-size: 13px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -463,27 +344,140 @@ export default function Page() {
           color: #1a73e8;
         }
 
+        .toolbar-btn svg {
+          width: 16px;
+          height: 16px;
+        }
+
+        .save-status {
+          margin-left: auto;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 12px;
+          color: #5f6368;
+        }
+
         .status-dot {
-          width: 8px;
-          height: 8px;
+          width: 6px;
+          height: 6px;
           border-radius: 50%;
           background-color: #34a853;
         }
 
-        .font-select {
-          padding: 6px 8px;
-          border: 1px solid #e0e0e0;
-          border-radius: 4px;
-          background: white;
-          font-size: 13px;
-          color: #5f6368;
-          cursor: pointer;
-          outline: none;
-          min-width: 80px;
+        .doc-container {
+          max-width: 850px;
+          margin: 0 auto;
+          padding: 16px;
         }
 
-        .font-select:hover {
-          background-color: #f1f3f4;
+        /* TipTap Editor Styles */
+        .tiptap {
+          min-height: calc(100vh - 120px);
+          outline: none;
+          font-size: 14px;
+          line-height: 1.6;
+          color: #202124;
+          font-family: 'Google Sans', 'Roboto', sans-serif;
+        }
+
+        .tiptap p {
+          margin-bottom: 6px;
+        }
+
+        .tiptap h1 {
+          font-size: 20px;
+          font-weight: 500;
+          margin-top: 12px;
+          margin-bottom: 4px;
+          color: #202124;
+        }
+
+        .tiptap h2 {
+          font-size: 16px;
+          font-weight: 500;
+          margin-top: 10px;
+          margin-bottom: 4px;
+          color: #202124;
+        }
+
+        .tiptap h3 {
+          font-size: 14px;
+          font-weight: 500;
+          margin-top: 8px;
+          margin-bottom: 4px;
+          color: #202124;
+        }
+
+        .tiptap ul, .tiptap ol {
+          padding-left: 20px;
+          margin: 6px 0;
+        }
+
+        .tiptap ul {
+          list-style-type: disc;
+        }
+
+        .tiptap ol {
+          list-style-type: decimal;
+        }
+
+        .tiptap li {
+          margin: 3px 0;
+        }
+
+        .tiptap blockquote {
+          border-left: 3px solid #dadce0;
+          padding-left: 12px;
+          margin: 12px 0;
+          color: #5f6368;
+        }
+
+        .tiptap a {
+          color: #1a73e8;
+          text-decoration: none;
+        }
+
+        .tiptap p.is-editor-empty:first-child::before {
+          color: #9aa0a6;
+          content: attr(data-placeholder);
+          float: left;
+          height: 0;
+          pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+          .sidebar {
+            width: 180px;
+          }
+          .main-content {
+            margin-left: 180px;
+          }
+          .compact-header {
+            padding: 6px 12px;
+          }
+          .doc-title-input {
+            width: 140px;
+            font-size: 14px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .sidebar {
+            position: fixed;
+            left: -180px;
+            transition: left 0.3s;
+            z-index: 50;
+          }
+          .sidebar.open {
+            left: 0;
+          }
+          .main-content {
+            margin-left: 0;
+          }
+          .compact-header {
+            flex-wrap: wrap;
+          }
         }
       `}</style>
 
@@ -525,21 +519,21 @@ export default function Page() {
                     </button>
                     
                     {menuTabId === tab.id && (
-                      <div className="absolute right-0 top-8 bg-white border border-gray-200 rounded-md shadow-lg z-50 min-w-[120px]">
+                      <div className="absolute right-0 top-6 bg-white border border-gray-200 rounded-md shadow-lg z-50 min-w-[100px]">
                         <button
                           onClick={(e) => { e.stopPropagation(); setMenuTabId(null); setRenameDialog({ open: true, tabId: tab.id, tabTitle: tab.title }); setRenameInput(tab.title); }}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 text-gray-700 flex items-center gap-2"
+                          className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 text-gray-700 flex items-center gap-2"
                         >
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                           </svg>
                           Rename
                         </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); setMenuTabId(null); setDeleteDialog({ open: true, tabId: tab.id, tabTitle: tab.title }); }}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 flex items-center gap-2"
+                          className="w-full text-left px-3 py-2 text-sm hover:bg-red-50 text-red-600 flex items-center gap-2"
                         >
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                           </svg>
                           Delete
@@ -561,16 +555,16 @@ export default function Page() {
                 onChange={(e) => setNewTabTitle(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Tab name..."
-                className="px-3 py-1 border border-gray-300 rounded text-sm outline-none focus:border-blue-500 flex-1"
+                className="px-2 py-1 border border-gray-300 rounded text-sm outline-none focus:border-blue-500 flex-1"
                 autoFocus
               />
               <button onClick={addTab} className="text-blue-500 hover:text-blue-700 p-1">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </button>
               <button onClick={() => { setIsAddingTab(false); setNewTabTitle(''); }} className="text-gray-500 hover:text-gray-700 p-1">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -580,7 +574,7 @@ export default function Page() {
               onClick={() => setIsAddingTab(true)}
               className="sidebar-tab text-gray-500 hover:text-gray-700"
             >
-              <svg className="w-4 h-4" style={{ marginRight: '12px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-4 h-4" style={{ marginRight: '10px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
               </svg>
               <span className="tab-title">Add new tab</span>
@@ -591,36 +585,36 @@ export default function Page() {
 
       {/* Main Content */}
       <div className="main-content">
-        {/* Document Header with Title */}
-        <div className="doc-header">
-          <div className="doc-container">
-            <input
-              type="text"
-              className="doc-title"
-              placeholder="Untitled document"
-              defaultValue={activeTabData?.title || ''}
-              onBlur={(e) => renameTab(activeTab, e.target.value)}
-            />
-          </div>
-        </div>
+        {/* Combined Header & Toolbar */}
+        <div className="compact-header">
+          {/* Mobile Menu Button */}
+          <button 
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="toolbar-btn md:hidden"
+            title="Menu"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
 
-        {/* Toolbar */}
-        <div className="toolbar-wrapper">
-          <div className="toolbar-inner">
-            {/* Mobile Menu Button */}
-            <button 
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="toolbar-btn md:hidden"
-              title="Menu"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+          {/* Document Title */}
+          <input
+            type="text"
+            className="doc-title-input"
+            placeholder="Untitled"
+            defaultValue={activeTabData?.title || ''}
+            onBlur={(e) => renameTab(activeTab, e.target.value)}
+          />
 
-            {/* Font Size Selector */}
+          <div className="toolbar-divider"></div>
+
+          {/* Compact Toolbar */}
+          <div className="compact-toolbar">
+            {/* Font Size */}
             <select 
-              className="font-select"
+              className="toolbar-btn"
+              style={{ padding: '4px 6px', fontSize: '12px', minWidth: '50px' }}
               onChange={(e) => {
                 const size = e.target.value;
                 if (size === '1') editor?.chain().focus().setParagraph().run();
@@ -631,75 +625,42 @@ export default function Page() {
               }}
             >
               <option value="">Size</option>
-              <option value="1">Paragraph</option>
-              <option value="2">Heading 3</option>
-              <option value="3">Heading 2</option>
-              <option value="4">Heading 1</option>
+              <option value="1">P</option>
+              <option value="2">H3</option>
+              <option value="3">H2</option>
+              <option value="4">H1</option>
             </select>
-            
-            <div className="w-px h-5 bg-gray-300 mx-1"></div>
-            
+
             <button 
               onClick={() => editor?.chain().focus().toggleBold().run()} 
-              className={`toolbar-btn font-bold ${editor?.isActive('bold') ? 'is-active' : ''}`}
-              title="Bold (Ctrl+B)"
+              className={`toolbar-btn ${editor?.isActive('bold') ? 'is-active' : ''}`}
+              title="Bold"
             >
               B
             </button>
             <button 
               onClick={() => editor?.chain().focus().toggleItalic().run()} 
-              className={`toolbar-btn italic ${editor?.isActive('italic') ? 'is-active' : ''}`}
-              title="Italic (Ctrl+I)"
+              className={`toolbar-btn ${editor?.isActive('italic') ? 'is-active' : ''}`}
+              title="Italic"
             >
               I
             </button>
             <button 
               onClick={() => editor?.chain().focus().toggleUnderline().run()} 
-              className={`toolbar-btn underline ${editor?.isActive('underline') ? 'is-active' : ''}`}
-              title="Underline (Ctrl+U)"
+              className={`toolbar-btn ${editor?.isActive('underline') ? 'is-active' : ''}`}
+              title="Underline"
             >
               U
             </button>
-            <button 
-              onClick={() => editor?.chain().focus().toggleStrike().run()} 
-              className={`toolbar-btn line-through ${editor?.isActive('strike') ? 'is-active' : ''}`}
-              title="Strikethrough"
-            >
-              S
-            </button>
-            
-            <div className="w-px h-5 bg-gray-300 mx-2"></div>
-            
-            <button 
-              onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()} 
-              className={`toolbar-btn font-bold ${editor?.isActive('heading', { level: 1 }) ? 'is-active' : ''}`}
-              title="Heading 1"
-            >
-              H1
-            </button>
-            <button 
-              onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()} 
-              className={`toolbar-btn font-bold ${editor?.isActive('heading', { level: 2 }) ? 'is-active' : ''}`}
-              title="Heading 2"
-            >
-              H2
-            </button>
-            <button 
-              onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()} 
-              className={`toolbar-btn font-bold ${editor?.isActive('heading', { level: 3 }) ? 'is-active' : ''}`}
-              title="Heading 3"
-            >
-              H3
-            </button>
-            
-            <div className="w-px h-5 bg-gray-300 mx-2"></div>
-            
+
+            <div className="toolbar-divider"></div>
+
             <button 
               onClick={() => editor?.chain().focus().toggleBulletList().run()} 
               className={`toolbar-btn ${editor?.isActive('bulletList') ? 'is-active' : ''}`}
               title="Bullet list"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h.01M8 6h12M4 12h.01M8 12h12M4 18h.01M8 18h12" />
               </svg>
             </button>
@@ -708,24 +669,22 @@ export default function Page() {
               className={`toolbar-btn ${editor?.isActive('orderedList') ? 'is-active' : ''}`}
               title="Numbered list"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h10M7 16h10M4 4h.01M4 8h.01M4 12h.01M4 16h.01" />
               </svg>
             </button>
-            
-            <div className="w-px h-5 bg-gray-300 mx-2"></div>
-            
+
+            <div className="toolbar-divider"></div>
+
             <button 
               onClick={() => editor?.chain().focus().toggleBlockquote().run()} 
               className={`toolbar-btn ${editor?.isActive('blockquote') ? 'is-active' : ''}`}
               title="Quote"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M8 20h6a2 2 0 002-2V8a2 2 0 00-2-2H8a2 2 0 00-2 2v6a2 2 0 002 2z" />
               </svg>
             </button>
-            
-            <div className="w-px h-5 bg-gray-300 mx-2"></div>
             
             <button 
               onClick={() => {
@@ -735,58 +694,27 @@ export default function Page() {
               className={`toolbar-btn ${editor?.isActive('link') ? 'is-active' : ''}`}
               title="Add link"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
               </svg>
             </button>
-            
-            <div className="w-px h-5 bg-gray-300 mx-2"></div>
-            
-            <button 
-              onClick={() => editor?.chain().focus().setTextAlign('left').run()} 
-              className="toolbar-btn"
-              title="Align left"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h10M4 18h14" />
-              </svg>
-            </button>
-            <button 
-              onClick={() => editor?.chain().focus().setTextAlign('center').run()} 
-              className="toolbar-btn"
-              title="Align center"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M7 12h10M5 18h14" />
-              </svg>
-            </button>
-            <button 
-              onClick={() => editor?.chain().focus().setTextAlign('right').run()} 
-              className="toolbar-btn"
-              title="Align right"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M10 12h10M6 18h14" />
-              </svg>
-            </button>
-            
-            {/* Save Status */}
-            <div className="ml-auto flex items-center gap-2 text-sm text-gray-500 status-area">
-              {isSaving ? (
-                <span className="text-blue-600">Saving...</span>
-              ) : lastSaved ? (
-                <div className="flex items-center gap-2">
-                  <div className="status-dot"></div>
-                  <span>Saved</span>
-                </div>
-              ) : null}
-            </div>
+          </div>
+
+          {/* Save Status */}
+          <div className="save-status">
+            {isSaving ? (
+              <span className="text-blue-600">Saving...</span>
+            ) : lastSaved ? (
+              <div className="flex items-center gap-2">
+                <div className="status-dot"></div>
+                <span>Saved</span>
+              </div>
+            ) : null}
           </div>
         </div>
 
         {/* Document Editor Content */}
         <div className="doc-container">
-          {/* TipTap Editor */}
           {editor && <EditorContent editor={editor} />}
         </div>
       </div>
@@ -794,8 +722,8 @@ export default function Page() {
       {/* Rename Dialog */}
       {renameDialog.open && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Rename Tab</h3>
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-5">
+            <h3 className="text-lg font-medium text-gray-900 mb-3">Rename Tab</h3>
             <input
               type="text"
               value={renameInput}
@@ -837,10 +765,10 @@ export default function Page() {
       {/* Delete Dialog */}
       {deleteDialog.open && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-                <svg className="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
+                <svg className="w-4 h-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
@@ -849,8 +777,8 @@ export default function Page() {
                 <p className="text-sm text-gray-500">This action cannot be undone.</p>
               </div>
             </div>
-            <p className="text-gray-700 mb-6">
-              Are you sure you want to delete <strong>"{deleteDialog.tabTitle}"</strong>? All content in this tab will be permanently removed.
+            <p className="text-gray-700 mb-4">
+              Are you sure you want to delete <strong>"{deleteDialog.tabTitle}"</strong>?
             </p>
             <div className="flex justify-end gap-3">
               <button
