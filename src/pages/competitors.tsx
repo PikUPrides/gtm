@@ -131,16 +131,19 @@ export default function Page() {
     }
   };
 
-  // Auto-save with debounce
+  // Auto-save with debounce - only update state if content actually changed
   useEffect(() => {
     if (!content || activeTab === 0) return;
     
     const activeTabData = tabs.find(t => t.id === activeTab);
     if (activeTabData?.path) return;
     
+    // Check if content actually changed to minimize re-renders
+    if (activeTabData?.content === content) return;
+    
     const timer = setTimeout(() => {
       saveContent(content);
-    }, 1000);
+    }, 2000);
     
     return () => clearTimeout(timer);
   }, [content, activeTab, tabs]);
@@ -180,9 +183,9 @@ export default function Page() {
   };
 
   const handleInput = () => {
-    if (editorRef.current) {
-      setContent(editorRef.current.innerHTML);
-    }
+    // Don't trigger state update on every keystroke to prevent cursor jumping
+    // Content is already in the DOM via refs
+    // Debounced save in useEffect handles persistence
   };
 
   const activeTabData = tabs.find(t => t.id === activeTab);
@@ -609,12 +612,8 @@ export default function Page() {
             ref={editorRef}
             className="editor"
             contentEditable
-            onInput={handleInput}
-            onMouseUp={() => {
-              if (editorRef.current) {
-                setContent(editorRef.current.innerHTML);
-              }
-            }}
+            suppressContentEditableWarning={true}
+            spellCheck={false}
             dangerouslySetInnerHTML={{ __html: content }}
           />
         </div>
