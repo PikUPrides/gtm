@@ -1,8 +1,8 @@
 import { user, Link } from '../api/sdk.js';
 import { useState, useEffect, useRef } from 'react';
 
-// Logo image URL - using the uploaded AYRO logo file ID
-const LOGO_FILE_ID = "34596756816d350738f724c7494aa95d"; // Ayro_Primary - 3.png
+// Logo image URL - using the uploaded AYRO full logo (blue text)
+const LOGO_FILE_ID = "0e0f8e80c15bdbab73df5c01f94f9480"; // Ayro_Secondary - 3.png (full logo with blue text)
 
 export default function Header({ showBackLink = false }) {
   const [currentUser, setCurrentUser] = useState(null);
