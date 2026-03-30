@@ -189,6 +189,12 @@ export default function Page() {
           left: 0;
           top: 0;
           overflow-y: auto;
+          transition: left 0.3s;
+          z-index: 40;
+        }
+
+        .sidebar.collapsed {
+          left: -200px;
         }
 
         .sidebar-header {
@@ -270,6 +276,15 @@ export default function Page() {
           margin-left: 200px;
           min-height: 100vh;
           background: white;
+          transition: margin-left 0.3s;
+        }
+
+        .main-content.sidebar-collapsed {
+          margin-left: 0;
+        }
+
+        .sidebar.collapsed {
+          left: -200px;
         }
 
         .compact-header {
@@ -450,8 +465,14 @@ export default function Page() {
           .sidebar {
             width: 180px;
           }
+          .sidebar.collapsed {
+            left: -180px;
+          }
           .main-content {
             margin-left: 180px;
+          }
+          .main-content.sidebar-collapsed {
+            margin-left: 0;
           }
           .compact-header {
             padding: 6px 12px;
@@ -461,28 +482,10 @@ export default function Page() {
             font-size: 14px;
           }
         }
-
-        @media (max-width: 640px) {
-          .sidebar {
-            position: fixed;
-            left: -180px;
-            transition: left 0.3s;
-            z-index: 50;
-          }
-          .sidebar.open {
-            left: 0;
-          }
-          .main-content {
-            margin-left: 0;
-          }
-          .compact-header {
-            flex-wrap: wrap;
-          }
-        }
       `}</style>
 
       {/* Left Sidebar */}
-      <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+      <div className={`sidebar ${!sidebarOpen ? 'collapsed' : ''}`}>
         <div className="sidebar-header">
           <div className="sidebar-title">Documents</div>
         </div>
@@ -584,17 +587,17 @@ export default function Page() {
       </div>
 
       {/* Main Content */}
-      <div className="main-content">
+      <div className={`main-content ${sidebarOpen ? '' : 'sidebar-collapsed'}`}>
         {/* Combined Header & Toolbar */}
         <div className="compact-header">
-          {/* Mobile Menu Button */}
+          {/* Hamburger Menu Button - Toggle Sidebar */}
           <button 
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="toolbar-btn md:hidden"
-            title="Menu"
+            className="toolbar-btn"
+            title={sidebarOpen ? "Hide menu" : "Show menu"}
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              <path strokeLinecap="round" strokeLinejoin="round" d={sidebarOpen ? "M13 7l5 5m0 0l-5 5m5-5H6" : "M4 6h16M4 12h16M4 18h16"} />
             </svg>
           </button>
 
