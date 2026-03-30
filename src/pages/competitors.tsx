@@ -19,6 +19,7 @@ export default function Page() {
   const [renameDialog, setRenameDialog] = useState({ open: false, tabId: null, tabTitle: '' });
   const [renameInput, setRenameInput] = useState('');
   const editorRef = useRef(null);
+  const saveTimeoutRef = useRef(null);
 
   // Load tabs from database
   useEffect(() => {
@@ -131,61 +132,78 @@ export default function Page() {
     }
   };
 
-  // Auto-save with debounce - only update state if content actually changed
-  useEffect(() => {
-    if (!content || activeTab === 0) return;
+  // Save content with debounce - uses direct DOM read to avoid re-renders
+  const handleEditorChange = () => {
+    if (!editorRef.current || activeTab === 0) return;
     
     const activeTabData = tabs.find(t => t.id === activeTab);
     if (activeTabData?.path) return;
     
-    // Check if content actually changed to minimize re-renders
-    if (activeTabData?.content === content) return;
+    // Clear existing timeout
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
     
-    const timer = setTimeout(() => {
-      saveContent(content);
-    }, 2000);
-    
-    return () => clearTimeout(timer);
-  }, [content, activeTab, tabs]);
+    // Debounce save by 1.5 seconds
+    saveTimeoutRef.current = setTimeout(() => {
+      if (editorRef.current) {
+        saveContent(editorRef.current.innerHTML);
+      }
+    }, 1500);
+  };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') addTab();
     if (e.key === 'Escape') setIsAddingTab(false);
   };
 
+  // Better execCmd that preserves cursor position properly
   const execCmd = (cmd, value = null) => {
+    // Save selection BEFORE executing command
     const selection = window.getSelection();
-    let savedRange = null;
+    let savedRanges = [];
     
     if (selection && selection.rangeCount > 0) {
-      savedRange = selection.getRangeAt(0).cloneRange();
-    }
-    
-    if (editorRef.current) {
-      editorRef.current.focus();
-    }
-    
-    setTimeout(() => {
-      if (savedRange) {
-        selection.removeAllRanges();
-        selection.addRange(savedRange);
+      for (let i = 0; i < selection.rangeCount; i++) {
+        savedRanges.push({
+          startContainer: selection.getRangeAt(i).startContainer,
+          startOffset: selection.getRangeAt(i).startOffset,
+          endContainer: selection.getRangeAt(i).endContainer,
+          endOffset: selection.getRangeAt(i).endOffset
+        });
       }
-      
-      try {
-        document.execCommand(cmd, false, value);
-        if (editorRef.current) {
-          setContent(editorRef.current.innerHTML);
+    }
+
+    // Execute the command
+    document.execCommand(cmd, false, value);
+
+    // Restore selection AFTER a brief delay
+    setTimeout(() => {
+      if (savedRanges.length > 0 && editorRef.current) {
+        try {
+          // Try to restore selection - this may not work perfectly in all cases
+          // but helps maintain some cursor position
+          const newSelection = window.getSelection();
+          newSelection.removeAllRanges();
+          
+          // For simple cursor (no selection), try to restore
+          if (savedRanges.length === 1 && 
+              savedRanges[0].startContainer === savedRanges[0].endContainer) {
+            // Try to find approximate position in editor
+            const range = document.createRange();
+            range.setStart(editorRef.current, 0);
+            range.collapse(true);
+            newSelection.addRange(range);
+          }
+        } catch (e) {
+          // Selection restore failed, just focus editor
+          console.log('Selection restore failed, focusing editor');
         }
-      } catch (e) {
-        console.log('Command failed:', cmd, e);
+        
+        // Always focus editor to keep cursor visible
+        editorRef.current.focus();
       }
     }, 10);
-  };
-
-  const handleInput = () => {
-    // Don't trigger state update on every keystroke to prevent cursor jumping
-    // Content is already in the DOM via refs
-    // Debounced save in useEffect handles persistence
   };
 
   const activeTabData = tabs.find(t => t.id === activeTab);
@@ -349,8 +367,17 @@ export default function Page() {
           margin: 8px 0;
         }
         
-        .editor li {
+        .editor ul {
+          list-style-type: disc;
+        }
+        
+        .editor ol {
+          list-style-type: decimal;
+        }
+        
+        .editor ul li, .editor ol li {
           margin: 4px 0;
+          display: list-item;
         }
         
         .editor blockquote {
@@ -390,6 +417,22 @@ export default function Page() {
           height: 8px;
           border-radius: 50%;
           background-color: #34a853;
+        }
+
+        .font-select {
+          padding: 6px 8px;
+          border: 1px solid #e0e0e0;
+          border-radius: 4px;
+          background: white;
+          font-size: 13px;
+          color: #5f6368;
+          cursor: pointer;
+          outline: none;
+          min-width: 70px;
+        }
+        
+        .font-select:hover {
+          background-color: #f1f3f4;
         }
       `}</style>
 
@@ -507,6 +550,24 @@ export default function Page() {
         {/* Toolbar */}
         <div className="border-b border-gray-200 sticky top-0 bg-white z-10">
           <div className="doc-container py-3 px-0 flex items-center gap-1 flex-wrap">
+            {/* Font Size Selector */}
+            <select 
+              className="font-select"
+              onChange={(e) => execCmd('fontSize', e.target.value)}
+              defaultValue=""
+            >
+              <option value="" disabled>Size</option>
+              <option value="1">Small</option>
+              <option value="2">Normal</option>
+              <option value="3">Large</option>
+              <option value="4">Huge</option>
+              <option value="5">Heading</option>
+              <option value="6">Title</option>
+              <option value="7">Headline</option>
+            </select>
+            
+            <div className="w-px h-5 bg-gray-300 mx-1"></div>
+            
             <button onClick={() => execCmd('bold')} className="toolbar-btn font-bold" title="Bold (Ctrl+B)">
               B
             </button>
@@ -615,6 +676,7 @@ export default function Page() {
             suppressContentEditableWarning={true}
             spellCheck={false}
             dangerouslySetInnerHTML={{ __html: content }}
+            onInput={handleEditorChange}
           />
         </div>
       </div>
