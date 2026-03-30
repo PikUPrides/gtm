@@ -192,7 +192,7 @@ export default function Page() {
         }
 
         .sidebar-header {
-          padding: 16px;
+          padding: 12px 16px;
           border-bottom: 1px solid #e5e7eb;
         }
 
@@ -211,12 +211,12 @@ export default function Page() {
         .sidebar-tab {
           display: flex;
           align-items: center;
-          padding: 10px 16px;
+          padding: 8px 16px;
           cursor: pointer;
           color: #374151;
           font-size: 14px;
           border-left: 3px solid transparent;
-          min-height: 40px;
+          min-height: 36px;
           box-sizing: border-box;
         }
 
@@ -275,23 +275,23 @@ export default function Page() {
         .doc-container {
           max-width: 850px;
           margin: 0 auto;
-          padding: 24px 16px;
+          padding: 12px 16px;
         }
 
         .doc-header {
-          padding: 16px;
+          padding: 12px;
           border-bottom: 1px solid #e5e7eb;
           background: white;
         }
 
         .doc-title {
-          font-size: 28px;
+          font-size: 22px;
           font-weight: 400;
           color: #202124;
           border: none;
           outline: none;
           width: 100%;
-          padding: 8px 0;
+          padding: 4px 0;
         }
 
         .doc-title::placeholder {
@@ -306,7 +306,7 @@ export default function Page() {
         .toolbar-inner {
           max-width: 850px;
           margin: 0 auto;
-          padding: 10px 16px;
+          padding: 8px 16px;
           display: flex;
           align-items: center;
           gap: 4px;
@@ -362,39 +362,39 @@ export default function Page() {
 
         /* TipTap Editor Styles */
         .tiptap {
-          min-height: 600px;
+          min-height: 400px;
           outline: none;
           font-size: 14px;
-          line-height: 1.8;
+          line-height: 1.6;
           color: #202124;
           font-family: 'Google Sans', 'Roboto', sans-serif;
         }
 
         .tiptap p {
-          margin-bottom: 12px;
+          margin-bottom: 8px;
         }
 
         .tiptap h1 {
-          font-size: 26px;
+          font-size: 22px;
           font-weight: 400;
-          margin-top: 24px;
-          margin-bottom: 8px;
+          margin-top: 16px;
+          margin-bottom: 6px;
           color: #202124;
         }
 
         .tiptap h2 {
-          font-size: 20px;
+          font-size: 18px;
           font-weight: 500;
-          margin-top: 20px;
-          margin-bottom: 8px;
+          margin-top: 14px;
+          margin-bottom: 6px;
           color: #202124;
         }
 
         .tiptap h3 {
-          font-size: 16px;
+          font-size: 15px;
           font-weight: 500;
-          margin-top: 16px;
-          margin-bottom: 8px;
+          margin-top: 12px;
+          margin-bottom: 6px;
           color: #202124;
         }
 
