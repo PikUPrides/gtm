@@ -629,6 +629,7 @@ export default function Page() {
               type="text"
               value={renameInput}
               onChange={(e) => setRenameInput(e.target.value)}
+              dir="ltr"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
               autoFocus
               onKeyDown={(e) => {
