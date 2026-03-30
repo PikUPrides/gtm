@@ -4,6 +4,10 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
+import Table from '@tiptap/extension-table';
+import TableRow from '@tiptap/extension-table-row';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
 import serenities from '../api/sdk';
 
 export default function Page() {
@@ -33,6 +37,12 @@ export default function Page() {
         heading: { levels: [1, 2, 3] },
       }),
       Underline,
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
       Placeholder.configure({
         placeholder: 'Start typing your content...',
       }),
@@ -448,6 +458,55 @@ export default function Page() {
           color: #5f6368;
         }
 
+        .tiptap table {
+          border-collapse: collapse;
+          margin: 16px 0;
+          width: 100%;
+        }
+
+        .tiptap th, .tiptap td {
+          border: 1px solid #e0e0e0;
+          padding: 8px 12px;
+          text-align: left;
+          min-width: 80px;
+        }
+
+        .tiptap th {
+          background-color: #f8f9fa;
+          font-weight: 500;
+        }
+
+        .tiptap td {
+          background-color: white;
+        }
+
+        .tiptap .selectedCell:after {
+          background: rgba(26, 115, 232, 0.1);
+          content: "";
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          pointer-events: none;
+          position: absolute;
+          z-index: 2;
+        }
+
+        .tiptap .column-resize-handle {
+          background-color: #1a73e8;
+          bottom: -2px;
+          position: absolute;
+          right: -2px;
+          pointer-events: none;
+          top: 0;
+          width: 4px;
+        }
+
+        .tiptap table {
+          table-layout: fixed;
+          width: 100%;
+        }
+
         .tiptap a {
           color: #1a73e8;
           text-decoration: none;
@@ -686,6 +745,46 @@ export default function Page() {
             >
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M8 20h6a2 2 0 002-2V8a2 2 0 00-2-2H8a2 2 0 00-2 2v6a2 2 0 002 2z" />
+              </svg>
+            </button>
+            
+            <button 
+              onClick={() => editor?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} 
+              className="toolbar-btn"
+              title="Insert table"
+            >
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </button>
+            
+            <button 
+              onClick={() => editor?.chain().focus().deleteTable().run()} 
+              className={`toolbar-btn ${editor?.isActive('table') ? 'is-active' : ''}`}
+              title="Delete table"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+            
+            <button 
+              onClick={() => editor?.chain().focus().addColumnAfter().run()} 
+              className="toolbar-btn"
+              title="Add column"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m-8-8h16" />
+              </svg>
+            </button>
+            
+            <button 
+              onClick={() => editor?.chain().focus().addRowAfter().run()} 
+              className="toolbar-btn"
+              title="Add row"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 12h16" />
               </svg>
             </button>
             
