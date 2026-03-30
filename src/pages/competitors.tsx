@@ -1,7 +1,10 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Header from '../components/Header.jsx';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Placeholder from '@tiptap/extension-placeholder';
 import serenities from '../api/sdk';
 
 export default function Page() {
@@ -10,6 +13,35 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [isAddingTab, setIsAddingTab] = useState(false);
   const [newTabTitle, setNewTabTitle] = useState('');
+  const [tabContent, setTabContent] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState(null);
+
+  // Create TipTap editor
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        placeholder: 'Start writing your document...',
+      }),
+    ],
+    content: tabContent,
+    onUpdate: ({ editor }) => {
+      setTabContent(editor.getHTML());
+    },
+    editorProps: {
+      attributes: {
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[300px] p-4',
+      },
+    },
+  });
+
+  // Update editor content when tab changes
+  useEffect(() => {
+    if (editor && tabContent !== editor.getHTML()) {
+      editor.commands.setContent(tabContent || '');
+    }
+  }, [activeTab, editor]);
 
   // Load tabs from database on mount
   useEffect(() => {
@@ -22,10 +54,12 @@ export default function Page() {
           path: row.Path || null,
           order: row.Order,
           rowId: row.id,
+          content: row.Content || '',
         }));
         setTabs(loadedTabs);
         if (loadedTabs.length > 0) {
           setActiveTab(loadedTabs[0].id);
+          setTabContent(loadedTabs[0].content || '');
         }
       } catch (err) {
         console.error('Failed to load tabs:', err);
@@ -34,6 +68,14 @@ export default function Page() {
     }
     loadTabs();
   }, []);
+
+  // Update content when active tab changes
+  useEffect(() => {
+    const activeTabData = tabs.find(t => t.id === activeTab);
+    if (activeTabData) {
+      setTabContent(activeTabData.content || '');
+    }
+  }, [activeTab]);
 
   const addTab = async () => {
     if (newTabTitle.trim()) {
@@ -77,6 +119,41 @@ export default function Page() {
       console.error('Failed to delete tab:', err);
     }
   };
+
+  const saveContent = useCallback(async (content) => {
+    const activeTabData = tabs.find(t => t.id === activeTab);
+    if (!activeTabData?.rowId || activeTabData.path) return;
+    
+    try {
+      setIsSaving(true);
+      await serenities.entities['Document Tabs'].update(activeTabData.rowId, {
+        Content: content,
+      });
+      // Update local state
+      setTabs(tabs.map(t => 
+        t.id === activeTab ? { ...t, content } : t
+      ));
+      setLastSaved(new Date());
+    } catch (err) {
+      console.error('Failed to save content:', err);
+    } finally {
+      setIsSaving(false);
+    }
+  }, [activeTab, tabs]);
+
+  // Auto-save with debounce
+  useEffect(() => {
+    if (!tabContent || activeTab === 0) return;
+    
+    const activeTabData = tabs.find(t => t.id === activeTab);
+    if (activeTabData?.path) return; // Don't save for built-in pages
+    
+    const timer = setTimeout(() => {
+      saveContent(tabContent);
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, [tabContent, activeTab, saveContent]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') addTab();
@@ -210,17 +287,94 @@ export default function Page() {
               </p>
             </div>
           </Link>
-        ) : (
-          <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
+        ) : activeTabData?.path ? (
+          <Link to={activeTabData.path} className="block">
+            <div className="bg-white rounded-xl border border-gray-200 p-8 text-center hover:shadow-md transition-shadow cursor-pointer">
+              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">{tabs[activeTab]?.title}</h2>
+              <p className="text-gray-500 max-w-md mx-auto">
+                Click to view this section.
+              </p>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">{tabs[activeTab].title}</h2>
-            <p className="text-gray-500 max-w-md mx-auto">
-              This section is under development. Check back soon for content.
-            </p>
+          </Link>
+        ) : (
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            {/* Editor Toolbar */}
+            <div className="border-b border-gray-200 p-3 flex items-center justify-between bg-gray-50">
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => editor?.chain().focus().toggleBold().run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('bold') ? 'bg-gray-200' : ''}`}
+                  title="Bold"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 12h9a4 4 0 014 4 4 4 0 01-4 4H6z" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().toggleItalic().run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('italic') ? 'bg-gray-200' : ''}`}
+                  title="Italic"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 4h4M14 20H6M7 4l4 16" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('heading', { level: 2 }) ? 'bg-gray-200' : ''}`}
+                  title="Heading"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h10" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().toggleBulletList().run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('bulletList') ? 'bg-gray-200' : ''}`}
+                  title="Bullet List"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h.01M8 6h12M4 12h.01M8 12h12M4 18h.01M8 18h12" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('orderedList') ? 'bg-gray-200' : ''}`}
+                  title="Ordered List"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h10M7 16h10M4 4h.01M4 8h.01M4 12h.01M4 16h.01" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().toggleBlockquote().run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('blockquote') ? 'bg-gray-200' : ''}`}
+                  title="Quote"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M8 20h6a2 2 0 002-2V8a2 2 0 00-2-2H8a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                  </svg>
+                </button>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                {isSaving ? (
+                  <span className="text-blue-500">Saving...</span>
+                ) : lastSaved ? (
+                  <span>Saved</span>
+                ) : null}
+              </div>
+            </div>
+            
+            {/* Editor Content */}
+            <div className="p-4 min-h-[400px]">
+              <EditorContent editor={editor} />
+            </div>
           </div>
         )}
       </div>
