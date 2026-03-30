@@ -1,10 +1,23 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Header from '../components/Header.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import Highlight from '@tiptap/extension-highlight';
+import LinkExtension from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
+import Table from '@tiptap/extension-table';
+import TableRow from '@tiptap/extension-table-row';
+import TableHeader from '@tiptap/extension-table-header';
+import TableCell from '@tiptap/extension-table-cell';
+import TaskList from '@tiptap/extension-task-list';
+import TaskItem from '@tiptap/extension-task-item';
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
+import lowlight from 'lowlight';
 import serenities from '../api/sdk';
 
 export default function Page() {
@@ -22,12 +35,40 @@ export default function Page() {
   const [tabToRename, setTabToRename] = useState(null);
   const [newTabName, setNewTabName] = useState('');
 
-  // Create TipTap editor
+  // Create TipTap editor with all extensions
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        codeBlock: false, // Disable default codeBlock to use Lowlight
+      }),
       Placeholder.configure({
         placeholder: 'Start writing your document...',
+      }),
+      Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      Highlight.configure({
+        multicolor: true,
+      }),
+      LinkExtension.configure({
+        openOnClick: false,
+      }),
+      Image.configure({
+        inline: true,
+      }),
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
+      CodeBlockLowlight.configure({
+        lowlight,
       }),
     ],
     content: tabContent,
@@ -207,7 +248,164 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-[#fafafe] flex" style={{ fontFamily: "'Open Sans', sans-serif" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap');`}</style>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap');
+        
+        /* TipTap Editor Styles */
+        .ProseMirror {
+          min-height: 400px;
+          outline: none;
+          font-size: 16px;
+          line-height: 1.7;
+          color: #374151;
+        }
+        
+        .ProseMirror p.is-editor-empty:first-child::before {
+          content: attr(data-placeholder);
+          float: left;
+          color: #9ca3af;
+          pointer-events: none;
+          height: 0;
+        }
+        
+        .ProseMirror h1 {
+          font-size: 2em;
+          font-weight: 700;
+          margin-top: 1em;
+          margin-bottom: 0.5em;
+          color: #1D0652;
+        }
+        
+        .ProseMirror h2 {
+          font-size: 1.5em;
+          font-weight: 600;
+          margin-top: 1em;
+          margin-bottom: 0.5em;
+          color: #1D0652;
+        }
+        
+        .ProseMirror h3 {
+          font-size: 1.25em;
+          font-weight: 600;
+          margin-top: 1em;
+          margin-bottom: 0.5em;
+          color: #1D0652;
+        }
+        
+        .ProseMirror ul, .ProseMirror ol {
+          padding-left: 1.5em;
+          margin: 0.5em 0;
+        }
+        
+        .ProseMirror li {
+          margin: 0.25em 0;
+        }
+        
+        .ProseMirror blockquote {
+          border-left: 3px solid #3b82f6;
+          padding-left: 1em;
+          margin: 1em 0;
+          color: #6b7280;
+          font-style: italic;
+        }
+        
+        .ProseMirror code {
+          background-color: #f3f4f6;
+          padding: 0.2em 0.4em;
+          border-radius: 4px;
+          font-family: 'Courier New', monospace;
+          font-size: 0.9em;
+        }
+        
+        .ProseMirror pre {
+          background-color: #1f2937;
+          color: #f9fafb;
+          padding: 1em;
+          border-radius: 8px;
+          overflow-x: auto;
+          font-family: 'Courier New', monospace;
+          font-size: 0.9em;
+        }
+        
+        .ProseMirror pre code {
+          background: none;
+          padding: 0;
+          color: inherit;
+        }
+        
+        .ProseMirror mark {
+          background-color: #ffc078;
+          padding: 0.1em 0.2em;
+          border-radius: 2px;
+        }
+        
+        .ProseMirror a {
+          color: #3b82f6;
+          text-decoration: underline;
+        }
+        
+        .ProseMirror table {
+          border-collapse: collapse;
+          width: 100%;
+          margin: 1em 0;
+        }
+        
+        .ProseMirror th, .ProseMirror td {
+          border: 1px solid #e5e7eb;
+          padding: 0.75em;
+          text-align: left;
+        }
+        
+        .ProseMirror th {
+          background-color: #f9fafb;
+          font-weight: 600;
+        }
+        
+        .ProseMirror hr {
+          border: none;
+          border-top: 2px solid #e5e7eb;
+          margin: 2em 0;
+        }
+        
+        .ProseMirror ul[data-type="taskList"] {
+          list-style: none;
+          padding-left: 0;
+        }
+        
+        .ProseMirror ul[data-type="taskList"] li {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.5em;
+        }
+        
+        .ProseMirror ul[data-type="taskList"] li > label {
+          flex-shrink: 0;
+          margin-top: 0.25em;
+        }
+        
+        .ProseMirror ul[data-type="taskList"] li > div {
+          flex: 1;
+        }
+        
+        /* Editor toolbar button hover states */
+        .ProseMirror::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        
+        .ProseMirror::-webkit-scrollbar-track {
+          background: #f3f4f6;
+        }
+        
+        .ProseMirror::-webkit-scrollbar-thumb {
+          background: #d1d5db;
+          border-radius: 4px;
+        }
+        
+        .ProseMirror::-webkit-scrollbar-thumb:hover {
+          background: #9ca3af;
+        }
+      `}</style>
       <Header showBackLink />
       
       {/* Side Panel */}
@@ -347,21 +545,7 @@ export default function Page() {
         </div>
 
         {/* Content Based on Active Tab */}
-        {activeTab === 0 ? (
-          <Link to="/sword" className="block">
-            <div className="bg-white rounded-xl border border-gray-200 p-8 text-center hover:shadow-md transition-shadow cursor-pointer">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Sword</h2>
-              <p className="text-gray-500 max-w-md mx-auto">
-                Click to view the Sword analysis tool for competitive intelligence.
-              </p>
-            </div>
-          </Link>
-        ) : activeTabData?.path ? (
+        {activeTabData?.path ? (
           <Link to={activeTabData.path} className="block">
             <div className="bg-white rounded-xl border border-gray-200 p-8 text-center hover:shadow-md transition-shadow cursor-pointer">
               <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -378,11 +562,11 @@ export default function Page() {
         ) : (
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
             {/* Editor Toolbar */}
-            <div className="border-b border-gray-200 p-3 flex items-center justify-between bg-gray-50">
-              <div className="flex items-center gap-1">
+            <div className="border-b border-gray-200 p-3 flex flex-wrap items-center justify-between gap-2 bg-gray-50">
+              <div className="flex items-center gap-1 flex-wrap">
                 <button
                   onClick={() => editor?.chain().focus().toggleBold().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('bold') ? 'bg-gray-200' : ''}`}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('bold') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
                   title="Bold"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -392,7 +576,7 @@ export default function Page() {
                 </button>
                 <button
                   onClick={() => editor?.chain().focus().toggleItalic().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('italic') ? 'bg-gray-200' : ''}`}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('italic') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
                   title="Italic"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -400,17 +584,53 @@ export default function Page() {
                   </svg>
                 </button>
                 <button
-                  onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('heading', { level: 2 }) ? 'bg-gray-200' : ''}`}
-                  title="Heading"
+                  onClick={() => editor?.chain().focus().toggleUnderline().run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('underline') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
+                  title="Underline"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h10" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 3v7a6 6 0 006 6 6 6 0 006-6V3M4 21h16" />
                   </svg>
                 </button>
                 <button
+                  onClick={() => editor?.chain().focus().toggleStrike().run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('strike') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
+                  title="Strikethrough"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 4H9a3 3 0 00-3 3v.5M8 20h7a3 3 0 003-3v-.5M4 12h.01M20 12h.01" />
+                  </svg>
+                </button>
+                
+                <div className="w-px h-6 bg-gray-300 mx-1"></div>
+                
+                <button
+                  onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('heading', { level: 1 }) ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
+                  title="Heading 1"
+                >
+                  <span className="text-xs font-bold">H1</span>
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('heading', { level: 2 }) ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
+                  title="Heading 2"
+                >
+                  <span className="text-xs font-bold">H2</span>
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('heading', { level: 3 }) ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
+                  title="Heading 3"
+                >
+                  <span className="text-xs font-bold">H3</span>
+                </button>
+                
+                <div className="w-px h-6 bg-gray-300 mx-1"></div>
+                
+                <button
                   onClick={() => editor?.chain().focus().toggleBulletList().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('bulletList') ? 'bg-gray-200' : ''}`}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('bulletList') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
                   title="Bullet List"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -419,7 +639,7 @@ export default function Page() {
                 </button>
                 <button
                   onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('orderedList') ? 'bg-gray-200' : ''}`}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('orderedList') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
                   title="Ordered List"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -427,12 +647,100 @@ export default function Page() {
                   </svg>
                 </button>
                 <button
+                  onClick={() => editor?.chain().focus().toggleTaskList().run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('taskList') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
+                  title="Task List"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                </button>
+                
+                <div className="w-px h-6 bg-gray-300 mx-1"></div>
+                
+                <button
                   onClick={() => editor?.chain().focus().toggleBlockquote().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('blockquote') ? 'bg-gray-200' : ''}`}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('blockquote') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
                   title="Quote"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M8 20h6a2 2 0 002-2V8a2 2 0 00-2-2H8a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().toggleCodeBlock().run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('codeBlock') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
+                  title="Code Block"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  </svg>
+                </button>
+                
+                <div className="w-px h-6 bg-gray-300 mx-1"></div>
+                
+                <button
+                  onClick={() => editor?.chain().focus().setTextAlign('left').run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive({ textAlign: 'left' }) ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
+                  title="Align Left"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h10M4 18h14" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().setTextAlign('center').run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive({ textAlign: 'center' }) ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
+                  title="Align Center"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M7 12h10M5 18h14" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().setTextAlign('right').run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive({ textAlign: 'right' }) ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
+                  title="Align Right"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M10 12h10M6 18h14" />
+                  </svg>
+                </button>
+                
+                <div className="w-px h-6 bg-gray-300 mx-1"></div>
+                
+                <button
+                  onClick={() => editor?.chain().focus().toggleHighlight({ color: '#ffc078' }).run()}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('highlight') ? 'bg-yellow-200 text-yellow-800' : 'text-gray-700'}`}
+                  title="Highlight"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                </button>
+                
+                <div className="w-px h-6 bg-gray-300 mx-1"></div>
+                
+                <button
+                  onClick={() => {
+                    const url = window.prompt('Enter URL:');
+                    if (url) editor?.chain().focus().setLink({ href: url }).run();
+                  }}
+                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('link') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
+                  title="Add Link"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().unsetLink().run()}
+                  disabled={!editor?.isActive('link')}
+                  className="p-2 rounded hover:bg-gray-200 transition-colors text-gray-700 disabled:opacity-30"
+                  title="Remove Link"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                   </svg>
                 </button>
               </div>
