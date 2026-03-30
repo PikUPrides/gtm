@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Header from '../components/Header.jsx';
-import { Link, useNavigate } from 'react-router-dom';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -28,18 +27,11 @@ export default function Page() {
   const [tabContent, setTabContent] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState(null);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [tabToDelete, setTabToDelete] = useState(null);
-  const [showRenameDialog, setShowRenameDialog] = useState(false);
-  const [tabToRename, setTabToRename] = useState(null);
-  const [newTabName, setNewTabName] = useState('');
 
-  // Create TipTap editor with all extensions
+  // Create TipTap editor
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        codeBlock: false, // Disable default codeBlock to use Lowlight
-      }),
+      StarterKit,
       Placeholder.configure({
         placeholder: 'Start writing your document...',
       }),
@@ -71,21 +63,9 @@ export default function Page() {
     onUpdate: ({ editor }) => {
       setTabContent(editor.getHTML());
     },
-    editorProps: {
-      attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[300px] p-4',
-      },
-    },
   });
 
-  // Update editor content when tab changes
-  useEffect(() => {
-    if (editor && tabContent !== editor.getHTML()) {
-      editor.commands.setContent(tabContent || '');
-    }
-  }, [activeTab, editor]);
-
-  // Load tabs from database on mount
+  // Load tabs from database
   useEffect(() => {
     async function loadTabs() {
       try {
@@ -114,10 +94,14 @@ export default function Page() {
   // Update content when active tab changes
   useEffect(() => {
     const activeTabData = tabs.find(t => t.id === activeTab);
-    if (activeTabData) {
-      setTabContent(activeTabData.content || '');
+    if (activeTabData && editor) {
+      const newContent = activeTabData.content || '';
+      if (editor.getHTML() !== newContent) {
+        editor.commands.setContent(newContent);
+      }
+      setTabContent(newContent);
     }
-  }, [activeTab]);
+  }, [activeTab, tabs, editor]);
 
   const addTab = async () => {
     if (newTabTitle.trim()) {
@@ -144,19 +128,9 @@ export default function Page() {
     }
   };
 
-  const deleteTab = async (e, tabId) => {
-    e.stopPropagation();
+  const deleteTab = async (tabId) => {
     const tabToDelete = tabs.find(t => t.id === tabId);
-    if (tabToDelete?.path) return; // Don't delete pages with paths
-    if (!tabToDelete?.rowId) return;
-    
-    // Show confirmation dialog instead of deleting directly
-    setTabToDelete(tabToDelete);
-    setShowDeleteDialog(true);
-  };
-
-  const confirmDeleteTab = async () => {
-    if (!tabToDelete?.rowId) return;
+    if (!tabToDelete?.rowId || tabToDelete.path) return;
     
     try {
       await serenities.entities['Document Tabs'].delete(tabToDelete.rowId);
@@ -167,35 +141,22 @@ export default function Page() {
       }
     } catch (err) {
       console.error('Failed to delete tab:', err);
-    } finally {
-      setShowDeleteDialog(false);
-      setTabToDelete(null);
     }
   };
 
-  const openRenameDialog = (e, tab) => {
-    e.stopPropagation();
-    setTabToRename(tab);
-    setNewTabName(tab.title);
-    setShowRenameDialog(true);
-  };
-
-  const confirmRenameTab = async () => {
-    if (!tabToRename?.rowId || !newTabName.trim()) return;
+  const renameTab = async (tabId, newName) => {
+    const tabToRename = tabs.find(t => t.id === tabId);
+    if (!tabToRename?.rowId || !newName.trim()) return;
     
     try {
       await serenities.entities['Document Tabs'].update(tabToRename.rowId, {
-        Title: newTabName.trim(),
+        Title: newName.trim(),
       });
       setTabs(tabs.map(t => 
-        t.id === tabToRename.id ? { ...t, title: newTabName.trim() } : t
+        t.id === tabToRename.id ? { ...t, title: newName.trim() } : t
       ));
     } catch (err) {
       console.error('Failed to rename tab:', err);
-    } finally {
-      setShowRenameDialog(false);
-      setTabToRename(null);
-      setNewTabName('');
     }
   };
 
@@ -208,7 +169,6 @@ export default function Page() {
       await serenities.entities['Document Tabs'].update(activeTabData.rowId, {
         Content: content,
       });
-      // Update local state
       setTabs(tabs.map(t => 
         t.id === activeTab ? { ...t, content } : t
       ));
@@ -225,7 +185,7 @@ export default function Page() {
     if (!tabContent || activeTab === 0) return;
     
     const activeTabData = tabs.find(t => t.id === activeTab);
-    if (activeTabData?.path) return; // Don't save for built-in pages
+    if (activeTabData?.path) return;
     
     const timer = setTimeout(() => {
       saveContent(tabContent);
@@ -239,588 +199,434 @@ export default function Page() {
     if (e.key === 'Escape') setIsAddingTab(false);
   };
 
-  // Handle empty tabs case
-  const activeTabData = tabs.find(t => t.id === activeTab) || tabs[0];
+  const activeTabData = tabs.find(t => t.id === activeTab);
 
   return (
-    <div className="min-h-screen bg-[#fafafe] flex" style={{ fontFamily: "'Open Sans', sans-serif" }}>
+    <div className="min-h-screen bg-white" style={{ fontFamily: "'Google Sans', 'Roboto', sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
         
-        /* TipTap Editor Styles */
-        .ProseMirror {
-          min-height: 400px;
+        /* Google Docs-like styling */
+        .doc-container {
+          max-width: 850px;
+          margin: 0 auto;
+          padding: 40px 60px;
+        }
+        
+        .doc-title {
+          font-size: 28px;
+          font-weight: 400;
+          color: #202124;
+          border: none;
           outline: none;
-          font-size: 16px;
-          line-height: 1.7;
-          color: #374151;
+          width: 100%;
+          margin-bottom: 24px;
+        }
+        
+        .doc-title::placeholder {
+          color: #9aa0a6;
+        }
+        
+        .ProseMirror {
+          min-height: 600px;
+          outline: none;
+          font-size: 14px;
+          line-height: 1.8;
+          color: #202124;
+          font-family: 'Google Sans', 'Roboto', sans-serif;
         }
         
         .ProseMirror p.is-editor-empty:first-child::before {
           content: attr(data-placeholder);
           float: left;
-          color: #9ca3af;
+          color: #9aa0a6;
           pointer-events: none;
           height: 0;
         }
         
         .ProseMirror h1 {
-          font-size: 2em;
-          font-weight: 700;
-          margin-top: 1em;
-          margin-bottom: 0.5em;
-          color: #1D0652;
+          font-size: 26px;
+          font-weight: 400;
+          margin-top: 24px;
+          margin-bottom: 8px;
+          color: #202124;
         }
         
         .ProseMirror h2 {
-          font-size: 1.5em;
-          font-weight: 600;
-          margin-top: 1em;
-          margin-bottom: 0.5em;
-          color: #1D0652;
+          font-size: 20px;
+          font-weight: 500;
+          margin-top: 20px;
+          margin-bottom: 8px;
+          color: #202124;
         }
         
         .ProseMirror h3 {
-          font-size: 1.25em;
-          font-weight: 600;
-          margin-top: 1em;
-          margin-bottom: 0.5em;
-          color: #1D0652;
+          font-size: 16px;
+          font-weight: 500;
+          margin-top: 16px;
+          margin-bottom: 8px;
+          color: #202124;
+        }
+        
+        .ProseMirror p {
+          margin-bottom: 12px;
         }
         
         .ProseMirror ul, .ProseMirror ol {
-          padding-left: 1.5em;
-          margin: 0.5em 0;
+          padding-left: 24px;
+          margin: 8px 0;
         }
         
         .ProseMirror li {
-          margin: 0.25em 0;
+          margin: 4px 0;
         }
         
         .ProseMirror blockquote {
-          border-left: 3px solid #3b82f6;
-          padding-left: 1em;
-          margin: 1em 0;
-          color: #6b7280;
-          font-style: italic;
+          border-left: 3px solid #dadce0;
+          padding-left: 16px;
+          margin: 16px 0;
+          color: #5f6368;
         }
         
         .ProseMirror code {
-          background-color: #f3f4f6;
-          padding: 0.2em 0.4em;
+          background-color: #f1f3f4;
+          padding: 2px 6px;
           border-radius: 4px;
-          font-family: 'Courier New', monospace;
-          font-size: 0.9em;
+          font-family: 'Google Sans', 'Roboto', sans-serif;
+          font-size: 13px;
         }
         
         .ProseMirror pre {
-          background-color: #1f2937;
-          color: #f9fafb;
-          padding: 1em;
+          background-color: #f1f3f4;
+          padding: 16px;
           border-radius: 8px;
           overflow-x: auto;
-          font-family: 'Courier New', monospace;
-          font-size: 0.9em;
-        }
-        
-        .ProseMirror pre code {
-          background: none;
-          padding: 0;
-          color: inherit;
+          font-size: 13px;
         }
         
         .ProseMirror mark {
-          background-color: #ffc078;
-          padding: 0.1em 0.2em;
-          border-radius: 2px;
+          background-color: #fef7e0;
+          padding: 2px 0;
         }
         
         .ProseMirror a {
-          color: #3b82f6;
+          color: #1a73e8;
+          text-decoration: none;
+        }
+        
+        .ProseMirror a:hover {
           text-decoration: underline;
         }
         
         .ProseMirror table {
           border-collapse: collapse;
           width: 100%;
-          margin: 1em 0;
+          margin: 16px 0;
         }
         
         .ProseMirror th, .ProseMirror td {
-          border: 1px solid #e5e7eb;
-          padding: 0.75em;
+          border: 1px solid #dadce0;
+          padding: 12px;
           text-align: left;
         }
         
         .ProseMirror th {
-          background-color: #f9fafb;
-          font-weight: 600;
+          background-color: #f8f9fa;
+          font-weight: 500;
         }
         
         .ProseMirror hr {
           border: none;
-          border-top: 2px solid #e5e7eb;
-          margin: 2em 0;
+          border-top: 1px solid #dadce0;
+          margin: 24px 0;
         }
         
-        .ProseMirror ul[data-type="taskList"] {
-          list-style: none;
-          padding-left: 0;
+        /* Tab bar styling */
+        .tab-item {
+          padding: 8px 16px;
+          cursor: pointer;
+          border-bottom: 2px solid transparent;
+          color: #5f6368;
+          font-size: 14px;
+          transition: all 0.2s;
         }
         
-        .ProseMirror ul[data-type="taskList"] li {
-          display: flex;
-          align-items: flex-start;
-          gap: 0.5em;
+        .tab-item:hover {
+          color: #202124;
         }
         
-        .ProseMirror ul[data-type="taskList"] li > label {
-          flex-shrink: 0;
-          margin-top: 0.25em;
+        .tab-item.active {
+          color: #1a73e8;
+          border-bottom-color: #1a73e8;
         }
         
-        .ProseMirror ul[data-type="taskList"] li > div {
-          flex: 1;
+        /* Toolbar */
+        .toolbar-btn {
+          padding: 6px 12px;
+          border-radius: 4px;
+          color: #5f6368;
+          transition: all 0.15s;
         }
         
-        /* Editor toolbar button hover states */
-        .ProseMirror::-webkit-scrollbar {
+        .toolbar-btn:hover {
+          background-color: #f1f3f4;
+          color: #202124;
+        }
+        
+        .toolbar-btn.active {
+          background-color: #e8f0fe;
+          color: #1a73e8;
+        }
+        
+        /* Status indicator */
+        .status-dot {
           width: 8px;
           height: 8px;
-        }
-        
-        .ProseMirror::-webkit-scrollbar-track {
-          background: #f3f4f6;
-        }
-        
-        .ProseMirror::-webkit-scrollbar-thumb {
-          background: #d1d5db;
-          border-radius: 4px;
-        }
-        
-        .ProseMirror::-webkit-scrollbar-thumb:hover {
-          background: #9ca3af;
+          border-radius: 50%;
+          background-color: #34a853;
         }
       `}</style>
-      <Header showBackLink />
-      
-      {/* Side Panel */}
-      <div className="w-80 h-screen bg-white border-r border-gray-200 flex flex-col fixed left-0 top-0 pt-16" style={{ left: 0 }}>
-        {/* Header */}
-        <div className="p-4 flex flex-col gap-6">
-          <div className="flex items-center justify-between px-2">
-            <h2 className="text-lg font-medium text-gray-800">Document tabs</h2>
-            <button 
-              onClick={() => setIsAddingTab(true)}
-              className="p-1 hover:bg-gray-100 rounded-md transition-colors"
-            >
-              <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
-            </button>
-          </div>
-          
-          {/* Add New Tab Input */}
-          {isAddingTab && (
-            <div className="px-2">
-              <div className="flex items-center gap-2 bg-white border border-blue-300 rounded-lg p-2 shadow-sm">
+
+      {/* Top Tab Bar */}
+      <div className="border-b border-gray-200 bg-white sticky top-0 z-10">
+        <div className="doc-container py-0 px-0 flex items-center justify-between">
+          {/* Tab List */}
+          <div className="flex items-center -mb-px">
+            {tabs.map((tab) => {
+              const isActive = activeTab === tab.id;
+              return (
+                <div
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`tab-item flex items-center gap-2 ${isActive ? 'active' : ''}`}
+                >
+                  <span>{tab.title}</span>
+                  {tabs.length > 1 && !tab.path && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (confirm(`Delete "${tab.title}"?`)) {
+                          deleteTab(tab.id);
+                        }
+                      }}
+                      className="ml-1 p-1 rounded hover:bg-gray-100 opacity-0 group-hover:opacity-100"
+                    >
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+            
+            {/* Add Tab Button */}
+            {isAddingTab ? (
+              <div className="flex items-center gap-2 ml-2">
                 <input
                   type="text"
                   value={newTabTitle}
                   onChange={(e) => setNewTabTitle(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Tab name..."
-                  className="flex-1 text-sm outline-none bg-transparent"
+                  className="px-3 py-1 border border-gray-300 rounded text-sm outline-none focus:border-blue-500"
                   autoFocus
                 />
                 <button
                   onClick={addTab}
-                  className="p-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                  className="text-blue-500 hover:text-blue-700"
                 >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </button>
                 <button
                   onClick={() => { setIsAddingTab(false); setNewTabTitle(''); }}
-                  className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+                  className="text-gray-500 hover:text-gray-700"
                 >
-                  <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
-            </div>
-          )}
-        </div>
-
-        {/* Tabs List */}
-        <nav className="flex-1 px-2 space-y-1 overflow-y-auto">
-          {tabs.map((tab) => {
-            const isActive = activeTab === tab.id;
-            return (
-              <div
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`
-                  group flex items-center justify-between px-4 py-3 cursor-pointer transition-all duration-200
-                  ${isActive 
-                    ? 'bg-blue-100 text-blue-800 rounded-full' 
-                    : 'text-gray-700 hover:bg-gray-50 rounded-lg'}
-                `}
+            ) : (
+              <button
+                onClick={() => setIsAddingTab(true)}
+                className="ml-2 p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full"
+                title="Add new tab"
               >
-                <div className="flex items-center gap-4 flex-1">
-                  <svg className={`w-[18px] h-[18px] ${isActive ? 'text-blue-700' : 'text-gray-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                  <span className="text-[15px] font-medium truncate max-w-[160px]">
-                    {tab.title}
-                  </span>
-                </div>
-                
-                {/* Three dots menu on hover */}
-                <div className="relative">
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // Close all other menus first
-                      document.querySelectorAll('[id^="menu-"]').forEach(el => {
-                        if (el.id !== `menu-${tab.id}`) el.classList.add('hidden');
-                      });
-                      const menu = document.getElementById(`menu-${tab.id}`);
-                      if (menu) menu.classList.toggle('hidden');
-                    }}
-                    className="p-1 opacity-0 group-hover:opacity-100 hover:bg-gray-200 rounded-full transition-all"
-                  >
-                    <svg className="w-[18px] h-[18px] text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                    </svg>
-                  </button>
-                  {/* Dropdown Menu */}
-                  <div id={`menu-${tab.id}`} className="hidden absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50 min-w-[140px]">
-                    <button
-                      onClick={(e) => {
-                        document.getElementById(`menu-${tab.id}`).classList.add('hidden');
-                        openRenameDialog(e, tab);
-                      }}
-                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                      Rename
-                    </button>
-                    {!tab.path && (
-                      <button
-                        onClick={(e) => {
-                          document.getElementById(`menu-${tab.id}`).classList.add('hidden');
-                          deleteTab(e, tab.id);
-                        }}
-                        className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        Delete
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </nav>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 pt-20 px-4 sm:px-6 max-w-6xl mx-auto pb-12 ml-80">
-        {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#1D0652] mb-2">Competitors</h1>
-          <p className="text-gray-500">Analyze and track your competitive landscape</p>
-        </div>
-
-        {/* Content Based on Active Tab */}
-        {activeTabData?.path ? (
-          <Link to={activeTabData.path} className="block">
-            <div className="bg-white rounded-xl border border-gray-200 p-8 text-center hover:shadow-md transition-shadow cursor-pointer">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
-              </div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">{tabs[activeTab]?.title}</h2>
-              <p className="text-gray-500 max-w-md mx-auto">
-                Click to view this section.
-              </p>
-            </div>
-          </Link>
-        ) : (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            {/* Editor Toolbar */}
-            <div className="border-b border-gray-200 p-3 flex flex-wrap items-center justify-between gap-2 bg-gray-50">
-              <div className="flex items-center gap-1 flex-wrap">
-                <button
-                  onClick={() => editor?.chain().focus().toggleBold().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('bold') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Bold"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 12h9a4 4 0 014 4 4 4 0 01-4 4H6z" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => editor?.chain().focus().toggleItalic().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('italic') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Italic"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 4h4M14 20H6M7 4l4 16" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => editor?.chain().focus().toggleUnderline().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('underline') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Underline"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 3v7a6 6 0 006 6 6 6 0 006-6V3M4 21h16" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => editor?.chain().focus().toggleStrike().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('strike') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Strikethrough"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 4H9a3 3 0 00-3 3v.5M8 20h7a3 3 0 003-3v-.5M4 12h.01M20 12h.01" />
-                  </svg>
-                </button>
-                
-                <div className="w-px h-6 bg-gray-300 mx-1"></div>
-                
-                <button
-                  onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('heading', { level: 1 }) ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Heading 1"
-                >
-                  <span className="text-xs font-bold">H1</span>
-                </button>
-                <button
-                  onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('heading', { level: 2 }) ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Heading 2"
-                >
-                  <span className="text-xs font-bold">H2</span>
-                </button>
-                <button
-                  onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('heading', { level: 3 }) ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Heading 3"
-                >
-                  <span className="text-xs font-bold">H3</span>
-                </button>
-                
-                <div className="w-px h-6 bg-gray-300 mx-1"></div>
-                
-                <button
-                  onClick={() => editor?.chain().focus().toggleBulletList().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('bulletList') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Bullet List"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h.01M8 6h12M4 12h.01M8 12h12M4 18h.01M8 18h12" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('orderedList') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Ordered List"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h10M7 16h10M4 4h.01M4 8h.01M4 12h.01M4 16h.01" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => editor?.chain().focus().toggleTaskList().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('taskList') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Task List"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                  </svg>
-                </button>
-                
-                <div className="w-px h-6 bg-gray-300 mx-1"></div>
-                
-                <button
-                  onClick={() => editor?.chain().focus().toggleBlockquote().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('blockquote') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Quote"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M8 20h6a2 2 0 002-2V8a2 2 0 00-2-2H8a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => editor?.chain().focus().toggleCodeBlock().run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('codeBlock') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Code Block"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                  </svg>
-                </button>
-                
-                <div className="w-px h-6 bg-gray-300 mx-1"></div>
-                
-                <button
-                  onClick={() => editor?.chain().focus().setTextAlign('left').run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive({ textAlign: 'left' }) ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Align Left"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h10M4 18h14" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => editor?.chain().focus().setTextAlign('center').run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive({ textAlign: 'center' }) ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Align Center"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M7 12h10M5 18h14" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => editor?.chain().focus().setTextAlign('right').run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive({ textAlign: 'right' }) ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Align Right"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M10 12h10M6 18h14" />
-                  </svg>
-                </button>
-                
-                <div className="w-px h-6 bg-gray-300 mx-1"></div>
-                
-                <button
-                  onClick={() => editor?.chain().focus().toggleHighlight({ color: '#ffc078' }).run()}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('highlight') ? 'bg-yellow-200 text-yellow-800' : 'text-gray-700'}`}
-                  title="Highlight"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                  </svg>
-                </button>
-                
-                <div className="w-px h-6 bg-gray-300 mx-1"></div>
-                
-                <button
-                  onClick={() => {
-                    const url = window.prompt('Enter URL:');
-                    if (url) editor?.chain().focus().setLink({ href: url }).run();
-                  }}
-                  className={`p-2 rounded hover:bg-gray-200 transition-colors ${editor?.isActive('link') ? 'bg-gray-200 text-blue-600' : 'text-gray-700'}`}
-                  title="Add Link"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => editor?.chain().focus().unsetLink().run()}
-                  disabled={!editor?.isActive('link')}
-                  className="p-2 rounded hover:bg-gray-200 transition-colors text-gray-700 disabled:opacity-30"
-                  title="Remove Link"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                  </svg>
-                </button>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                {isSaving ? (
-                  <span className="text-blue-500">Saving...</span>
-                ) : lastSaved ? (
-                  <span>Saved</span>
-                ) : null}
-              </div>
-            </div>
-            
-            {/* Editor Content */}
-            <div className="p-4 min-h-[400px]">
-              <EditorContent editor={editor} />
-            </div>
+              </button>
+            )}
           </div>
-        )}
+          
+          {/* Save Status */}
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            {isSaving ? (
+              <span className="text-blue-600">Saving...</span>
+            ) : lastSaved ? (
+              <div className="flex items-center gap-2">
+                <div className="status-dot"></div>
+                <span>Saved</span>
+              </div>
+            ) : null}
+          </div>
+        </div>
+        
+        {/* Toolbar */}
+        <div className="doc-container py-2 px-0 flex items-center gap-1 border-b border-gray-100">
+          <button
+            onClick={() => editor?.chain().focus().toggleBold().run()}
+            className={`toolbar-btn ${editor?.isActive('bold') ? 'active' : ''}`}
+            title="Bold"
+          >
+            <strong>B</strong>
+          </button>
+          <button
+            onClick={() => editor?.chain().focus().toggleItalic().run()}
+            className={`toolbar-btn ${editor?.isActive('italic') ? 'active' : ''}`}
+            title="Italic"
+          >
+            <em>I</em>
+          </button>
+          <button
+            onClick={() => editor?.chain().focus().toggleUnderline().run()}
+            className={`toolbar-btn ${editor?.isActive('underline') ? 'active' : ''}`}
+            title="Underline"
+          >
+            <u>U</u>
+          </button>
+          
+          <div className="w-px h-5 bg-gray-300 mx-2"></div>
+          
+          <button
+            onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
+            className={`toolbar-btn ${editor?.isActive('heading', { level: 1 }) ? 'active' : ''}`}
+            title="Heading 1"
+          >
+            H1
+          </button>
+          <button
+            onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
+            className={`toolbar-btn ${editor?.isActive('heading', { level: 2 }) ? 'active' : ''}`}
+            title="Heading 2"
+          >
+            H2
+          </button>
+          <button
+            onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
+            className={`toolbar-btn ${editor?.isActive('heading', { level: 3 }) ? 'active' : ''}`}
+            title="Heading 3"
+          >
+            H3
+          </button>
+          
+          <div className="w-px h-5 bg-gray-300 mx-2"></div>
+          
+          <button
+            onClick={() => editor?.chain().focus().toggleBulletList().run()}
+            className={`toolbar-btn ${editor?.isActive('bulletList') ? 'active' : ''}`}
+            title="Bullet list"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h.01M8 6h12M4 12h.01M8 12h12M4 18h.01M8 18h12" />
+            </svg>
+          </button>
+          <button
+            onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+            className={`toolbar-btn ${editor?.isActive('orderedList') ? 'active' : ''}`}
+            title="Numbered list"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h10M7 16h10M4 4h.01M4 8h.01M4 12h.01M4 16h.01" />
+            </svg>
+          </button>
+          
+          <div className="w-px h-5 bg-gray-300 mx-2"></div>
+          
+          <button
+            onClick={() => editor?.chain().focus().toggleBlockquote().run()}
+            className={`toolbar-btn ${editor?.isActive('blockquote') ? 'active' : ''}`}
+            title="Quote"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M8 20h6a2 2 0 002-2V8a2 2 0 00-2-2H8a2 2 0 00-2 2v6a2 2 0 002 2z" />
+            </svg>
+          </button>
+          
+          <div className="w-px h-5 bg-gray-300 mx-2"></div>
+          
+          <button
+            onClick={() => editor?.chain().focus().toggleHighlight({ color: '#fef7e0' }).run()}
+            className={`toolbar-btn ${editor?.isActive('highlight') ? 'active' : ''}`}
+            title="Highlight"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
+          </button>
+          
+          <button
+            onClick={() => {
+              const url = window.prompt('Enter URL:');
+              if (url) editor?.chain().focus().setLink({ href: url }).run();
+            }}
+            className={`toolbar-btn ${editor?.isActive('link') ? 'active' : ''}`}
+            title="Add link"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+          </button>
+          
+          <div className="w-px h-5 bg-gray-300 mx-2"></div>
+          
+          <button
+            onClick={() => editor?.chain().focus().setTextAlign('left').run()}
+            className={`toolbar-btn ${editor?.isActive({ textAlign: 'left' }) ? 'active' : ''}`}
+            title="Align left"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h10M4 18h14" />
+            </svg>
+          </button>
+          <button
+            onClick={() => editor?.chain().focus().setTextAlign('center').run()}
+            className={`toolbar-btn ${editor?.isActive({ textAlign: 'center' }) ? 'active' : ''}`}
+            title="Align center"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M7 12h10M5 18h14" />
+            </svg>
+          </button>
+          <button
+            onClick={() => editor?.chain().focus().setTextAlign('right').run()}
+            className={`toolbar-btn ${editor?.isActive({ textAlign: 'right' }) ? 'active' : ''}`}
+            title="Align right"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M10 12h10M6 18h14" />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      {/* Delete Confirmation Dialog */}
-      {showDeleteDialog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
-            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 mx-auto mb-4">
-              <svg className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">Delete Tab?</h3>
-            <p className="text-gray-500 text-center mb-6">
-              Are you sure you want to delete "{tabToDelete?.title}"? This action cannot be undone.
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => { setShowDeleteDialog(false); setTabToDelete(null); }}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmDeleteTab}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Rename Dialog */}
-      {showRenameDialog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
-            <h3 className="text-lg font-semibold text-gray-900 text-center mb-4">Rename Tab</h3>
-            <input
-              type="text"
-              value={newTabName}
-              onChange={(e) => setNewTabName(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') confirmRenameTab(); if (e.key === 'Escape') { setShowRenameDialog(false); setTabToRename(null); setNewTabName(''); } }}
-              placeholder="Enter new name..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-              autoFocus
-            />
-            <div className="flex gap-3">
-              <button
-                onClick={() => { setShowRenameDialog(false); setTabToRename(null); setNewTabName(''); }}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmRenameTab}
-                disabled={!newTabName.trim()}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
+      {/* Document Content */}
+      <div className="doc-container">
+        {/* Document Title */}
+        <input
+          type="text"
+          className="doc-title"
+          placeholder="Untitled document"
+          defaultValue={activeTabData?.title || ''}
+          onBlur={(e) => renameTab(activeTab, e.target.value)}
+        />
+        
+        {/* Editor */}
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 }
