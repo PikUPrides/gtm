@@ -181,7 +181,7 @@ export default function Page() {
                     <div className="mb-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700">
                       <p className="text-slate-300 text-sm">
                         {counter.lawsuit && <><span className="text-white font-semibold">Legal risk:</span> {counter.lawsuit} </>}
-                        {counter.containment && <><span className="text-white font-semibold">Containment problem:</span> {counter.containration} </>}
+                        {counter.containment && <><span className="text-white font-semibold">Containment problem:</span> {counter.containment} </>}
                         {counter.frustration && <>{counter.frustration} </>}
                         {counter.opacity && <>{counter.opacity}</>}
                       </p>
