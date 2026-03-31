@@ -76,7 +76,7 @@ export default function Header({ showBackLink = false }) {
   const strategyItems = [
     { href: '/gtm', label: 'GTM Strategy' },
     { href: '/ayro-orbit', label: 'AYRO Orbit' },
-    { href: '/pitch-deck', label: 'how.topitch deck' },
+    { href: '/pitch-deck', label: 'How To Pitch Deck' },
     { href: '/ed-kang-pitch-deck', label: 'Ed Kang Pitch Deck' },
     { href: '/downloads', label: 'Downloads Strategy' },
   ];
