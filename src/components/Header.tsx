@@ -8,10 +8,14 @@ export default function Header({ showBackLink = false }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [showStrategyDropdown, setShowStrategyDropdown] = useState(false);
   const [showDataDropdown, setShowDataDropdown] = useState(false);
+  const [showCompetitorsDropdown, setShowCompetitorsDropdown] = useState(false);
+  const [showSwordDropdown, setShowSwordDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const strategyDropdownRef = useRef(null);
   const dataDropdownRef = useRef(null);
+  const competitorsDropdownRef = useRef(null);
+  const swordDropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
   const userButtonRef = useRef(null);
   const userButtonMobileRef = useRef(null);
@@ -36,6 +40,12 @@ export default function Header({ showBackLink = false }) {
       }
       if (dataDropdownRef.current && !dataDropdownRef.current.contains(event.target)) {
         setShowDataDropdown(false);
+      }
+      if (competitorsDropdownRef.current && !competitorsDropdownRef.current.contains(event.target)) {
+        setShowCompetitorsDropdown(false);
+      }
+      if (swordDropdownRef.current && !swordDropdownRef.current.contains(event.target)) {
+        setShowSwordDropdown(false);
       }
 
       // Don't close user dropdown if clicking on either profile button
@@ -69,7 +79,20 @@ export default function Header({ showBackLink = false }) {
     { href: '/pitch-deck', label: 'Pitch Deck' },
     { href: '/ed-kang-pitch-deck', label: 'Ed Kang Pitch Deck' },
     { href: '/downloads', label: 'Downloads Strategy' },
-    { href: '/competitors', label: 'Competitors & Sword' },
+  ];
+
+  // Competitors sub-menu items
+  const competitorsItems = [
+    { href: '/documents/ubers-moat', label: "Uber's Moat" },
+    { href: '/documents/how-lyft-survived', label: 'How Lyft Survived' },
+    { href: '/documents/counter-strategy', label: 'Counter-Strategy' },
+    { href: '/documents/empower-nyc-validation', label: 'Empower NYC Validation' },
+  ];
+
+  // Sword sub-menu items
+  const swordItems = [
+    { href: '/documents/sword', label: 'Sword' },
+    { href: '/documents/slide', label: 'Slide' },
   ];
 
   // Data dropdown items
@@ -122,6 +145,72 @@ export default function Header({ showBackLink = false }) {
                           key={item.href}
                           to={item.href}
                           onClick={() => setShowStrategyDropdown(false)}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {/* Competitors Sub-Menu */}
+              <div
+                className="relative"
+                ref={competitorsDropdownRef}
+                onMouseEnter={() => { setShowCompetitorsDropdown(true); setShowDataDropdown(false); setShowSwordDropdown(false); }}
+                onMouseLeave={() => setShowCompetitorsDropdown(false)}
+              >
+                <button
+                  onClick={() => setShowCompetitorsDropdown(!showCompetitorsDropdown)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#1D0652] hover:text-[#423DF9] rounded-md hover:bg-[#423DF9]/5 transition-colors"
+                >
+                  Competitors
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showCompetitorsDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {showCompetitorsDropdown && (
+                  <div className="absolute left-0 mt-0 pt-2 w-56 z-[9999]">
+                    <div className="bg-white rounded-lg shadow-lg border border-gray-200 border-t-2 border-t-[#423DF9] py-2">
+                      {competitorsItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          to={item.href}
+                          onClick={() => setShowCompetitorsDropdown(false)}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {/* Sword Sub-Menu */}
+              <div
+                className="relative"
+                ref={swordDropdownRef}
+                onMouseEnter={() => { setShowSwordDropdown(true); setShowDataDropdown(false); setShowCompetitorsDropdown(false); }}
+                onMouseLeave={() => setShowSwordDropdown(false)}
+              >
+                <button
+                  onClick={() => setShowSwordDropdown(!showSwordDropdown)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#1D0652] hover:text-[#423DF9] rounded-md hover:bg-[#423DF9]/5 transition-colors"
+                >
+                  Sword
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showSwordDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {showSwordDropdown && (
+                  <div className="absolute left-0 mt-0 pt-2 w-56 z-[9999]">
+                    <div className="bg-white rounded-lg shadow-lg border border-gray-200 border-t-2 border-t-[#423DF9] py-2">
+                      {swordItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          to={item.href}
+                          onClick={() => setShowSwordDropdown(false)}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                         >
                           {item.label}
