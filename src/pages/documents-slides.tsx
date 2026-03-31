@@ -953,10 +953,10 @@ export default function Page() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-6">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span className="text-white/80 text-sm font-medium">Pitch Deck Slides</span>
+            <span className="text-white/80 text-sm font-medium">Slide Content</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            AYRO <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Pitch Deck</span>
+            Ayro <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Slide</span>
           </h1>
           <p className="text-xl text-slate-300 max-w-2xl">
             Complete slide-by-slide breakdown with multiple variants. All claims sourced with full citations. 
