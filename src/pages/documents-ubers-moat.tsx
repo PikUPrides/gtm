@@ -6,7 +6,34 @@ export default function Page() {
     <div className="min-h-screen bg-white">
       <Header />
       <div className="max-w-4xl mx-auto px-6 py-16 pt-32">
-        <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{__html:`<h2><strong>WHY UBER CAN'T DROP TO 5% — Your Moat</strong></h2><p><strong>1. Wall Street won't let them.</strong> Uber just hit its first-ever annual profit in Feb 2024. Uber's free cash flow for 2025 hit $9.8 billion, up 42% from prior year. They announced a $7B stock buyback. If they drop take rate to 5%, they instantly wipe out billions in revenue.</p><p><strong>2. They're RAISING take rates, not lowering.</strong> From 2019 to end of 2024, Uber increased its commission rate from 20.7% to 27.1% (that's their own reported number — real driver-experienced rate is 40%+). From 2019 to mid-2022, the average fare jumped by 63%. They're moving in the opposite direction.</p><p><strong>3. They have $52B in annual revenue dependent on high take rates.</strong> Revenue rose 18% to $52.0 billion in 2025. Cutting take rate from 40% to 5% across the US would eliminate most of that.</p><p><strong>4. They're fighting AGAINST transparency.</strong> In January 2025, Uber filed an injunction against a Colorado law requiring them to disclose the portion of fare going to drivers. Uber stopped disclosing its global rideshare take rates as of Q1 2025. They're hiding, not competing.</p><p><strong>5. The Innovator's Dilemma.</strong> Uber can't disrupt itself. Dropping to 5% in DFW to compete with AYRO means explaining to Wall Street why they're destroying margin in a single market, which then spreads to every market.</p>`}} />
+        <h2 className="text-2xl font-bold mb-4">WHY UBER CAN'T DROP TO 5% — Your Moat</h2>
+        
+        <div className="space-y-4">
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <h3 className="font-bold mb-2">1. Wall Street won't let them.</h3>
+            <p className="text-gray-600">Uber's free cash flow hit $9.8B in 2025. They announced a $7B stock buyback. If they drop take rate to 5%, they wipe out billions in revenue.</p>
+          </div>
+          
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <h3 className="font-bold mb-2">2. They're RAISING take rates, not lowering.</h3>
+            <p className="text-gray-600">From 2019 to 2024, Uber increased commission from 20.7% to 27.1%. Real driver-experienced rate is 40%+. Fares up 52% since 2019.</p>
+          </div>
+          
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <h3 className="font-bold mb-2">3. $52B revenue depends on high take rates.</h3>
+            <p className="text-gray-600">Cutting take rate from 40% to 5% would eliminate most of that revenue.</p>
+          </div>
+          
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <h3 className="font-bold mb-2">4. Fighting AGAINST transparency.</h3>
+            <p className="text-gray-600">Uber filed an injunction against Colorado's transparency law. Stopped disclosing take rates Q1 2025. They're hiding, not competing.</p>
+          </div>
+          
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <h3 className="font-bold mb-2">5. The Innovator's Dilemma.</h3>
+            <p className="text-gray-600">Uber can't disrupt itself. Dropping to 5% in DFW spreads to every market. They can't contain it.</p>
+          </div>
+        </div>
       </div>
     </div>
   );
