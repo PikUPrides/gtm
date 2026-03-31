@@ -321,6 +321,28 @@ export default function Header({ showBackLink = false }) {
                 {item.label}
               </Link>
             ))}
+            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Competitors</div>
+            {competitorsItems.map((item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Sword</div>
+            {swordItems.map((item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
             <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Data</div>
             {dataItems.map((item) => (
               <Link
