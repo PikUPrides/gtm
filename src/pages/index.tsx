@@ -7,8 +7,9 @@ const items = [
   { title: 'Go-to-Market Strategy', desc: '55+ channels across paid, organic, hyperlocal, community, CRM, and partnerships.', path: '/gtm', tag: 'Strategy', color: '#423DF9', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
   { title: 'The AYRO Orbit', desc: 'A self-reinforcing mobility ecosystem where drivers, riders, and platform growth continuously strengthen each other.', path: '/ayro-orbit', tag: 'Strategy', color: '#7742F1', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' },
   { title: '1 Million Downloads in 90 Days', desc: '3-month phased playbook from soft launch to viral Orbit.', path: '/downloads', tag: 'Growth', color: '#08D9C4', icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' },
+  { title: 'Strategy Documents', desc: 'Research and analysis on competitive landscape, market positioning, and growth strategies.', path: '/documents', tag: 'Research', color: '#F472B6', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
   { title: 'Ed Kang Pitch Deck Template', desc: 'Ultimate guide for early-stage founders on crafting seed-stage pitch decks.', path: '/ed-kang-pitch-deck', tag: 'Fundraising', color: '#3a0ca3', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
-  { title: 'Ayro Slide', desc: 'Research-backed playbook for crafting seed-stage pitch decks.', path: '/pitch-deck', tag: 'Fundraising', color: '#120E78', icon: 'M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z' },
+  { title: 'How To Pitch Deck', desc: 'Research-backed playbook for crafting seed-stage pitch decks.', path: '/pitch-deck', tag: 'Fundraising', color: '#120E78', icon: 'M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z' },
 ];
 
 export default function Page() {
