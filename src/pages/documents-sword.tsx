@@ -1,6 +1,8 @@
 import Header from '../components/Header.jsx';
 
 export default function Page() {
+  const content = "<ol><li><p>Half the price</p></li><li><p>No surge pricing</p></li><li><p>Transparency</p></li><li><p>Low margin and high volume</p></li></ol>";
+
   return (
     <div className="min-h-screen bg-white">
       <Header showBackLink />
@@ -11,14 +13,7 @@ export default function Page() {
           <p className="text-gray-500">AYRO's competitive advantages</p>
         </div>
 
-        <div className="prose prose-lg max-w-none">
-          <ul>
-            <li>Half the price</li>
-            <li>No surge pricing</li>
-            <li>Transparency</li>
-            <li>Low margin and high volume</li>
-          </ul>
-        </div>
+        <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: content }} />
       </div>
     </div>
   );
