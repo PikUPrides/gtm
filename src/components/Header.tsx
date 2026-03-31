@@ -92,7 +92,7 @@ export default function Header({ showBackLink = false }) {
   // Sword sub-menu items
   const swordItems = [
     { href: '/documents/sword', label: 'Sword' },
-    { href: '/documents/slide', label: 'Slide' },
+    { href: '/documents/slides', label: 'Slide' },
   ];
 
   // Data dropdown items
