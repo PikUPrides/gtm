@@ -6,7 +6,103 @@ export default function Page() {
     <div className="min-h-screen bg-white">
       <Header />
       <div className="max-w-4xl mx-auto px-6 py-16 pt-32">
-        <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{__html:`<h2><strong>EMPOWER — What's Happening Right Now</strong></h2><p><strong>What it is:</strong> A rideshare app where drivers keep 100% of fares, set their own prices, and pay a monthly subscription fee ($50–$350/month) instead of a per-ride commission.</p><p><strong>The results are dramatic:</strong></p><ul><li><p>A ride from Bushwick to SoHo cost $28.18 via Empower, compared to $68 and $60 from Uber and Lyft respectively. That's 50–60% cheaper.</p></li><li><p>Empower's CEO said thousands of drivers provide "tens of thousands" of rides in the city each week.</p></li><li><p>Drivers set their own rates and get 100% of the fare. Empower takes ZERO commission.</p></li><li><p>Pricing is 25-35% cheaper than Uber on average, and up to 60% cheaper on some routes.</p></li></ul><hr><h2><strong>THE BIG PROBLEM — They're Operating Illegally in NYC</strong></h2><p>This is the cautionary tale for AYRO:</p><ul><li><p>NYC officials say the rides are illegal. The NYC Taxi and Limousine Commission warns trips booked through Empower are unlawful and may not be insured.</p></li><li><p>The TLC set up a dedicated website warning New Yorkers not to use the app.</p><li><p>Drivers face fines up to $500. Vehicle owners up to $10,000.</p></li></ul><p><strong>Empower's CEO is defiant:</strong> "I've spoken with board members of Uber. This is an existential threat to their business, and they are going to do everything in their power, bribe every official they can, influence anyone, pull every lever they can to stop drivers from working for themselves."</p><hr><h2><strong>EMPOWER'S MODEL vs AYRO'S MODEL</strong></h2><table><thead><tr><th></th><th>Empower</th><th>AYRO</th></tr></thead><tbody><tr><td>Driver commission</td><td>0% (drivers keep 100%)</td><td>5%</td></tr><tr><td>How platform makes money</td><td>Monthly subscription $50–$350</td><td>5% per ride</td></tr><tr><td>Who sets price</td><td>Driver sets their own rate</td><td>AYRO sets flat rate</td></tr><tr><td>Surge pricing</td><td>No</td><td>No</td></tr><tr><td>Transparency</td><td>Yes — driver keeps everything</td><td>Yes — full breakdown shown</td></tr><tr><td>Regulatory compliance</td><td>❌ Operating without license</td><td>✅ Fully licensed</td></tr><tr><td>Insurance</td><td>⚠️ May not be insured</td><td>✅ AYRO handles</td></tr></tbody></table><hr><h2><strong>WHAT AYRO SHOULD LEARN FROM EMPOWER</strong></h2><p><strong>✅ What Empower PROVES:</strong></p><ol><li><strong>The demand is real and massive.</strong> Riders are desperate for cheaper alternatives.</li><li><strong>Drivers will switch immediately.</strong> When you offer 95–100% take-home vs 56–60%, drivers move fast.</li><li><strong>The price gap is shocking enough to go viral.</strong> $28 vs $68 creates instant word-of-mouth.</li><li><strong>Uber IS scared.</strong> Empower's CEO claims Uber board members said it's an existential threat.</li></ol><p><strong>❌ What Empower GOT WRONG:</strong></p><ol><li><strong>Launching without a license.</strong> AYRO should launch 100% licensed.</li><li><strong>Letting drivers set their own prices.</strong> Creates inconsistent rider experience.</li><li><strong>Subscription model punishes low-volume drivers.</strong> AYRO's 5% per-ride is fair to ALL.</li><li><strong>Insurance gap.</strong> AYRO handles insurance — removes regulator's strongest weapon.</li></ol><hr><h2><strong>THE PITCH FRAMING FOR INVESTORS</strong></h2><p><strong>"Empower just proved our thesis in NYC — tens of thousands of rides per week at 50–60% less than Uber, despite operating without a license. AYRO is the same economics but with three critical fixes: full regulatory compliance, consistent flat pricing, and platform-handled insurance. We're Empower done right."</strong></p>`}} />
+        <h2 className="text-2xl font-bold mb-4">EMPOWER NYC VALIDATION</h2>
+        <p className="text-gray-600 mb-6">What's happening right now in NYC.</p>
+        
+        <section className="mb-6">
+          <h3 className="text-xl font-bold mb-3">What Empower Is</h3>
+          <p className="mb-2">A rideshare app where drivers keep 100% of fares, set their own prices, pay $50–$350/month subscription instead of per-ride commission.</p>
+          <ul className="list-disc pl-5 text-gray-600">
+            <li>Ride from Bushwick to SoHo: $28 via Empower vs $68 Uber vs $60 Lyft</li>
+            <li>Tens of thousands of rides per week in NYC</li>
+            <li>Drivers set their own rates, get 100%</li>
+            <li>25-60% cheaper than Uber</li>
+          </ul>
+        </section>
+        
+        <hr className="my-6" />
+        
+        <section className="mb-6 bg-red-50 p-4 rounded-lg">
+          <h3 className="text-xl font-bold mb-3 text-red-800">THE BIG PROBLEM</h3>
+          <p className="mb-2">NYC officials say the rides are illegal.</p>
+          <ul className="list-disc pl-5 text-red-700">
+            <li>TLC warns trips may not be insured</li>
+            <li>Dedicated website warning New Yorkers</li>
+            <li>Drivers face fines up to $500</li>
+          </ul>
+        </section>
+        
+        <hr className="my-6" />
+        
+        <section className="mb-6">
+          <h3 className="text-xl font-bold mb-3">EMPOWER vs AYRO</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="text-left p-2 border"></th>
+                  <th className="text-left p-2 border">Empower</th>
+                  <th className="text-left p-2 border">AYRO</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="p-2 border">Driver Commission</td>
+                  <td className="p-2 border">0%</td>
+                  <td className="p-2 border">5%</td>
+                </tr>
+                <tr>
+                  <td className="p-2 border">Who Sets Price</td>
+                  <td className="p-2 border">Driver</td>
+                  <td className="p-2 border">AYRO (flat rate)</td>
+                </tr>
+                <tr>
+                  <td className="p-2 border">Regulatory</td>
+                  <td className="p-2 border">❌ Illegal</td>
+                  <td className="p-2 border">✅ Licensed</td>
+                </tr>
+                <tr>
+                  <td className="p-2 border">Insurance</td>
+                  <td className="p-2 border">⚠️ May not be</td>
+                  <td className="p-2 border">✅ Handled</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        
+        <hr className="my-6" />
+        
+        <section className="mb-6">
+          <h3 className="text-xl font-bold mb-3">WHAT AYRO LEARNS</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-green-50 p-4 rounded-lg">
+              <h4 className="font-bold text-green-800 mb-2">✅ PROVES</h4>
+              <ul className="list-disc pl-5 text-green-700">
+                <li>Demand is massive</li>
+                <li>Drivers switch immediately</li>
+                <li>Price goes viral ($28 vs $68)</li>
+                <li>Uber IS scared</li>
+              </ul>
+            </div>
+            <div className="bg-red-50 p-4 rounded-lg">
+              <h4 className="font-bold text-red-800 mb-2">❌ GOT WRONG</h4>
+              <ul className="list-disc pl-5 text-red-700">
+                <li>Launched without license</li>
+                <li>Drivers set own prices</li>
+                <li>Subscription punishes low-volume</li>
+                <li>Insurance gap</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        
+        <hr className="my-6" />
+        
+        <div className="bg-blue-50 p-4 rounded-lg">
+          <h3 className="text-lg font-bold mb-2">PITCH FOR INVESTORS</h3>
+          <p>"Empower proved our thesis in NYC — tens of thousands of rides at 50-60% less than Uber, despite being illegal. AYRO is the same economics with three fixes: full compliance, consistent pricing, and insurance. We're Empower done right."</p>
+        </div>
       </div>
     </div>
   );
