@@ -6,7 +6,72 @@ export default function Page() {
     <div className="min-h-screen bg-white">
       <Header />
       <div className="max-w-4xl mx-auto px-6 py-16 pt-32">
-        <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{__html:`<h2><strong>HOW LYFT SURVIVED UBER — AND WHAT AYRO CAN LEARN</strong></h2><p>Lyft is the ONLY US competitor that survived Uber's full assault. Every other one — Sidecar, Juno, Hailo, Gett (US), Via (as a direct competitor) — either died, pivoted, or sold. Understanding HOW Lyft survived is critical for AYRO.</p><hr><h3><strong>WHAT UBER THREW AT LYFT</strong></h3><p><strong>1. Predatory pricing</strong> — Uber subsidized below-cost rides to steal Lyft's riders.</p><p><strong>2. Driver poaching</strong> — Uber employees offering cash to Lyft drivers to switch and drive exclusively for Uber.</p><p><strong>3. Executive poaching</strong> — Uber poached both Lyft's COO and VP of Operations.</p><p><strong>4. Fake ride attacks</strong> — Uber engaged in "clandestine campaigns" with names like "Project Hell" and "SLOG" — submitting fraudulent ride requests through competitors' apps.</p><p><strong>5. Capital suffocation</strong> — Uber raised $9 billion in equity and another $1.6 billion in debt over 15 rounds.</p><p><strong>6. Acquisition attempt</strong> — Travis Kalanick tried to eliminate his closest competition by offering to buy Lyft.</p><hr><h3><strong>HOW LYFT SURVIVED EACH ATTACK</strong></h3><p><strong>1. They nearly died — and survived on sheer will.</strong> In early 2015, Lyft had only about four months' worth of cash left.</p><p><strong>2. They built a BRAND identity Uber couldn't copy.</strong> Lyft marketed a friendly, whimsical take on the business. The "fist bump," riding in the front seat.</p><p><strong>3. They exploited Uber's scandals as a growth lever.</strong> In 2017, Uber imploded: sexual harassment claims, executive departures, the #DeleteUber movement. While Uber was busy repairing its image, Lyft was hard at work building its brand.</p><p><strong>4. They formed strategic alliances.</strong> Lyft established an alliance with GrabTaxi, Ola, and Didi Kuaidi.</p><p><strong>5. They raised enough capital to survive (barely).</strong> Key investments from GM ($500M in 2016), Alphabet/Google kept them alive.</p><p><strong>6. They accepted being #2 and focused on the US only.</strong> Lyft positioned itself as the "nice guy." It let rival Uber do most of the dirty work fighting regulators.</p><hr><h3><strong>WHAT AYRO CAN LEARN FROM LYFT</strong></h3><table><thead><tr><th>Lyft's Approach</th><th>AYRO's Advantage</th></tr></thead><tbody><tr><td>Lyft differentiated on BRAND (fuzzy pink mustache, friendly vibes)</td><td>AYRO differentiates on PRICE AND TRANSPARENCY — much harder to copy</td></tr><tr><td>Lyft charged similar prices to Uber</td><td>AYRO charges HALF. Price is a stronger switching motivator.</td></tr><tr><td>Lyft needed billions to survive the cash war</td><td>AYRO's model is sustainable at 5% — doesn't need to burn cash</td></tr><tr><td>Lyft needed Uber to make mistakes to grow</td><td>AYRO doesn't need Uber to screw up — the price difference alone drives switching</td></tr><tr><td>Lyft's moat was brand + capital + alliances</td><td>AYRO's moat is structural — 5% take rate is built into the cost model</td></tr></tbody></table><hr><h3><strong>THE KEY INSIGHT FOR INVESTORS</strong></h3><p>Every Uber competitor that died (Sidecar, Juno, Hailo) tried to compete on the SAME business model — high take rate, subsidized prices, burn cash to grow. Uber just had more money.</p><p><strong>AYRO is doing something NONE of them did — competing on a fundamentally different COST STRUCTURE.</strong> 5% take rate vs 40% isn't a pricing promotion. It's a different business model. You can't out-subsidize a company that doesn't need subsidies.</p>`}} />
+        <h2 className="text-2xl font-bold mb-4">HOW LYFT SURVIVED UBER</h2>
+        <p className="text-gray-600 mb-6">Lyft is the ONLY US competitor that survived Uber's full assault.</p>
+        
+        <section className="mb-6">
+          <h3 className="text-xl font-bold mb-3">WHAT UBER THREW AT LYFT</h3>
+          <ul className="list-disc pl-5">
+            <li>Predatory pricing — subsidized below-cost rides</li>
+            <li>Driver poaching — cash to switch</li>
+            <li>Executive poaching</li>
+            <li>Fake ride attacks — "Project Hell" campaigns</li>
+            <li>Capital suffocation — $9B raised</li>
+            <li>Acquisition attempt</li>
+          </ul>
+        </section>
+        
+        <hr className="my-6" />
+        
+        <section className="mb-6">
+          <h3 className="text-xl font-bold mb-3">HOW LYFT SURVIVED</h3>
+          <ul className="list-disc pl-5">
+            <li>Nearly died — survived on sheer will (4 months cash in 2015)</li>
+            <li>Built a BRAND identity — "friend with a car" vs Uber's corporate cold</li>
+            <li>Exploited Uber's scandals — #DeleteUber drove riders to Lyft</li>
+            <li>Formed strategic alliances — GM $500M, Grab, Ola, Didi</li>
+            <li>Focused on US only — didn't burn cash globally</li>
+          </ul>
+        </section>
+        
+        <hr className="my-6" />
+        
+        <section>
+          <h3 className="text-xl font-bold mb-3">WHAT AYRO CAN LEARN</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="text-left p-2 border">Lyft</th>
+                  <th className="text-left p-2 border">AYRO</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="p-2 border">Brand differentiation</td>
+                  <td className="p-2 border">Price + Transparency</td>
+                </tr>
+                <tr>
+                  <td className="p-2 border">Similar prices to Uber</td>
+                  <td className="p-2 border">HALF the price</td>
+                </tr>
+                <tr>
+                  <td className="p-2 border">Needed billions</td>
+                  <td className="p-2 border">Sustainable at 5%</td>
+                </tr>
+                <tr>
+                  <td className="p-2 border">Needed Uber to fail</td>
+                  <td className="p-2 border">Price drives switching</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        
+        <hr className="my-6" />
+        
+        <h3 className="text-lg font-bold">KEY INSIGHT</h3>
+        <p>Every Uber competitor died trying to compete on the SAME model. AYRO competes on a DIFFERENT cost structure. You can't out-subsidize someone who doesn't need subsidies.</p>
       </div>
     </div>
   );
