@@ -34,16 +34,6 @@ const platforms = [
   { name: 'Sulekha', type: 'Job board', profileUrl: '', website: 'https://www.sulekha.com', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
 ];
 
-const getStatusColor = (status) => {
-  switch (status) {
-    case 'Active': return { bg: '#dcfce7', text: '#166534' };
-    case 'Pending': return { bg: '#fef3c7', text: '#92400e' };
-    case 'Blocked': return { bg: '#fee2e2', text: '#991b1b' };
-    case 'In Progress': return { bg: '#dbeafe', text: '#1e40af' };
-    default: return { bg: '#f3f4f6', text: '#6b7280' };
-  }
-};
-
 const getTypeColor = (type) => {
   if (type.includes('Job Board')) return '#423DF9';
   if (type.includes('Industry')) return '#08D9C4';
@@ -130,7 +120,6 @@ export default function DriverMarketing() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {platforms.map((platform, index) => {
-            const statusColor = getStatusColor(platform.status);
             const typeColor = getTypeColor(platform.type);
             
             return (
@@ -146,13 +135,11 @@ export default function DriverMarketing() {
                       </div>
                       <div>
                         <h3 className="font-bold text-gray-900">{platform.name}</h3>
-                        <p className="text-xs text-gray-400">{platform.type}</p>
+                        <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ background: typeColor + '20', color: typeColor }}">
+                          {platform.type}
+                        </span>
                       </div>
                     </div>
-                    <span className="text-xs font-semibold px-2 py-1 rounded-full" style={{ background: statusColor.bg, color: statusColor.text }}>
-                      {platform.status}
-                    </span>
-                  </div>
 
                   {/* Budget */}
                   {platform.budget && (
