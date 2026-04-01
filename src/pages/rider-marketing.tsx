@@ -4,8 +4,16 @@ import { user } from '../api/sdk';
 
 const channels = [
   // Organic/Paid Social Media Channels (1-15)
-  { name: 'YouTube', type: 'Organic/Paid', contentFormat: 'Video', color: '#FF0000', status: 'Ready', budget: '$100', dimensions: { thumbnail: '1280×720 px', video: '1920×1080 px', shorts: '1080×1920 px' }, contacts: [{ name: 'Nishant', role: 'Video Editor', email: 'nishant@skillsvital.com', phone: '+977 981-6630434' }], vendors: [{ name: 'Feedbird', email: 'support@feedbird.com' }, { name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://www.youtube.com', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
-  { name: 'TikTok', type: 'Organic/Paid', contentFormat: 'Video', color: '#00f2ea', status: 'Ready', budget: '$100', dimensions: { image: '1080×1920 px', video: '1080×1920 px' }, contacts: [{ name: 'Nishant', role: 'Video Editor', email: 'nishant@skillsvital.com', phone: '+977 981-6630434' }], vendors: [{ name: 'Feedbird', email: 'support@feedbird.com' }, { name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://www.tiktok.com', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
+  { name: 'YouTube', type: 'Organic/Paid', contentFormat: 'Video', color: '#FF0000', status: 'Ready', budget: '$100', dimensions: { thumbnail: '1280×720 px', video: '1920×1080 px', shorts: '1080×1920 px' }, contacts: [{ name: 'Nishant', role: 'Video Editor', email: 'nishant@skillsvital.com', phone: '+977 981-6630434' }], vendors: [{ name: 'Feedbird', email: 'support@feedbird.com' }, { name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://www.youtube.com', adsManager: 'https://ads.google.com', analytics: 'https://studio.youtube.com', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
+  { name: 'TikTok', type: 'Organic/Paid', contentFormat: 'Video', color: '#00f2ea', status: 'Ready', budget: '$100', dimensions: { image: '1080×1920 px', video: '1080×1920 px' }, contacts: [{ name: 'Nishant', role: 'Video Editor', email: 'nishant@skillsvital.com', phone: '+977 981-6630434' }], vendors: [{ name: 'Feedbird', email: 'support@feedbird.com' }, { name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://www.tiktok.com', adsManager: 'https://ads.tiktok.com', analytics: 'https://www.tiktok.com/analytics', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
+  { name: 'Facebook', type: 'Organic/Paid', contentFormat: 'Video', color: '#1877F2', status: 'Ready', budget: '$100', dimensions: { feed: '1080×1080 px', landscape: '1200×630 px', story: '1080×1920 px' }, contacts: [{ name: 'Nishant', role: 'Video Editor', email: 'nishant@skillsvital.com', phone: '+977 981-6630434' }], vendors: [{ name: 'Feedbird', email: 'support@feedbird.com' }, { name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://www.facebook.com', adsManager: 'https://business.facebook.com', analytics: 'https://business.facebook.com/insights', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
+  { name: 'Instagram', type: 'Organic/Paid', contentFormat: 'Video', color: '#E4405F', status: 'Ready', budget: '$100', dimensions: { feedSquare: '1080×1080 px', feedPortrait: '1080×1350 px', stories: '1080×1920 px' }, contacts: [{ name: 'Feedbird', role: 'Dina', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://www.instagram.com', adsManager: 'https://business.facebook.com', analytics: 'https://business.facebook.com/insights', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
+  { name: 'Threads', type: 'Organic/Paid', contentFormat: 'Video', color: '#000000', status: 'Ready', budget: '$100', dimensions: { image: '1080×1080 px', video: '1080×1920 px' }, contacts: [{ name: 'Feedbird', role: 'Dina', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://www.threads.net', adsManager: 'https://business.facebook.com', analytics: 'https://business.facebook.com/insights', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
+  { name: 'Snapchat', type: 'Organic/Paid', contentFormat: 'Video', color: '#FFFC00', status: 'Ready', budget: '$100', dimensions: { image: '1080×1920 px', video: '1080×1920 px' }, contacts: [{ name: 'Feedbird', role: 'Dina', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://www.snapchat.com', adsManager: 'https://ads.snapchat.com', analytics: 'https://ads.snapchat.com/manage', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
+  { name: 'Twitter/X', type: 'Organic/Paid', contentFormat: 'Video', color: '#000000', status: 'Ready', budget: '$100', dimensions: { singleImage: '1200×675 px', square: '1080×1080 px', video: '1080×1920 px' }, contacts: [{ name: 'Feedbird', role: 'Dina', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://x.com', adsManager: 'https://ads.x.com', analytics: 'https://analytics.x.com', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
+  { name: 'LinkedIn', type: 'Organic/Paid', contentFormat: 'Video', color: '#0A66C2', status: 'Ready', budget: '$100', dimensions: { feed: '1200×1200 px', landscape: '1200×627 px', video: '1080×1920 px' }, contacts: [{ name: 'Feedbird', role: 'Dina', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://www.linkedin.com', adsManager: 'https://www.linkedin.com/campaignmanager', analytics: 'https://www.linkedin.com/analytics', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
+  { name: 'Reddit', type: 'Organic/Paid', contentFormat: 'Video', color: '#FF4500', status: 'Ready', budget: '$100', dimensions: { image: '1080×1080 px', video: '1080×1920 px' }, contacts: [{ name: 'Feedbird', role: 'Dina', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://www.reddit.com', adsManager: 'https://ads.reddit.com', analytics: 'https://ads.reddit.com', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
+  { name: 'Pinterest', type: 'Organic/Paid', contentFormat: 'Video', color: '#E60023', status: 'Ready', budget: '$100', dimensions: { standard: '1000×1500 px', video: '1080×1920 px' }, contacts: [{ name: 'Feedbird', role: 'Dina', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://www.pinterest.com', adsManager: 'https://ads.pinterest.com', analytics: 'https://analytics.pinterest.com', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
   { name: 'Facebook', type: 'Organic/Paid', contentFormat: 'Static + Video', color: '#1877F2', status: 'Ready', budget: '$100', dimensions: { feed: '1080×1080 px', landscape: '1200×630 px', story: '1080×1920 px', video: '1080×1080 px' }, contacts: [{ name: 'Nishant', role: 'Video Editor', email: 'nishant@skillsvital.com', phone: '+977 981-6630434' }], vendors: [{ name: 'Feedbird', email: 'support@feedbird.com' }, { name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://www.facebook.com', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
   { name: 'Instagram', type: 'Organic/Paid', contentFormat: 'Static + Video', color: '#E1306C', status: 'Ready', budget: '$100', dimensions: { feedSquare: '1080×1080 px', feedPortrait: '1080×1350 px', stories: '1080×1920 px', reels: '1080×1920 px' }, contacts: [{ name: 'Feedbird', role: 'Social Manager', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }, { name: 'MANI', email: 'rmv1108m@gmail.com' }], website: 'https://www.instagram.com', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
   { name: 'Threads', type: 'Organic/Paid', contentFormat: 'Static + Video', color: '#000000', status: 'Ready', budget: '$100', dimensions: { image: '1080×1080 px or 1080×1350 px', video: '1080×1920 px' }, contacts: [{ name: 'Feedbird', role: 'Social Manager', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], website: 'https://www.threads.net', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image' },
@@ -295,7 +303,38 @@ export default function RiderMarketing() {
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
-                    Visit Website
+                    Website
+                  </a>
+                )}
+                
+                {/* Ads Manager Link */}
+                {channel.adsManager && (
+                  <a 
+                    href={channel.adsManager} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-[#423DF9] hover:underline ml-3"
+                  >
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                    </svg>
+                    Ads Manager
+                  </a>
+                )}
+                
+                {/* Analytics Link */}
+                {channel.analytics && (
+                  <a 
+                    href={channel.analytics} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-[#423DF9] hover:underline ml-3"
+                  >
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    Analytics
                   </a>
                 )}
 
