@@ -207,6 +207,77 @@ export default function RiderMarketing() {
                     )}
                 </div>
 
+                {/* Content Format - Static & Video */}
+                {(channel.name === 'YouTube' || channel.name === 'TikTok' || channel.name === 'Facebook' || channel.name === 'Instagram' || channel.name === 'Threads' || channel.name === 'Snapchat' || channel.name === 'Twitter/X' || channel.name === 'LinkedIn' || channel.name === 'Reddit' || channel.name === 'Pinterest' || channel.name === 'Telegram') && (
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600">Static</span>
+                      <span className="text-xs font-medium px-2 py-1 rounded" style={{ background: '#423DF915', color: '#423DF9' }}>Video</span>
+                    </div>
+                    {/* Dimensions */}
+                    <div className="text-xs text-gray-500 space-y-1">
+                      {channel.name === 'YouTube' && (
+                        <>
+                          <p><span className="font-medium">Thumbnail:</span> 1280×720 px (16:9)</p>
+                          <p><span className="font-medium">Video:</span> 1920×1080 px (16:9)</p>
+                          <p><span className="font-medium">Shorts:</span> 1080×1920 px (9:16)</p>
+                        </>
+                      )}
+                      {channel.name === 'TikTok' && (
+                        <>
+                          <p><span className="font-medium">Image:</span> 1080×1920 px (9:16)</p>
+                          <p><span className="font-medium">Video:</span> 1080×1920 px (9:16)</p>
+                        </>
+                      )}
+                      {channel.name === 'Facebook' && (
+                        <>
+                          <p><span className="font-medium">Feed:</span> 1080×1080 px</p>
+                          <p><span className="font-medium">Landscape:</span> 1200×630 px</p>
+                          <p><span className="font-medium">Story/Reels:</span> 1080×1920 px</p>
+                        </>
+                      )}
+                      {channel.name === 'Instagram' && (
+                        <>
+                          <p><span className="font-medium">Feed Square:</span> 1080×1080 px</p>
+                          <p><span className="font-medium">Feed Portrait:</span> 1080×1350 px</p>
+                          <p><span className="font-medium">Stories/Reels:</span> 1080×1920 px</p>
+                        </>
+                      )}
+                      {channel.name === 'Threads' && (
+                        <>
+                          <p><span className="font-medium">Image:</span> 1080×1080 px or 1080×1350 px</p>
+                          <p><span className="font-medium">Video:</span> 1080×1920 px</p>
+                        </>
+                      )}
+                      {channel.name === 'Snapchat' && (
+                        <>
+                          <p><span className="font-medium">Snap Image:</span> 1080×1920 px</p>
+                          <p><span className="font-medium">Snap Video:</span> 1080×1920 px</p>
+                        </>
+                      )}
+                      {(channel.name === 'Twitter/X' || channel.name === 'LinkedIn') && (
+                        <>
+                          <p><span className="font-medium">Image:</span> 1200×675 px (16:9)</p>
+                          <p><span className="font-medium">Square:</span> 1080×1080 px</p>
+                          <p><span className="font-medium">Video:</span> 1080×1920 px</p>
+                        </>
+                      )}
+                      {channel.name === 'Reddit' && (
+                        <>
+                          <p><span className="font-medium">Image:</span> 1080×1080 px</p>
+                          <p><span className="font-medium">Video:</span> 1080×1920 px</p>
+                        </>
+                      )}
+                      {channel.name === 'Pinterest' && (
+                        <>
+                          <p><span className="font-medium">Standard:</span> 1000×1500 px (2:3)</p>
+                          <p><span className="font-medium">Video:</span> 1080×1920 px</p>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Budget */}
                 <div className="flex items-center justify-between mb-4 p-3 rounded-lg" style={{ background: '#423DF908' }}>
                   <span className="text-xs text-gray-500">Monthly Budget</span>
