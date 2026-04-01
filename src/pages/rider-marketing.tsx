@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { user } from '../api/sdk';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Header from '../components/Header.jsx';
 
 const channels = [
   // Organic/Paid Social Media Channels (1-15)
@@ -79,19 +79,6 @@ const channels = [
 
 export default function RiderMarketing() {
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(null);
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const me = await user.me();
-        setCurrentUser(me);
-      } catch (e) {
-        setCurrentUser(null);
-      }
-    }
-    load();
-  }, []);
 
   const groupByType = (channels) => {
     const groups = {};
@@ -108,46 +95,10 @@ export default function RiderMarketing() {
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');`}</style>
       
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-gray-100/50 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-2" style={{ background: 'linear-gradient(135deg, #423DF9 0%, #08D9C4 100%)' }}>
-                <span className="text-white font-bold text-sm">A</span>
-              </div>
-              <span className="text-xl font-bold" style={{ color: '#1D0652' }}>AYRO</span>
-            </Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link to="/" className="text-sm font-medium text-gray-500 hover:text-[#423DF9] transition-colors">Home</Link>
-              <div className="relative group">
-                <button className="text-sm font-medium text-gray-500 hover:text-[#423DF9] transition-colors flex items-center gap-1">
-                  Strategy
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div className="absolute top-full left-0 mt-2 w-44 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                  <Link to="/gtm" className="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#423DF9] rounded-t-xl">Go-to-Market</Link>
-                  <Link to="/ayro-orbit" className="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#423DF9]">Orbit Strategy</Link>
-                  <Link to="/downloads" className="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#423DF9] rounded-b-xl">1M Downloads</Link>
-                </div>
-              </div>
-              <Link to="/documents/slides" className="text-sm font-medium text-gray-500 hover:text-[#423DF9] transition-colors">Slides</Link>
-              <Link to="/data" className="text-sm font-medium text-gray-500 hover:text-[#423DF9] transition-colors">Data</Link>
-            </nav>
-          </div>
-          <div className="flex items-center gap-3">
-            {currentUser ? (
-              <button onClick={() => { user.logout(); navigate('/login'); }} className="text-sm font-medium text-gray-500 hover:text-[#423DF9] transition-colors">Logout</button>
-            ) : (
-              <Link to="/login" className="text-sm font-medium" style={{ color: '#423DF9' }}>Login</Link>
-            )}
-          </div>
-        </div>
-      </header>
+      <Header showBackLink={true} />
 
       {/* Hero */}
-      <div className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1D0652 0%, #423DF9 60%, #08D9C4 100%)' }}>
+      <div className="relative overflow-hidden pt-20" style={{ background: 'linear-gradient(135deg, #1D0652 0%, #423DF9 60%, #08D9C4 100%)' }}>
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 right-20 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, #08D9C4 0%, transparent 70%)' }} />
           <div className="absolute bottom-10 left-20 w-48 h-48 rounded-full" style={{ background: 'radial-gradient(circle, #7742F1 0%, transparent 70%)' }} />
