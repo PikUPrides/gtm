@@ -16,22 +16,22 @@ const platforms = [
   { name: 'Ground Truth', type: 'Market Research & Data Platform', profileUrl: '', website: 'https://www.groundtruth.com/', checklist: '', notes: 'How ground truth is helping to get the drivers? Do we need to send them a message?', contact: 'info@groundtruth.com', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'In Progress' },
   { name: 'SEM Nexus', type: 'App Marketing & Growth Agency', profileUrl: 'https://prnt.sc/XY67baxjQhb6', website: 'https://semnexus.com/', checklist: '', notes: 'Sorry, you have been blocked', contact: 'hello@semnexus.com', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Blocked' },
   { name: 'Your Driver Mike', type: 'Personal Brand', profileUrl: '', website: 'https://www.yourdrivermike.com/', checklist: 'Account Creation, Profile setup, Description, Logo Updated, Website details, Profile Image', notes: 'Waiting for len to get the content verified and then will contact them', contact: 'hello@yourdrivermike.com', phone: '', links: 'https://drive.google.com/file/d/19y8YvJQZbyjsgyh0n1AirNQck5scQi5m/view', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
-  { name: 'Uberpeople.net', type: 'Job board', profileUrl: 'https://www.uberpeople.net/members/ayrorides.275491/', website: 'https://www.uberpeople.net/', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Active' },
+  { name: 'Uberpeople.net', type: 'Job Board', profileUrl: 'https://www.uberpeople.net/members/ayrorides.275491/', website: 'https://www.uberpeople.net/', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Active' },
   { name: 'AudioGo', type: 'Audio Platform', profileUrl: 'https://app.audiogo.com/us/account/settings', website: '', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Active' },
   { name: 'Roku', type: 'Streaming Platform', profileUrl: '', website: '', checklist: '', notes: "The email address or password provided does not match our records. Tip: You can verify your Roku account email address from your device by visiting Settings.", contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Blocked' },
   { name: 'Vibe.co', type: 'CTV Advertising', profileUrl: 'My First CTV Campaign', website: 'https://www.vibe.co/', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'In Progress' },
   { name: 'Rideshare Professor', type: 'Media Platform', profileUrl: '', website: '', checklist: '', notes: 'Waiting for len to get the content verified and then will contact them', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
-  { name: 'Snagajob', type: 'Job board', profileUrl: 'https://prnt.sc/LqZwHev5IfON', website: 'https://www.snagajob.com/employer', checklist: '', notes: 'Address issue at my end, need to choose city, state, zip code', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'In Progress' },
-  { name: 'SalutemyJob', type: 'Job board', profileUrl: 'https://salutemyjob.com/recruiter/', website: 'https://salutemyjob.com/', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Active' },
-  { name: 'Glassdoor', type: 'Job board', profileUrl: '', website: '', checklist: '', notes: 'We take profile verification very seriously at Glassdoor and we appreciate your patience as we verify that you are a representative of your company. We will send an update to socialmedia@pikup.us within 24-hrs about your account status.', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
-  { name: 'Heartland Express', type: 'Job board', profileUrl: '', website: 'https://www.heartlandexpress.com/contact-us', checklist: '', notes: 'Waiting for len to get the content verified and then will contact them', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
-  { name: 'Monster', type: 'Job board', profileUrl: 'https://manage.monster.com/en-us/companyProfile', website: 'https://www.monster.com', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Active' },
-  { name: 'Easy.jobs', type: 'Job board', profileUrl: '', website: 'https://easy.jobs/contact/', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
-  { name: 'Easy Careers', type: 'Job board', profileUrl: '', website: '', checklist: '', notes: 'Waiting for len to get the content verified and then will contact them', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
-  { name: 'CDLLife Jobs', type: 'Job board', profileUrl: '', website: 'https://contact.cdlconnect.io/contact-cdllife?dl=https%3A%2F%2Fcdllife.com%2Fnews%2F', checklist: '', notes: 'Waiting for len to get the content verified and then will contact them', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
+  { name: 'Snagajob', type: 'Job Board', profileUrl: 'https://prnt.sc/LqZwHev5IfON', website: 'https://www.snagajob.com/employer', checklist: '', notes: 'Address issue at my end, need to choose city, state, zip code', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'In Progress' },
+  { name: 'SalutemyJob', type: 'Job Board', profileUrl: 'https://salutemyjob.com/recruiter/', website: 'https://salutemyjob.com/', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Active' },
+  { name: 'Glassdoor', type: 'Job Board', profileUrl: '', website: '', checklist: '', notes: 'We take profile verification very seriously at Glassdoor and we appreciate your patience as we verify that you are a representative of your company. We will send an update to socialmedia@pikup.us within 24-hrs about your account status.', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
+  { name: 'Heartland Express', type: 'Job Board', profileUrl: '', website: 'https://www.heartlandexpress.com/contact-us', checklist: '', notes: 'Waiting for len to get the content verified and then will contact them', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
+  { name: 'Monster', type: 'Job Board', profileUrl: 'https://manage.monster.com/en-us/companyProfile', website: 'https://www.monster.com', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Active' },
+  { name: 'Easy.jobs', type: 'Job Board', profileUrl: '', website: 'https://easy.jobs/contact/', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
+  { name: 'Easy Careers', type: 'Job Board', profileUrl: '', website: '', checklist: '', notes: 'Waiting for len to get the content verified and then will contact them', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
+  { name: 'CDLLife Jobs', type: 'Job Board', profileUrl: '', website: 'https://contact.cdlconnect.io/contact-cdllife?dl=https%3A%2F%2Fcdllife.com%2Fnews%2F', checklist: '', notes: 'Waiting for len to get the content verified and then will contact them', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
   { name: 'Facebook Group', type: 'Community / Social Network', profileUrl: '', website: '', checklist: '', notes: 'Vendor', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
   { name: 'Website Careers', type: 'Careers Page', profileUrl: '', website: '', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
-  { name: 'Sulekha', type: 'Job board', profileUrl: '', website: 'https://www.sulekha.com', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
+  { name: 'Sulekha', type: 'Job Board', profileUrl: '', website: 'https://www.sulekha.com', checklist: '', notes: '', contact: '', phone: '', links: '', budget: '', approved: '', goLive: '', thingsToDo: '', status: 'Pending' },
 ];
 
 const getTypeColor = (type) => {
@@ -126,21 +126,20 @@ export default function DriverMarketing() {
               <div key={`${platform.name}-${index}`} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
                 <div className="h-2" style={{ background: typeColor }} />
                 <div className="p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: typeColor + '15' }}>
-                        <svg className="w-6 h-6" style={{ color: typeColor }} fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                        </svg>
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-gray-900">{platform.name}</h3>
-                        <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ background: typeColor + '20', color: typeColor }}">
-                          {platform.type}
-                        </span>
-                      </div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: typeColor + '15' }}>
+                      <svg className="w-6 h-6" style={{ color: typeColor }} fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                      </svg>
                     </div>
-
+                    <div>
+                      <h3 className="font-bold text-gray-900">{platform.name}</h3>
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ background: typeColor + '20', color: typeColor }}>
+                        {platform.type}
+                      </span>
+                    </div>
+                  </div>
+                  
                   {/* Budget */}
                   {platform.budget && (
                     <div className="flex items-center justify-between mb-4 p-3 rounded-lg" style={{ background: '#7742F108' }}>
