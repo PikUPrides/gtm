@@ -74,6 +74,8 @@ export default function Header({ showBackLink = false }) {
 
   // Strategy dropdown items
   const strategyItems = [
+    { href: '/rider-marketing', label: '🚗 Rider Marketing' },
+    { href: '/driver-marketing', label: '🚙 Driver Marketing' },
     { href: '/gtm', label: 'GTM Strategy' },
     { href: '/ayro-orbit', label: 'AYRO Orbit' },
     { href: '/pitch-deck', label: 'How To Pitch Deck' },
@@ -310,8 +312,19 @@ export default function Header({ showBackLink = false }) {
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
           <nav ref={mobileMenuRef} className="sm:hidden flex flex-col gap-1 pb-2 border-t border-gray-100 pt-3">
+            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Marketing</div>
+            {strategyItems.slice(0, 2).map((item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
             <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Strategy</div>
-            {strategyItems.map((item) => (
+            {strategyItems.slice(2).map((item) => (
               <Link
                 key={item.href}
                 to={item.href}

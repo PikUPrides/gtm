@@ -3,6 +3,8 @@ import { Link } from '../api/sdk.js';
 import Header from '../components/Header.jsx';
 
 const items = [
+  { title: 'Rider Marketing', desc: '45+ marketing channels to acquire riders — social, paid ads, influencers, community, and more.', path: '/rider-marketing', tag: 'Growth', color: '#F59E0B', icon: 'M12 19l9 2-9-18-9 18 9-2zm0 0v-8' },
+  { title: 'Driver Marketing', desc: 'Driver acquisition channels — recruitment ads, referral programs, fleet partnerships, and incentives.', path: '/driver-marketing', tag: 'Growth', color: '#10B981', icon: 'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4' },
   { title: 'US Market Data', desc: 'Interactive US demographic map for GTM targeting — population, age, income by state.', path: '/data', tag: 'Data', color: '#08D9C4', icon: 'M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7' },
   { title: 'Go-to-Market Strategy', desc: '55+ channels across paid, organic, hyperlocal, community, CRM, and partnerships.', path: '/gtm', tag: 'Strategy', color: '#423DF9', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
   { title: 'The AYRO Orbit', desc: 'A self-reinforcing mobility ecosystem where drivers, riders, and platform growth continuously strengthen each other.', path: '/ayro-orbit', tag: 'Strategy', color: '#7742F1', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' },
