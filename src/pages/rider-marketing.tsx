@@ -142,8 +142,8 @@ export default function RiderMarketing() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {channels.map(channel => (
-            <div key={channel.name} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
+          {channels.map((channel, index) => (
+            <div key={`${channel.name}-${index}`} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
               <div className="h-2" style={{ background: channel.color }} />
               <div className="p-5">
                 <div className="flex items-center justify-between mb-4">
