@@ -179,16 +179,6 @@ export default function RiderMarketing() {
                   </div>
                 )}
 
-                {/* Go Live Date */}
-                {channel.goLive && (
-                  <div className="flex items-center gap-2 text-xs text-green-600 bg-green-50 px-3 py-2 rounded-lg">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    Go Live: {channel.goLive}
-                  </div>
-                )}
-
                 {/* Notes */}
                 {channel.notes && (
                   <div className="mt-3 flex items-center gap-2 text-xs text-red-600 bg-red-50 px-3 py-2 rounded-lg">
