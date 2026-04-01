@@ -78,7 +78,6 @@ const channels = [
 ];
 
 export default function RiderMarketing() {
-  const navigate = useNavigate();
 
   const groupByType = (channels) => {
     const groups = {};
