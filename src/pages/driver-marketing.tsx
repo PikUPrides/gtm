@@ -83,28 +83,6 @@ export default function DriverMarketing() {
               <p className="text-xs text-gray-500">Platforms</p>
             </div>
           </div>
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 px-6 py-3 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#dcfce715' }}>
-              <svg className="w-5 h-5" style={{ color: '#166534' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-2xl font-bold" style={{ color: '#166534' }}>{platforms.filter(p => p.status === 'Active').length}</p>
-              <p className="text-xs text-gray-500">Active</p>
-            </div>
-          </div>
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 px-6 py-3 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#fef3c715' }}>
-              <svg className="w-5 h-5" style={{ color: '#92400e' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-2xl font-bold" style={{ color: '#92400e' }}>{platforms.filter(p => p.status === 'Pending').length}</p>
-              <p className="text-xs text-gray-500">Pending</p>
-            </div>
-          </div>
         </div>
       </div>
 
