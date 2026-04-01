@@ -74,8 +74,8 @@ export default function Header({ showBackLink = false }) {
 
   // Strategy dropdown items
   const strategyItems = [
-    { href: '/rider-marketing', label: '🚗 Rider Marketing' },
-    { href: '/driver-marketing', label: '🚙 Driver Marketing' },
+    { href: '/rider-marketing', label: 'Rider Marketing' },
+    { href: '/driver-marketing', label: 'Driver Marketing' },
     { href: '/gtm', label: 'GTM Strategy' },
     { href: '/ayro-orbit', label: 'AYRO Orbit' },
     { href: '/pitch-deck', label: 'How To Pitch Deck' },
