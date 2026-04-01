@@ -52,7 +52,7 @@ export default function DriverMarketing() {
       <Header />
 
       {/* Hero */}
-      <div className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1D0652 0%, #7742F1 60%, #08D9C4 100%)' }}>
+      <div className="relative overflow-hidden pt-16" style={{ background: 'linear-gradient(135deg, #1D0652 0%, #7742F1 60%, #08D9C4 100%)' }}>
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 right-20 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, #08D9C4 0%, transparent 70%)' }} />
           <div className="absolute bottom-10 left-20 w-48 h-48 rounded-full" style={{ background: 'radial-gradient(circle, #7742F1 0%, transparent 70%)' }} />
