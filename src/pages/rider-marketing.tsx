@@ -1,31 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { entities, user } from '../api/sdk';
-import { serenities } from '../api/globals';
+import serenities from '../api/sdk';
 
 const channels = [
-  { name: 'TikTok', category: 'Social', color: '#00f2ea' },
-  { name: 'Instagram Reels', category: 'Social', color: '#E1306C' },
-  { name: 'YouTube Shorts', category: 'Social', color: '#FF0000' },
-  { name: 'Snapchat', category: 'Social', color: '#FFFC00' },
-  { name: 'Google Performance Max', category: 'Paid', color: '#4285F4' },
-  { name: 'Meta Ads', category: 'Paid', color: '#0081FB' },
-  { name: 'TikTok Ads', category: 'Paid', color: '#00f2ea' },
-  { name: 'Local SEO', category: 'Organic', color: '#34A853' },
-  { name: 'App Store Optimization', category: 'Organic', color: '#5AC8FA' },
-  { name: 'Influencer Partnerships', category: 'Partnerships', color: '#9B51E0' },
-  { name: 'University Campus', category: 'Partnerships', color: '#FF6B00' },
-  { name: 'Corporate Deals', category: 'Partnerships', color: '#00C853' },
-  { name: 'Referral Program', category: 'Referral', color: '#423DF9' },
-  { name: 'Cash Rewards', category: 'Referral', color: '#08D9C4' },
-  { name: 'Community Events', category: 'Community', color: '#FF6B6B' },
-  { name: 'Rider Loyalty', category: 'CRM', color: '#7742F1' },
+  { name: 'YouTube', type: 'Organic/Paid', color: '#FF0000', status: 'WIP', approved: 'No', budget: '$100', contacts: [{ name: 'Nishant', role: 'Video Editor', email: 'nishant@skillsvital.com', phone: '+977 981-6630434' }], vendors: [{ name: 'Feedbird', email: 'support@feedbird.com' }, { name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], dimensions: { thumbnail: '1280×720 px (16:9)', video: '1920×1080 px (16:9)', shorts: '1080×1920 px (9:16)' } },
+  { name: 'TikTok', type: 'Organic/Paid', color: '#00f2ea', status: 'WIP', approved: 'No', budget: '$100', contacts: [{ name: 'Nishant', role: 'Video Editor', email: 'nishant@skillsvital.com', phone: '+977 981-6630434' }], vendors: [{ name: 'Feedbird', email: 'support@feedbird.com' }, { name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], dimensions: { image: '1080×1920 px (9:16)', video: '1080×1920 px (9:16)' } },
+  { name: 'Facebook', type: 'Organic/Paid', color: '#1877F2', status: 'NO', approved: 'No', budget: '$100', contacts: [{ name: 'Nishant', role: 'Video Editor', email: 'nishant@skillsvital.com', phone: '+977 981-6630434' }], vendors: [{ name: 'Feedbird', email: 'support@feedbird.com' }, { name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], dimensions: { feed: '1080×1080 px (1:1)', landscape: '1200×630 px (1.91:1)', story: '1080×1920 px (9:16)', video: '1080×1080 px or 1920×1080 px' } },
+  { name: 'Instagram', type: 'Organic/Paid', color: '#E1306C', status: 'NO', approved: 'No', budget: '$100', contacts: [{ name: 'Feedbird', role: 'Social Manager', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }, { name: 'MANI', email: 'rmv1108m@gmail.com' }], dimensions: { feedSquare: '1080×1080 px (1:1)', feedPortrait: '1080×1350 px (4:5)', stories: '1080×1920 px (9:16)', reels: '1080×1920 px (9:16)' } },
+  { name: 'Threads', type: 'Organic/Paid', color: '#000000', status: 'NO', approved: 'No', budget: '$100', contacts: [{ name: 'Feedbird', role: 'Social Manager', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], dimensions: { image: '1080×1080 px or 1080×1350 px', video: '1080×1920 px (9:16)' }, notes: 'Account disabled on 9th January 2026' },
+  { name: 'Snapchat', type: 'Organic/Paid', color: '#FFFC00', status: 'NO', approved: 'No', budget: '$100', contacts: [{ name: 'Feedbird', role: 'Social Manager', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], dimensions: { image: '1080×1920 px (9:16)', video: '1080×1920 px (9:16)' } },
+  { name: 'Twitter/X', type: 'Organic/Paid', color: '#000000', status: 'NO', approved: 'No', budget: '$100', contacts: [{ name: 'Feedbird', role: 'Social Manager', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], dimensions: { singleImage: '1200×675 px (16:9)', squareImage: '1080×1080 px', landscapeVideo: '1280×720 px (16:9)', vertical: '1080×1920 px (9:16)' }, notes: 'Wrong password' },
+  { name: 'LinkedIn', type: 'Organic/Paid', color: '#0A66C2', status: 'NO', approved: 'No', budget: '$100', contacts: [{ name: 'Feedbird', role: 'Social Manager', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], dimensions: { feedImage: '1200×1200 px (1:1)', landscape: '1200×627 px (1.91:1)', squareVideo: '1080×1080 px', verticalVideo: '1080×1920 px', landscapeVideo: '1920×1080 px' } },
+  { name: 'Reddit', type: 'Organic/Paid', color: '#FF4500', status: 'NO', approved: 'No', budget: '$100', contacts: [{ name: 'Feedbird', role: 'Social Manager', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], dimensions: { image: '1080×1080 px or 1200×1200 px', video: '1080×1920 px or 1920×1080 px' } },
+  { name: 'Pinterest', type: 'Organic/Paid', color: '#E60023', status: 'Ready', approved: 'No', budget: '$100', contacts: [{ name: 'Feedbird', role: 'Social Manager', email: 'support@feedbird.com' }], vendors: [{ name: '99 Social', contact: 'Juan Restrepo' }, { name: 'Draftss', contact: 'Aditi' }], dimensions: { standard: '1000×1500 px (2:3)', long: '1000×1800 px', video: '1080×1920 px (9:16)' }, goLive: '15-Jan' },
 ];
 
 export default function RiderMarketing() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
   const [videos, setVideos] = useState([]);
+  const [content, setContent] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,17 +36,21 @@ export default function RiderMarketing() {
   }, []);
 
   useEffect(() => {
-    async function loadVideos() {
+    async function loadData() {
       try {
-        const data = await entities.Videos.list();
-        setVideos(data);
+        const [videoData, contentData] = await Promise.all([
+          entities.Videos.list(),
+          entities.Content.list()
+        ]);
+        setVideos(videoData);
+        setContent(contentData);
       } catch (e) {
-        console.error('Error loading videos:', e);
+        console.error('Error loading data:', e);
       } finally {
         setLoading(false);
       }
     }
-    loadVideos();
+    loadData();
   }, []);
 
   return (
@@ -105,40 +104,144 @@ export default function RiderMarketing() {
         </div>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 relative z-10">
           <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-4" style={{ background: 'rgba(255,255,255,0.15)', color: '#08D9C4', border: '1px solid rgba(255,255,255,0.2)' }}>
-            Growth Channels
+            Social Media Channels
           </div>
           <h1 className="text-white text-3xl sm:text-4xl font-bold mb-4 leading-tight">Rider Marketing Playbook</h1>
           <p className="text-white/80 text-base sm:text-lg max-w-2xl leading-relaxed">
-            45+ acquisition channels across social, paid ads, influencers, community, and strategic partnerships.
+            10 social media channels with complete specs, vendor contacts, and content creation workflows.
           </p>
         </div>
         <div className="h-1" style={{ background: 'linear-gradient(90deg, #423DF9, #08D9C4, #7742F1)' }} />
       </div>
 
-      {/* Channels */}
+      {/* Stats Bar */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 -mt-6 relative z-20">
+        <div className="flex flex-wrap gap-4 justify-center">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 px-6 py-3 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#423DF915' }}>
+              <svg className="w-5 h-5" style={{ color: '#423DF9' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-2xl font-bold" style={{ color: '#1D0652' }}>{channels.length}</p>
+              <p className="text-xs text-gray-500">Channels</p>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 px-6 py-3 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#08D9C415' }}>
+              <svg className="w-5 h-5" style={{ color: '#08D9C4' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-2xl font-bold" style={{ color: '#1D0652' }}>{videos.length}</p>
+              <p className="text-xs text-gray-500">Videos</p>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 px-6 py-3 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#7742F115' }}>
+              <svg className="w-5 h-5" style={{ color: '#7742F1' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-2xl font-bold" style={{ color: '#1D0652' }}>{content.length}</p>
+              <p className="text-xs text-gray-500">Scripts</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Channels Grid */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-xl font-bold" style={{ color: '#1D0652' }}>Acquisition Channels</h2>
-            <p className="text-gray-500 text-sm mt-1">Tactical approaches for rider growth</p>
+            <h2 className="text-xl font-bold" style={{ color: '#1D0652' }}>Social Media Channels</h2>
+            <p className="text-gray-500 text-sm mt-1">Dimensions, contacts, and setup status</p>
           </div>
-          <span className="text-sm font-semibold px-3 py-1 rounded-full" style={{ background: '#423DF915', color: '#423DF9' }}>{channels.length} active</span>
+          <span className="text-sm font-semibold px-3 py-1 rounded-full" style={{ background: '#423DF915', color: '#423DF9' }}>{channels.length} channels</span>
         </div>
         
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {channels.map(channel => (
-            <div key={channel.name} className="group bg-white rounded-xl border border-gray-100 p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
-              <div className="absolute top-0 left-0 w-full h-1 rounded-t-xl" style={{ background: channel.color }} />
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: channel.color + '15' }}>
-                  <svg className="w-5 h-5" style={{ color: channel.color }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                  </svg>
+            <div key={channel.name} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
+              <div className="h-2" style={{ background: channel.color }} />
+              <div className="p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: channel.color + '15' }}>
+                      <svg className="w-6 h-6" style={{ color: channel.color }} fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900">{channel.name}</h3>
+                      <p className="text-xs text-gray-400">{channel.type}</p>
+                    </div>
+                  </div>
+                  <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
+                    channel.status === 'Ready' ? 'bg-green-100 text-green-700' :
+                    channel.status === 'WIP' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-red-100 text-red-700'
+                  }`}>
+                    {channel.status}
+                  </span>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 text-sm">{channel.name}</h3>
-                  <p className="text-xs text-gray-400">{channel.category}</p>
+
+                {/* Dimensions */}
+                <div className="mb-4">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Dimensions</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {Object.entries(channel.dimensions).slice(0, 4).map(([key, val]) => (
+                      <span key={key} className="text-xs px-2 py-1 bg-gray-50 text-gray-600 rounded">
+                        {val.split(' px')[0]}
+                      </span>
+                    ))}
+                  </div>
                 </div>
+
+                {/* Budget */}
+                <div className="flex items-center justify-between mb-4 p-3 rounded-lg" style={{ background: '#423DF908' }}>
+                  <span className="text-xs text-gray-500">Monthly Budget</span>
+                  <span className="font-bold" style={{ color: '#423DF9' }}>{channel.budget}</span>
+                </div>
+
+                {/* Contacts */}
+                {channel.contacts.length > 0 && (
+                  <div className="mb-3">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Primary Contact</p>
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-medium text-gray-600">
+                        {channel.contacts[0].name.charAt(0)}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-gray-900 truncate">{channel.contacts[0].name}</p>
+                        <p className="text-xs text-gray-400 truncate">{channel.contacts[0].role}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Go Live Date */}
+                {channel.goLive && (
+                  <div className="flex items-center gap-2 text-xs text-green-600 bg-green-50 px-3 py-2 rounded-lg">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Go Live: {channel.goLive}
+                  </div>
+                )}
+
+                {/* Notes */}
+                {channel.notes && (
+                  <div className="mt-3 flex items-center gap-2 text-xs text-red-600 bg-red-50 px-3 py-2 rounded-lg">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    {channel.notes}
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -149,7 +252,7 @@ export default function RiderMarketing() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
         <div className="mb-8">
           <h2 className="text-xl font-bold" style={{ color: '#1D0652' }}>Video Library</h2>
-          <p className="text-gray-500 text-sm mt-1">Campaign assets and creative references</p>
+          <p className="text-gray-500 text-sm mt-1">Campaign assets from database</p>
         </div>
         
         {loading ? (
@@ -163,7 +266,7 @@ export default function RiderMarketing() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
             </div>
-            <p className="text-gray-500 text-sm">No video library content yet.</p>
+            <p className="text-gray-500 text-sm">No videos in library yet. Add videos to the Videos table.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
