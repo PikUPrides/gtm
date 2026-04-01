@@ -216,26 +216,19 @@ export default function RiderMarketing() {
                   <span className="font-bold" style={{ color: '#423DF9' }}>{channel.budget}</span>
                 </div>
 
-                {/* Contact Info */}
-                {channel.contacts && channel.contacts.length > 0 && (
-                  <div className="mb-3">
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Contacts</p>
-                    {channel.contacts.map((c, i) => (
-                      <div key={i} className="text-xs text-gray-600">
-                        {c.name} {c.role && <span className="text-gray-400">- {c.role}</span>}
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Website */}
+                {/* Website Link */}
                 {channel.website && (
-                  <div className="text-xs">
-                    <span className="text-gray-500">Website: </span>
-                    <a href={channel.website} target="_blank" rel="noopener noreferrer" className="text-[#423DF9] hover:underline">
-                      {channel.website.replace('https://', '').slice(0, 25)}...
-                    </a>
-                  </div>
+                  <a 
+                    href={channel.website} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-[#423DF9] hover:underline"
+                  >
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    Visit Website
+                  </a>
                 )}
 
               </div>
