@@ -163,31 +163,7 @@ export default function RiderMarketing() {
                   <span className="font-bold" style={{ color: '#423DF9' }}>{channel.budget}</span>
                 </div>
 
-                {/* Contacts */}
-                {channel.contacts.length > 0 && (
-                  <div className="mb-3">
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Primary Contact</p>
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-medium text-gray-600">
-                        {channel.contacts[0].name.charAt(0)}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-gray-900 truncate">{channel.contacts[0].name}</p>
-                        <p className="text-xs text-gray-400 truncate">{channel.contacts[0].role}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
 
-                {/* Notes */}
-                {channel.notes && (
-                  <div className="mt-3 flex items-center gap-2 text-xs text-red-600 bg-red-50 px-3 py-2 rounded-lg">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    {channel.notes}
-                  </div>
-                )}
               </div>
             </div>
           ))}
