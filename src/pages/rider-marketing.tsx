@@ -200,14 +200,11 @@ export default function RiderMarketing() {
                       <p className="text-xs text-gray-400">{channel.type}</p>
                     </div>
                   </div>
-                  <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                    channel.status === 'Ready' ? 'bg-green-100 text-green-700' :
-                    channel.status === 'WIP' ? 'bg-yellow-100 text-yellow-700' :
-                    channel.status === 'NO' ? 'bg-red-100 text-red-700' :
-                    'bg-gray-100 text-gray-600'
-                  }`}>
-                    {channel.status}
-                  </span>
+                  {channel.type.includes('Paid') ? (
+                      <span className="text-xs font-semibold px-2 py-1 rounded-full bg-green-100 text-green-700">Paid</span>
+                    ) : (
+                      <span className="text-xs font-semibold px-2 py-1 rounded-full bg-blue-100 text-blue-700">Organic</span>
+                    )}
                 </div>
 
                 {/* Budget */}
