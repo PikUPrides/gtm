@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { user } from '../api/sdk';
+import Header from '../components/Header';
 
 export default function RiderMarketing() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -10,6 +11,7 @@ export default function RiderMarketing() {
     user.me().then(setCurrentUser).catch(() => setCurrentUser(null));
   }, []);
 
+  // Add padding-top to account for fixed header
   const channels = {
     organic: [
       { name: 'YouTube', icon: '▶️', status: 'WIP', budget: '$100', url: 'https://www.youtube.com/@AYRO_Inc', dimensions: 'Thumbnail: 1280×720px, Video: 1920×1080px', content: '4 Videos/month, 10 static images', contact: 'Nishant (Video Editor)', email: 'nishant@skillsvital.com' },
@@ -85,12 +87,14 @@ export default function RiderMarketing() {
   const totalBudget = 3200;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
+    <div>
+      <Header />
+      <div className="pt-20 min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
+        <div className="max-w-7xl mx-auto">
+        {/* Page Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-white mb-2">🚗 Rider Marketing</h1>
+            <h1 className="text-4xl font-bold text-white mb-2">Rider Marketing</h1>
             <p className="text-purple-300">AYRO RideShare - Marketing Channel Dashboard</p>
           </div>
           <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl p-4 text-center">
@@ -213,5 +217,8 @@ export default function RiderMarketing() {
         </div>
       </div>
     </div>
+    </div>
+  );
+}
   );
 }
