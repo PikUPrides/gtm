@@ -159,7 +159,138 @@ function MetroSection({ metros }) {
   );
 }
 
-function DemographicsSection({ stateName, data, stateMetros, cityMetric, onMetricChange }) {
+function CountySection({ counties, expandedDMA, onToggleDMA, stateZips, expandedCounty, onToggleCounty }) {
+  if (!counties || counties.length === 0) return null;
+  // Group counties by DMA
+  const dmaGroups = {};
+  counties.forEach(c => {
+    const dma = c.dma || 'Other';
+    if (!dmaGroups[dma]) dmaGroups[dma] = { counties: [], totalPop: 0 };
+    dmaGroups[dma].counties.push(c);
+    dmaGroups[dma].totalPop += c.population;
+  });
+  const sortedDMAs = Object.entries(dmaGroups).sort((a, b) => b[1].totalPop - a[1].totalPop);
+
+  return (
+    <div className="bg-white rounded-xl p-6 border border-gray-200 mb-8">
+      <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
+        <div className="w-3 h-3 rounded-full bg-[#3a0ca3]" />
+        Counties by DMA
+      </h3>
+      <div className="space-y-2">
+        {sortedDMAs.map(([dmaName, group]) => (
+          <div key={dmaName} className="border border-gray-100 rounded-lg overflow-hidden">
+            <button
+              onClick={() => onToggleDMA(expandedDMA === dmaName ? null : dmaName)}
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <span className="inline-block px-2 py-0.5 bg-[#3a0ca3]/10 text-[#3a0ca3] text-[10px] font-bold rounded-full">DMA</span>
+                <span className="text-sm font-semibold text-gray-800">{dmaName}</span>
+                <span className="text-xs text-gray-400">{group.counties.length} {group.counties.length === 1 ? 'county' : 'counties'}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-semibold text-[#3a0ca3]">{fmtNum(group.totalPop)}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 text-gray-400 transition-transform ${expandedDMA === dmaName ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </button>
+            {expandedDMA === dmaName && (
+              <div className="border-t border-gray-100">
+                {group.counties.map((county, i) => {
+                  const countyZips = stateZips ? stateZips.filter(z => z.county === county.name) : [];
+                  return (
+                    <div key={county.name}>
+                      <div
+                        className={`flex items-center justify-between px-4 py-2.5 ${i > 0 ? 'border-t border-gray-50' : ''} hover:bg-gray-50/50 transition-colors cursor-pointer`}
+                        onClick={() => countyZips.length > 0 && onToggleCounty(expandedCounty === county.name ? null : county.name)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold text-white bg-[#3a0ca3]/70">{i + 1}</span>
+                          <span className="text-sm text-gray-700">{county.name}</span>
+                          {countyZips.length > 0 && (
+                            <span className="text-[10px] text-gray-400">{countyZips.length} zip{countyZips.length !== 1 ? 's' : ''}</span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-600">{county.popFormatted}</span>
+                          {countyZips.length > 0 && (
+                            <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 text-gray-400 transition-transform ${expandedCounty === county.name ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          )}
+                        </div>
+                      </div>
+                      {expandedCounty === county.name && countyZips.length > 0 && (
+                        <div className="bg-gray-50/50 border-t border-gray-100 px-4 py-2">
+                          <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-2 pl-8">Zip Codes</p>
+                          {countyZips.map((zip, zi) => (
+                            <div key={zip.zipCode} className="flex items-center justify-between py-1.5 pl-8">
+                              <div className="flex items-center gap-2">
+                                <span className="inline-block px-1.5 py-0.5 bg-[#0B9F90]/10 text-[#0B9F90] text-[10px] font-bold rounded">{zip.zipCode}</span>
+                                <span className="text-xs text-gray-600">{zip.city}</span>
+                              </div>
+                              <span className="text-xs text-gray-500">{zip.popFormatted}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ZipCodeSection({ zips }) {
+  if (!zips || zips.length === 0) return null;
+  return (
+    <div className="bg-white rounded-xl p-6 border border-gray-200 mb-8">
+      <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
+        <div className="w-3 h-3 rounded-full bg-[#0B9F90]" />
+        Top ZIP Codes
+      </h3>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-gray-200">
+              <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold w-8">#</th>
+              <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">ZIP Code</th>
+              <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">City</th>
+              <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold hidden sm:table-cell">County</th>
+              <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Population</th>
+            </tr>
+          </thead>
+          <tbody>
+            {zips.map((z, i) => (
+              <tr key={z.zipCode} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                <td className="py-2.5 px-2">
+                  <span className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold text-white" style={{ backgroundColor: '#0B9F90' }}>
+                    {i + 1}
+                  </span>
+                </td>
+                <td className="py-2.5 px-2">
+                  <span className="inline-block px-2 py-0.5 bg-[#0B9F90]/10 text-[#0B9F90] text-[11px] font-bold rounded">{z.zipCode}</span>
+                </td>
+                <td className="py-2.5 px-2 text-gray-700">{z.city}</td>
+                <td className="py-2.5 px-2 text-gray-500 hidden sm:table-cell">{z.county}</td>
+                <td className="py-2.5 px-2 text-right text-gray-600">{z.popFormatted}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function DemographicsSection({ stateName, data, stateMetros, stateCounties, stateZips, cityMetric, onMetricChange, expandedDMA, onToggleDMA, expandedCounty, onToggleCounty }) {
   if (!data) return null;
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
@@ -354,9 +485,15 @@ function DemographicsSection({ stateName, data, stateMetros, cityMetric, onMetri
       {/* Metro Areas for this state */}
       <MetroSection metros={stateMetros} />
 
+      {/* Counties by DMA */}
+      <CountySection counties={stateCounties} expandedDMA={expandedDMA} onToggleDMA={onToggleDMA} stateZips={stateZips} expandedCounty={expandedCounty} onToggleCounty={onToggleCounty} />
+
+      {/* Top ZIP Codes */}
+      <ZipCodeSection zips={stateZips} />
+
       {/* Data Sources */}
       <p className="text-xs text-gray-400 text-center pt-4 border-t border-gray-100">
-        Sources: U.S. Census Bureau ACS 2022 5-Year Estimates, Census QuickFacts, Nielsen DMA.
+        Sources: World Population Review 2026, Nielsen DMA.
       </p>
     </div>
   );
@@ -379,8 +516,12 @@ export default function Page() {
   const [statesLookup, setStatesLookup] = useState({});
   const [citiesByState, setCitiesByState] = useState({});
   const [metroAreas, setMetroAreas] = useState([]);
+  const [countiesByState, setCountiesByState] = useState({});
+  const [zipsByState, setZipsByState] = useState({});
   const [dataLoading, setDataLoading] = useState(true);
   const [cityMetric, setCityMetric] = useState('population');
+  const [expandedDMA, setExpandedDMA] = useState(null);
+  const [expandedCounty, setExpandedCounty] = useState(null);
 
   // Fetch demographics from States, Cities, and Metro Areas tables
   useEffect(() => {
@@ -446,7 +587,51 @@ export default function Page() {
       })
       .catch(err => console.error('Failed to load metro areas data:', err));
 
-    Promise.all([loadStates, loadCities, loadMetros]).then(() => {
+    const loadCounties = serenities.entities.Counties.list('-Population', 200)
+      .then(rows => {
+        const grouped = {};
+        rows.forEach(row => {
+          if (row.State) {
+            if (!grouped[row.State]) grouped[row.State] = [];
+            grouped[row.State].push({
+              name: row.Name,
+              population: Number(row.Population) || 0,
+              popFormatted: fmtNum(row.Population),
+              dma: row.DMA || '',
+              rank: Number(row.Rank) || 0,
+            });
+          }
+        });
+        Object.keys(grouped).forEach(state => {
+          grouped[state].sort((a, b) => b.population - a.population);
+        });
+        setCountiesByState(grouped);
+      })
+      .catch(err => console.error('Failed to load counties data:', err));
+
+    const loadZips = serenities.entities['Zip Codes'].list('-Population', 200)
+      .then(rows => {
+        const grouped = {};
+        rows.forEach(row => {
+          if (row.State) {
+            if (!grouped[row.State]) grouped[row.State] = [];
+            grouped[row.State].push({
+              zipCode: row.ZipCode,
+              city: row.City,
+              county: row.County || '',
+              population: Number(row.Population) || 0,
+              popFormatted: fmtNum(row.Population),
+            });
+          }
+        });
+        Object.keys(grouped).forEach(state => {
+          grouped[state].sort((a, b) => b.population - a.population);
+        });
+        setZipsByState(grouped);
+      })
+      .catch(err => console.error('Failed to load zip codes data:', err));
+
+    Promise.all([loadStates, loadCities, loadMetros, loadCounties, loadZips]).then(() => {
       setDataLoading(false);
     });
   }, []);
@@ -510,6 +695,8 @@ export default function Page() {
             });
             setSelectedState(name);
             setCityMetric('population');
+            setExpandedDMA(null);
+            setExpandedCounty(null);
             map.fitBounds(layer.getBounds(), { padding: [50, 50], maxZoom: 6 });
             setTimeout(() => {
               if (dataRef.current) {
@@ -611,6 +798,8 @@ export default function Page() {
     });
     setSelectedState(name);
     setCityMetric('population');
+    setExpandedDMA(null);
+    setExpandedCounty(null);
     setSearchQuery('');
     setShowSearchDropdown(false);
     mapInstance.current.fitBounds(layer.getBounds(), { padding: [50, 50], maxZoom: 6 });
@@ -634,6 +823,8 @@ export default function Page() {
   const stateMetros = selectedState && stateAbbr ? metroAreas.filter(m =>
     m.states && m.states.split(',').some(s => s.trim() === stateAbbr)
   ) : [];
+  const stateCounties = selectedState ? (countiesByState[selectedState] || []) : [];
+  const stateZips = selectedState ? (zipsByState[selectedState] || []) : [];
 
   return (
     <div className="min-h-screen bg-[#fafafe]" style={{ fontFamily: "'Open Sans', sans-serif" }}>
@@ -748,7 +939,7 @@ export default function Page() {
         <div ref={dataRef}>
           {selectedState && demographics && (
             <div>
-              <DemographicsSection stateName={selectedState} data={demographics} stateMetros={stateMetros} cityMetric={cityMetric} onMetricChange={setCityMetric} />
+              <DemographicsSection stateName={selectedState} data={demographics} stateMetros={stateMetros} stateCounties={stateCounties} stateZips={stateZips} cityMetric={cityMetric} onMetricChange={setCityMetric} expandedDMA={expandedDMA} onToggleDMA={setExpandedDMA} expandedCounty={expandedCounty} onToggleCounty={setExpandedCounty} />
             </div>
           )}
 
