@@ -587,64 +587,60 @@ export default function Page() {
       })
       .catch(err => console.error('Failed to load metro areas data:', err));
 
-    let loadCounties = Promise.resolve();
-    try {
-      if (serenities.entities.Counties) {
-        loadCounties = serenities.entities.Counties.list('-Population', 200)
-          .then(rows => {
-            const grouped = {};
-            rows.forEach(row => {
-              if (row.State) {
-                if (!grouped[row.State]) grouped[row.State] = [];
-                grouped[row.State].push({
-                  name: row.Name,
-                  population: Number(row.Population) || 0,
-                  popFormatted: fmtNum(row.Population),
-                  dma: row.DMA || '',
-                  rank: Number(row.Rank) || 0,
-                });
-              }
-            });
-            Object.keys(grouped).forEach(state => {
-              grouped[state].sort((a, b) => b.population - a.population);
-            });
-            setCountiesByState(grouped);
-          })
-          .catch(err => console.error('Failed to load counties data:', err));
-      }
-    } catch (e) { console.error('Counties entity not available:', e); }
-
-    let loadZips = Promise.resolve();
-    try {
-      const zipEntity = serenities.entities['Zip Codes'];
-      if (zipEntity) {
-        loadZips = zipEntity.list('-Population', 200)
-          .then(rows => {
-            const grouped = {};
-            rows.forEach(row => {
-              if (row.State) {
-                if (!grouped[row.State]) grouped[row.State] = [];
-                grouped[row.State].push({
-                  zipCode: row.ZipCode,
-                  city: row.City,
-                  county: row.County || '',
-                  population: Number(row.Population) || 0,
-                  popFormatted: fmtNum(row.Population),
-                });
-              }
-            });
-            Object.keys(grouped).forEach(state => {
-              grouped[state].sort((a, b) => b.population - a.population);
-            });
-            setZipsByState(grouped);
-          })
-          .catch(err => console.error('Failed to load zip codes data:', err));
-      }
-    } catch (e) { console.error('Zip Codes entity not available:', e); }
-
-    Promise.all([loadStates, loadCities, loadMetros, loadCounties, loadZips]).then(() => {
+    Promise.all([loadStates, loadCities, loadMetros]).then(() => {
       setDataLoading(false);
     });
+  }, []);
+
+  // Load Counties and Zip Codes separately so they don't block core data
+  useEffect(() => {
+    try {
+      serenities.entities.Counties.list()
+        .then(rows => {
+          const grouped = {};
+          rows.forEach(row => {
+            if (row.State) {
+              if (!grouped[row.State]) grouped[row.State] = [];
+              grouped[row.State].push({
+                name: row.Name,
+                population: Number(row.Population) || 0,
+                popFormatted: fmtNum(row.Population),
+                dma: row.DMA || '',
+                rank: Number(row.Rank) || 0,
+              });
+            }
+          });
+          Object.keys(grouped).forEach(state => {
+            grouped[state].sort((a, b) => b.population - a.population);
+          });
+          setCountiesByState(grouped);
+        })
+        .catch(err => console.error('Counties load error:', err));
+    } catch (e) { console.error('Counties entity error:', e); }
+
+    try {
+      serenities.entities['Zip Codes'].list()
+        .then(rows => {
+          const grouped = {};
+          rows.forEach(row => {
+            if (row.State) {
+              if (!grouped[row.State]) grouped[row.State] = [];
+              grouped[row.State].push({
+                zipCode: row.ZipCode,
+                city: row.City,
+                county: row.County || '',
+                population: Number(row.Population) || 0,
+                popFormatted: fmtNum(row.Population),
+              });
+            }
+          });
+          Object.keys(grouped).forEach(state => {
+            grouped[state].sort((a, b) => b.population - a.population);
+          });
+          setZipsByState(grouped);
+        })
+        .catch(err => console.error('Zip Codes load error:', err));
+    } catch (e) { console.error('Zip Codes entity error:', e); }
   }, []);
 
   useEffect(() => {
