@@ -597,7 +597,6 @@ export default function Page() {
     try {
       serenities.entities.Counties.list(null, 200)
         .then(rows => {
-          console.log('Counties loaded:', rows.length, 'rows', rows.slice(0,2));
           const grouped = {};
           rows.forEach(row => {
             if (row.State) {
@@ -622,10 +621,13 @@ export default function Page() {
     try {
       serenities.entities['Zip Codes'].list(null, 200)
         .then(rows => {
-          console.log('Zips loaded:', rows.length, 'rows', rows.slice(0,2));
           const grouped = {};
+          const seen = new Set();
           rows.forEach(row => {
-            if (row.State) {
+            if (row.State && row.ZipCode) {
+              const key = row.State + '-' + row.ZipCode;
+              if (seen.has(key)) return;
+              seen.add(key);
               if (!grouped[row.State]) grouped[row.State] = [];
               grouped[row.State].push({
                 zipCode: row.ZipCode,
