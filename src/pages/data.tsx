@@ -595,7 +595,7 @@ export default function Page() {
   // Load Counties and Zip Codes separately so they don't block core data
   useEffect(() => {
     try {
-      serenities.entities.Counties.list()
+      serenities.entities.Counties.list('-createdAt', 200)
         .then(rows => {
           const grouped = {};
           rows.forEach(row => {
@@ -619,7 +619,7 @@ export default function Page() {
     } catch (e) { console.error('Counties entity error:', e); }
 
     try {
-      serenities.entities['Zip Codes'].list()
+      serenities.entities['Zip Codes'].list('-createdAt', 200)
         .then(rows => {
           const grouped = {};
           rows.forEach(row => {
