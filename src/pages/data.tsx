@@ -528,7 +528,7 @@ function DemographicsSection({ stateName, data, stateMetros, stateCounties, stat
       <CountySection counties={stateCounties} expandedDMA={expandedDMA} onToggleDMA={onToggleDMA} stateZips={stateZips} expandedCounty={expandedCounty} onToggleCounty={onToggleCounty} />
 
       {/* Top ZIP Codes */}
-      <ZipCodeSection zips={stateZips} zipMetric={zipMetric} onZipMetricChange={setZipMetric} />
+      <ZipCodeSection zips={stateZips} zipMetric={zipMetric} onZipMetricChange={onZipMetricChange} />
 
       {/* Data Sources */}
       <p className="text-xs text-gray-400 text-center pt-4 border-t border-gray-100">
