@@ -248,14 +248,41 @@ function CountySection({ counties, expandedDMA, onToggleDMA, stateZips, expanded
   );
 }
 
-function ZipCodeSection({ zips }) {
+function ZipCodeSection({ zips, zipMetric, onZipMetricChange }) {
   if (!zips || zips.length === 0) return null;
+  const metrics = [
+    { key: 'population', label: 'Population', getValue: z => z.population, format: z => z.popFormatted },
+    { key: 'medianIncome', label: 'Med. Income', getValue: z => z.medianIncome, format: z => z.medianIncome ? fmtCur(z.medianIncome) : '\u2014' },
+    { key: 'medianAge', label: 'Med. Age', getValue: z => z.medianAge, format: z => z.medianAge ? String(z.medianAge) : '\u2014' },
+    { key: 'medianHomeValue', label: 'Home Value', getValue: z => z.medianHomeValue, format: z => z.medianHomeValue ? fmtCur(z.medianHomeValue) : '\u2014' },
+    { key: 'renterPct', label: 'Renter %', getValue: z => z.renterPct, format: z => z.renterPct ? z.renterPct + '%' : '\u2014' },
+    { key: 'hispanicPct', label: 'Hispanic %', getValue: z => z.hispanicPct, format: z => z.hispanicPct ? z.hispanicPct + '%' : '\u2014' },
+    { key: 'bachelorsPct', label: "Bachelor's %", getValue: z => z.bachelorsPct, format: z => z.bachelorsPct ? z.bachelorsPct + '%' : '\u2014' },
+    { key: 'medianRent', label: 'Med. Rent', getValue: z => z.medianRent, format: z => z.medianRent ? fmtCur(z.medianRent) : '\u2014' },
+  ];
+  const active = metrics.find(m => m.key === zipMetric) || metrics[0];
+  const sorted = [...zips].sort((a, b) => active.getValue(b) - active.getValue(a));
+  const maxVal = sorted.length > 0 ? active.getValue(sorted[0]) : 1;
+
   return (
     <div className="bg-white rounded-xl p-6 border border-gray-200 mb-8">
-      <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider mb-4 flex items-center gap-2">
-        <div className="w-3 h-3 rounded-full bg-[#0B9F90]" />
-        Top ZIP Codes
-      </h3>
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h3 className="text-sm font-bold text-[#1D0652] uppercase tracking-wider flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-[#0B9F90]" />
+          Top ZIP Codes
+        </h3>
+        <div className="flex flex-wrap gap-1">
+          {metrics.map(m => (
+            <button
+              key={m.key}
+              onClick={() => onZipMetricChange(m.key)}
+              className={`px-2.5 py-1 text-[10px] font-semibold rounded-full transition-colors ${zipMetric === m.key ? 'bg-[#0B9F90] text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
@@ -265,24 +292,36 @@ function ZipCodeSection({ zips }) {
               <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">City</th>
               <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold hidden sm:table-cell">County</th>
               <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Population</th>
+              <th className="text-right py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold text-[#0B9F90]">{active.label}</th>
+              <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold w-28"></th>
             </tr>
           </thead>
           <tbody>
-            {zips.map((z, i) => (
-              <tr key={z.zipCode} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                <td className="py-2.5 px-2">
-                  <span className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold text-white" style={{ backgroundColor: '#0B9F90' }}>
-                    {i + 1}
-                  </span>
-                </td>
-                <td className="py-2.5 px-2">
-                  <span className="inline-block px-2 py-0.5 bg-[#0B9F90]/10 text-[#0B9F90] text-[11px] font-bold rounded">{z.zipCode}</span>
-                </td>
-                <td className="py-2.5 px-2 text-gray-700">{z.city}</td>
-                <td className="py-2.5 px-2 text-gray-500 hidden sm:table-cell">{z.county}</td>
-                <td className="py-2.5 px-2 text-right text-gray-600">{z.popFormatted}</td>
-              </tr>
-            ))}
+            {sorted.map((z, i) => {
+              const val = active.getValue(z);
+              const barPct = maxVal > 0 ? (val / maxVal) * 100 : 0;
+              return (
+                <tr key={z.zipCode} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                  <td className="py-2.5 px-2">
+                    <span className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold text-white" style={{ backgroundColor: i < 3 ? '#0B9F90' : i < 6 ? '#14b8a6' : '#5eead4' }}>
+                      {i + 1}
+                    </span>
+                  </td>
+                  <td className="py-2.5 px-2">
+                    <span className="inline-block px-2 py-0.5 bg-[#0B9F90]/10 text-[#0B9F90] text-[11px] font-bold rounded">{z.zipCode}</span>
+                  </td>
+                  <td className="py-2.5 px-2 text-gray-700">{z.city}</td>
+                  <td className="py-2.5 px-2 text-gray-500 hidden sm:table-cell">{z.county}</td>
+                  <td className="py-2.5 px-2 text-right text-gray-600">{z.popFormatted}</td>
+                  <td className="py-2.5 px-2 text-right font-semibold text-[#0B9F90]">{active.format(z)}</td>
+                  <td className="py-2.5 px-2">
+                    <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-300" style={{ width: `${barPct}%`, backgroundColor: '#0B9F90' }} />
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -290,7 +329,7 @@ function ZipCodeSection({ zips }) {
   );
 }
 
-function DemographicsSection({ stateName, data, stateMetros, stateCounties, stateZips, cityMetric, onMetricChange, expandedDMA, onToggleDMA, expandedCounty, onToggleCounty }) {
+function DemographicsSection({ stateName, data, stateMetros, stateCounties, stateZips, cityMetric, onMetricChange, expandedDMA, onToggleDMA, expandedCounty, onToggleCounty, zipMetric, onZipMetricChange }) {
   if (!data) return null;
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
@@ -489,7 +528,7 @@ function DemographicsSection({ stateName, data, stateMetros, stateCounties, stat
       <CountySection counties={stateCounties} expandedDMA={expandedDMA} onToggleDMA={onToggleDMA} stateZips={stateZips} expandedCounty={expandedCounty} onToggleCounty={onToggleCounty} />
 
       {/* Top ZIP Codes */}
-      <ZipCodeSection zips={stateZips} />
+      <ZipCodeSection zips={stateZips} zipMetric={zipMetric} onZipMetricChange={setZipMetric} />
 
       {/* Data Sources */}
       <p className="text-xs text-gray-400 text-center pt-4 border-t border-gray-100">
@@ -522,6 +561,7 @@ export default function Page() {
   const [cityMetric, setCityMetric] = useState('population');
   const [expandedDMA, setExpandedDMA] = useState(null);
   const [expandedCounty, setExpandedCounty] = useState(null);
+  const [zipMetric, setZipMetric] = useState('population');
 
   // Fetch demographics from States, Cities, and Metro Areas tables
   useEffect(() => {
@@ -635,6 +675,13 @@ export default function Page() {
                 county: row.County || '',
                 population: Number(row.Population) || 0,
                 popFormatted: fmtNum(row.Population),
+                medianIncome: Number(row.MedianIncome) || 0,
+                medianAge: Number(row.MedianAge) || 0,
+                medianHomeValue: Number(row.MedianHomeValue) || 0,
+                renterPct: Number(row.RenterPct) || 0,
+                hispanicPct: Number(row.HispanicPct) || 0,
+                bachelorsPct: Number(row.BachelorsPct) || 0,
+                medianRent: Number(row.MedianRent) || 0,
               });
             }
           });
@@ -950,7 +997,7 @@ export default function Page() {
         <div ref={dataRef}>
           {selectedState && demographics && (
             <div>
-              <DemographicsSection stateName={selectedState} data={demographics} stateMetros={stateMetros} stateCounties={stateCounties} stateZips={stateZips} cityMetric={cityMetric} onMetricChange={setCityMetric} expandedDMA={expandedDMA} onToggleDMA={setExpandedDMA} expandedCounty={expandedCounty} onToggleCounty={setExpandedCounty} />
+              <DemographicsSection stateName={selectedState} data={demographics} stateMetros={stateMetros} stateCounties={stateCounties} stateZips={stateZips} cityMetric={cityMetric} onMetricChange={setCityMetric} expandedDMA={expandedDMA} onToggleDMA={setExpandedDMA} expandedCounty={expandedCounty} onToggleCounty={setExpandedCounty} zipMetric={zipMetric} onZipMetricChange={setZipMetric} />
             </div>
           )}
 
