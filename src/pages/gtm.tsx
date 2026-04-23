@@ -42,7 +42,7 @@ export default function Page() {
             ))}
           </div>
           <div className="px-9 py-2.5 flex items-center justify-between" style={{background:'linear-gradient(90deg,#0b1a30 0%,#1a3a6a 100%)'}}>
-            <div className="text-center"><div className="text-base font-extrabold" style={{color:'#007aff'}}>55+</div><div className="text-[9px] font-semibold uppercase tracking-wide" style={{color:'rgba(255,255,255,0.55)'}}>Active Channels</div></div>
+            <div className="text-center"><div className="text-base font-extrabold" style={{color:'#007aff'}}>75+</div><div className="text-[9px] font-semibold uppercase tracking-wide" style={{color:'rgba(255,255,255,0.55)'}}>Active Channels</div></div>
             <div className="w-px h-6" style={{background:'rgba(255,255,255,0.15)'}} />
             <div className="text-center"><div className="text-base font-extrabold" style={{color:'#007aff'}}>3</div><div className="text-[9px] font-semibold uppercase tracking-wide" style={{color:'rgba(255,255,255,0.55)'}}>Launch Phases</div></div>
             <div className="w-px h-6" style={{background:'rgba(255,255,255,0.15)'}} />
