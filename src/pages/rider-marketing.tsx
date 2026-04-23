@@ -238,7 +238,7 @@ export default function RiderMarketing() {
 
                 {/* Budget */}
                 <div className="flex items-center justify-between mb-4 p-3 rounded-lg" style={{ background: '#423DF908' }}>
-                  <span className="text-xs text-gray-500">Monthly Budget</span>
+                  <span className="text-xs text-gray-500">Initial Budget</span>
                   <span className="font-bold" style={{ color: '#423DF9' }}>{channel.budget}</span>
                 </div>
 
