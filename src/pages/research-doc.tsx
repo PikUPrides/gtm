@@ -15,7 +15,6 @@ const SECTIONS = [
   { id: 'riders', label: 'Rider Behaviour', group: 'Customers' },
   { id: 'drivers', label: 'Driver Behaviour', group: 'Customers' },
   { id: 'demand', label: 'Demand Forecast 2025–2030', group: 'Forecast' },
-  { id: 'av-threat', label: 'AV / Robotaxi Threat', group: 'Forecast', hot: true },
   { id: 'price-bench', label: 'Price Benchmarking', group: 'Competition' },
   { id: 'fuel', label: 'Fuel Price Impact', group: 'Operations' },
   { id: 'urb-sub', label: 'Suburban vs Urban', group: 'Operations' },
