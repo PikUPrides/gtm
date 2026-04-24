@@ -338,7 +338,7 @@ export default function ResearchDocPage() {
               <span className="w-1.5 h-1.5 rounded-full bg-[#423DF9]" />
               Market Research
             </span>
-            <span className="text-xs text-gray-500">Updated April 24, 2026 · 19 sections · ~40 min read</span>
+            <span className="text-xs text-gray-500">Updated April 24, 2026 · 18 sections · ~35 min read</span>
           </div>
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#1D0652] mb-5 tracking-tight leading-[1.05]">
             The AYRO Market<br />
