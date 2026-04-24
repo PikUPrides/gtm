@@ -712,7 +712,7 @@ export default function GTM() {
         <section className="block" id="channels">
           <div className="block-inner">
             <div className="section-label">08 · The channel stack</div>
-            <h2 className="section-title">12 channels doing <em>90% of the work</em> — not 55.</h2>
+            <h2 className="section-title">12 channels doing <em>90% of the work.</em></h2>
             <p className="section-intro">Community and driver channels carry Phase 1. Paid scales in Phase 2. Earned and B2B drive Phase 3. Every channel has an owner, a budget, a KPI, and a documented kill criterion.</p>
 
             <div className="channels">
