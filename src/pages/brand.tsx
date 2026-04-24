@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import serenities from '../api/sdk';
 import Header from '../components/Header.jsx';
 
@@ -34,53 +34,21 @@ const APP_ICONS = [
   { id: 'e329d571587f40674dbdfdc55bc311e2', name: 'App Icon 3 v3' },
 ];
 
-const ALL_FILES = [
-  BRAND_PDF_ID,
-  ...PRIMARY_LOGOS.map((l) => l.id),
-  ...SECONDARY_LOGOS.map((l) => l.id),
-  ...BLACK_LOGOS.map((l) => l.id),
-  ...APP_ICONS.map((i) => i.id),
-];
-
-async function downloadFile(e, url, filename) {
-  if (e) e.preventDefault();
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('fetch failed');
-    const blob = await res.blob();
-    const blobUrl = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = blobUrl;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(blobUrl), 1500);
-  } catch (err) {
-    window.open(url, '_blank', 'noopener,noreferrer');
-  }
-}
-
-function LogoCard({ logo, dark, url, loading }) {
+function LogoCard({ logo, dark }) {
+  const viewUrl = serenities.files.url(logo.id);
+  const downloadUrl = serenities.files.downloadUrl(logo.id);
   const filename = `${logo.name.replace(/\s+/g, '_')}.png`;
   return (
     <div className="group rounded-xl overflow-hidden border border-gray-200 bg-white flex flex-col">
       <div className={`flex-1 flex items-center justify-center p-8 min-h-[180px] ${dark ? 'bg-[#1D0652]' : 'bg-gray-50'}`}>
-        {loading ? (
-          <div className="w-12 h-12 rounded-full border-2 border-gray-200 border-t-[#423DF9] animate-spin" />
-        ) : url ? (
-          <img src={url} alt={logo.name} className="max-h-32 max-w-full object-contain" />
-        ) : (
-          <div className="text-xs text-gray-400">Unable to load</div>
-        )}
+        <img src={viewUrl} alt={logo.name} className="max-h-32 max-w-full object-contain" />
       </div>
       <div className="px-4 py-3 flex items-center justify-between border-t border-gray-100">
         <div className="text-sm font-medium text-gray-700 truncate">{logo.name}</div>
-        <button
-          type="button"
-          disabled={!url}
-          onClick={(e) => downloadFile(e, url, filename)}
-          className="ml-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#423DF9] hover:text-[#1D0652] disabled:text-gray-300 disabled:cursor-not-allowed px-2.5 py-1.5 rounded-md hover:bg-[#423DF9]/5 transition-colors"
+        <a
+          href={downloadUrl}
+          download={filename}
+          className="ml-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#423DF9] hover:text-[#1D0652] px-2.5 py-1.5 rounded-md hover:bg-[#423DF9]/5 transition-colors"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -88,32 +56,27 @@ function LogoCard({ logo, dark, url, loading }) {
             <line x1="12" y1="15" x2="12" y2="3" />
           </svg>
           Download
-        </button>
+        </a>
       </div>
     </div>
   );
 }
 
-function IconCard({ icon, url, loading }) {
+function IconCard({ icon }) {
+  const viewUrl = serenities.files.url(icon.id);
+  const downloadUrl = serenities.files.downloadUrl(icon.id);
   const filename = `${icon.name.replace(/\s+/g, '_')}.png`;
   return (
     <div className="group rounded-xl overflow-hidden border border-gray-200 bg-white flex flex-col">
       <div className="flex-1 flex items-center justify-center p-6 min-h-[160px] bg-gray-50">
-        {loading ? (
-          <div className="w-10 h-10 rounded-full border-2 border-gray-200 border-t-[#423DF9] animate-spin" />
-        ) : url ? (
-          <img src={url} alt={icon.name} className="max-h-28 max-w-28 object-contain rounded-2xl shadow-sm" />
-        ) : (
-          <div className="text-xs text-gray-400">Unable to load</div>
-        )}
+        <img src={viewUrl} alt={icon.name} className="max-h-28 max-w-28 object-contain rounded-2xl shadow-sm" />
       </div>
       <div className="px-4 py-3 flex items-center justify-between border-t border-gray-100">
         <div className="text-sm font-medium text-gray-700 truncate">{icon.name}</div>
-        <button
-          type="button"
-          disabled={!url}
-          onClick={(e) => downloadFile(e, url, filename)}
-          className="ml-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#423DF9] hover:text-[#1D0652] disabled:text-gray-300 disabled:cursor-not-allowed px-2.5 py-1.5 rounded-md hover:bg-[#423DF9]/5 transition-colors"
+        <a
+          href={downloadUrl}
+          download={filename}
+          className="ml-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#423DF9] hover:text-[#1D0652] px-2.5 py-1.5 rounded-md hover:bg-[#423DF9]/5 transition-colors"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -121,7 +84,7 @@ function IconCard({ icon, url, loading }) {
             <line x1="12" y1="15" x2="12" y2="3" />
           </svg>
           Download
-        </button>
+        </a>
       </div>
     </div>
   );
@@ -138,57 +101,8 @@ function SectionHeader({ eyebrow, title, description }) {
 }
 
 export default function BrandPage() {
-  const [urls, setUrls] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [pdfBlobUrl, setPdfBlobUrl] = useState(null);
-  const [pdfState, setPdfState] = useState('loading');
-
-  useEffect(() => {
-    let cancelled = false;
-    Promise.all(
-      ALL_FILES.map(async (id) => {
-        try {
-          const res = await serenities.files.get(id);
-          return [id, res && res.url ? res.url : null];
-        } catch (err) {
-          return [id, null];
-        }
-      })
-    ).then((entries) => {
-      if (cancelled) return;
-      setUrls(Object.fromEntries(entries));
-      setLoading(false);
-    });
-    return () => { cancelled = true; };
-  }, []);
-
-  const pdfUrl = urls[BRAND_PDF_ID];
-
-  useEffect(() => {
-    if (!pdfUrl) return;
-    let cancelled = false;
-    let blobUrl = null;
-    setPdfState('loading');
-    fetch(pdfUrl)
-      .then((res) => {
-        if (!res.ok) throw new Error('pdf fetch failed');
-        return res.blob();
-      })
-      .then((blob) => {
-        if (cancelled) return;
-        blobUrl = URL.createObjectURL(blob);
-        setPdfBlobUrl(blobUrl);
-        setPdfState('ready');
-      })
-      .catch(() => {
-        if (cancelled) return;
-        setPdfState('error');
-      });
-    return () => {
-      cancelled = true;
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
-    };
-  }, [pdfUrl]);
+  const pdfViewUrl = serenities.files.url(BRAND_PDF_ID);
+  const pdfDownloadUrl = serenities.files.downloadUrl(BRAND_PDF_ID);
 
   return (
     <div className="min-h-screen bg-white">
@@ -207,7 +121,7 @@ export default function BrandPage() {
             <SectionHeader
               eyebrow="01 · Guidelines"
               title="Brand guideline PDF"
-              description="The complete logo, color, typography, and usage guideline. Open inline or download for offline reference."
+              description="The complete logo, color, typography, and usage guideline. Preview inline or download for offline reference."
             />
             <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white shadow-sm">
               <div className="flex items-center justify-between px-5 py-3 bg-gray-50 border-b border-gray-100">
@@ -225,11 +139,10 @@ export default function BrandPage() {
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <a
-                    href={pdfUrl || '#'}
+                    href={pdfViewUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={(e) => { if (!pdfUrl) e.preventDefault(); }}
-                    className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-md transition-colors ${pdfUrl ? 'text-gray-700 hover:text-[#423DF9] hover:bg-gray-100' : 'text-gray-300 cursor-not-allowed'}`}
+                    className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-gray-700 hover:text-[#423DF9] px-3 py-1.5 rounded-md hover:bg-gray-100 transition-colors"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
@@ -238,11 +151,10 @@ export default function BrandPage() {
                     </svg>
                     Open
                   </a>
-                  <button
-                    type="button"
-                    disabled={!pdfUrl}
-                    onClick={(e) => downloadFile(e, pdfUrl, 'ayro-brand-guideline.pdf')}
-                    className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-white px-3 py-1.5 rounded-md transition-colors ${pdfUrl ? 'bg-[#423DF9] hover:bg-[#1D0652]' : 'bg-gray-300 cursor-not-allowed'}`}
+                  <a
+                    href={pdfDownloadUrl}
+                    download="ayro-brand-guideline.pdf"
+                    className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-white bg-[#423DF9] hover:bg-[#1D0652] px-3 py-1.5 rounded-md transition-colors"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -250,26 +162,15 @@ export default function BrandPage() {
                       <line x1="12" y1="15" x2="12" y2="3" />
                     </svg>
                     Download
-                  </button>
+                  </a>
                 </div>
               </div>
               <div className="bg-gray-100" style={{ height: 'min(80vh, 760px)' }}>
-                {pdfState === 'ready' && pdfBlobUrl ? (
-                  <iframe
-                    src={pdfBlobUrl}
-                    title="AYRO Brand Guideline"
-                    className="w-full h-full border-0"
-                  />
-                ) : pdfState === 'error' ? (
-                  <div className="w-full h-full flex flex-col items-center justify-center text-center px-6 gap-2">
-                    <div className="text-sm font-semibold text-gray-700">Couldn't load preview</div>
-                    <div className="text-xs text-gray-500 max-w-sm">Use the Open or Download buttons above.</div>
-                  </div>
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full border-2 border-gray-300 border-t-[#423DF9] animate-spin" />
-                  </div>
-                )}
+                <iframe
+                  src={pdfViewUrl}
+                  title="AYRO Brand Guideline"
+                  className="w-full h-full border-0"
+                />
               </div>
             </div>
           </section>
@@ -281,7 +182,7 @@ export default function BrandPage() {
               description="Use the primary logo on light backgrounds. Maintain clear space and minimum size as defined in the guideline."
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {PRIMARY_LOGOS.map((l) => <LogoCard key={l.id} logo={l} url={urls[l.id]} loading={loading} />)}
+              {PRIMARY_LOGOS.map((l) => <LogoCard key={l.id} logo={l} />)}
             </div>
           </section>
 
@@ -292,7 +193,7 @@ export default function BrandPage() {
               description="Use the secondary mark in supporting roles — favicon-style placements, badges, and tighter horizontal layouts."
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {SECONDARY_LOGOS.map((l) => <LogoCard key={l.id} logo={l} url={urls[l.id]} loading={loading} dark />)}
+              {SECONDARY_LOGOS.map((l) => <LogoCard key={l.id} logo={l} dark />)}
             </div>
           </section>
 
@@ -303,7 +204,7 @@ export default function BrandPage() {
               description="Single-color version for print, watermark, embossing, or anywhere full color is not appropriate."
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {BLACK_LOGOS.map((l) => <LogoCard key={l.id} logo={l} url={urls[l.id]} loading={loading} />)}
+              {BLACK_LOGOS.map((l) => <LogoCard key={l.id} logo={l} />)}
             </div>
           </section>
 
@@ -314,7 +215,7 @@ export default function BrandPage() {
               description="Mobile app icon explorations and final candidates. Square 1024×1024 source with rounded mask preview."
             />
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
-              {APP_ICONS.map((i) => <IconCard key={i.id} icon={i} url={urls[i.id]} loading={loading} />)}
+              {APP_ICONS.map((i) => <IconCard key={i.id} icon={i} />)}
             </div>
           </section>
 
