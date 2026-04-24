@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import serenities from '../api/sdk';
 import Header from '../components/Header.jsx';
 
@@ -100,6 +100,335 @@ function SectionHeader({ eyebrow, title, description }) {
   );
 }
 
+// ─── Banner Upload Section ────────────────────────────────────────────────────
+
+const BANNER_TABLE = 'Banners';
+
+function BannerCard({ banner, onDelete }) {
+  const viewUrl = serenities.files.url(banner.FileId);
+  const downloadUrl = serenities.files.downloadUrl(banner.FileId);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      await serenities.files.delete(banner.FileId);
+    } catch (e) { /* file may already be gone */ }
+    try {
+      await serenities.entities[BANNER_TABLE].delete(banner.id);
+    } catch (e) { /* ignore */ }
+    onDelete(banner.id);
+  };
+
+  return (
+    <div className="group rounded-xl overflow-hidden border border-gray-200 bg-white flex flex-col hover:shadow-md transition-shadow">
+      <div className="flex-1 bg-gray-50 flex items-center justify-center min-h-[180px] overflow-hidden">
+        <img
+          src={viewUrl}
+          alt={banner.Name}
+          className="max-h-48 max-w-full object-contain p-4"
+        />
+      </div>
+      <div className="px-4 py-3 border-t border-gray-100">
+        <div className="flex items-center justify-between gap-2 mb-1">
+          <div className="text-sm font-semibold text-gray-800 truncate">{banner.Name}</div>
+          <span className="text-xs text-gray-400 flex-shrink-0">
+            {banner.Category || 'General'}
+          </span>
+        </div>
+        <div className="flex items-center gap-2 mt-2">
+          <a
+            href={downloadUrl}
+            download={banner.Name}
+            className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-[#423DF9] hover:text-[#1D0652] px-2.5 py-1.5 rounded-md hover:bg-[#423DF9]/5 border border-[#423DF9]/20 transition-colors"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Download
+          </a>
+          {!confirmDelete ? (
+            <button
+              onClick={() => setConfirmDelete(true)}
+              className="inline-flex items-center justify-center px-2.5 py-1.5 rounded-md text-xs font-semibold text-red-400 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-200 transition-colors"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6l-1 14H6L5 6" />
+                <path d="M10 11v6M14 11v6" />
+                <path d="M9 6V4h6v2" />
+              </svg>
+            </button>
+          ) : (
+            <button
+              onClick={handleDelete}
+              disabled={deleting}
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-bold text-white bg-red-500 hover:bg-red-600 transition-colors disabled:opacity-50"
+            >
+              {deleting ? '…' : 'Confirm'}
+            </button>
+          )}
+          {confirmDelete && !deleting && (
+            <button
+              onClick={() => setConfirmDelete(false)}
+              className="text-xs text-gray-400 hover:text-gray-600 px-1"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const CATEGORIES = ['Social', 'Web', 'Email', 'Print', 'Partner', 'General'];
+
+function BannersSection() {
+  const [banners, setBanners] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [uploadName, setUploadName] = useState('');
+  const [uploadCategory, setUploadCategory] = useState('General');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [filterCat, setFilterCat] = useState('All');
+  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    loadBanners();
+  }, []);
+
+  const loadBanners = async () => {
+    setLoading(true);
+    try {
+      const rows = await serenities.entities[BANNER_TABLE].list('-createdAt');
+      setBanners(rows || []);
+    } catch (e) {
+      // table may not exist yet — start empty
+      setBanners([]);
+    }
+    setLoading(false);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setSelectedFile(file);
+    // Set default name from filename
+    const nameWithoutExt = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+    setUploadName(nameWithoutExt);
+    // Preview
+    const reader = new FileReader();
+    reader.onload = (ev) => setPreview(ev.target.result);
+    reader.readAsDataURL(file);
+    setError('');
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setError('Please drop an image file.');
+      return;
+    }
+    // Trigger the same flow
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    fileInputRef.current.files = dt.files;
+    handleFileChange({ target: { files: [file] } });
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) { setError('Please select a file first.'); return; }
+    if (!uploadName.trim()) { setError('Please enter a banner name.'); return; }
+
+    setUploading(true);
+    setError('');
+    try {
+      const result = await serenities.files.upload(selectedFile);
+      if (!result?.file?.id) throw new Error('Upload failed');
+
+      await serenities.entities[BANNER_TABLE].create({
+        Name: uploadName.trim(),
+        FileId: result.file.id,
+        Category: uploadCategory,
+        FileName: selectedFile.name,
+        MimeType: selectedFile.type,
+      });
+
+      setSuccess(`"${uploadName}" uploaded successfully!`);
+      setSelectedFile(null);
+      setPreview(null);
+      setUploadName('');
+      setUploadCategory('General');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      await loadBanners();
+      setTimeout(() => setSuccess(''), 4000);
+    } catch (e) {
+      setError('Upload failed. ' + (e?.message || ''));
+    }
+    setUploading(false);
+  };
+
+  const handleDelete = (id) => {
+    setBanners(prev => prev.filter(b => b.id !== id));
+  };
+
+  const filtered = filterCat === 'All' ? banners : banners.filter(b => (b.Category || 'General') === filterCat);
+
+  return (
+    <section className="mb-8">
+      <SectionHeader
+        eyebrow="06 · Banners"
+        title="Marketing banners"
+        description="Upload, preview, and download social, web, email, print, and partner banners."
+      />
+
+      {/* Upload card */}
+      <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden mb-8 shadow-sm">
+        <div className="px-5 py-4 bg-gray-50 border-b border-gray-100 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-[#423DF9]/10 flex items-center justify-center flex-shrink-0">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#423DF9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="16 16 12 12 8 16" />
+              <line x1="12" y1="12" x2="12" y2="21" />
+              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
+            </svg>
+          </div>
+          <span className="text-sm font-semibold text-gray-800">Upload new banner</span>
+        </div>
+
+        <div className="p-5 sm:p-6">
+          <div className="grid sm:grid-cols-2 gap-5">
+            {/* Drop zone */}
+            <div
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
+              className="relative cursor-pointer rounded-xl border-2 border-dashed border-gray-200 hover:border-[#423DF9]/50 hover:bg-[#423DF9]/2 transition-colors flex flex-col items-center justify-center min-h-[180px] gap-3 bg-gray-50"
+            >
+              {preview ? (
+                <img src={preview} alt="Preview" className="max-h-40 max-w-full object-contain rounded-lg p-2" />
+              ) : (
+                <>
+                  <div className="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-sm">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#423DF9" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                      <circle cx="8.5" cy="8.5" r="1.5" />
+                      <polyline points="21 15 16 10 5 21" />
+                    </svg>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-sm font-semibold text-gray-700">Drop image here or click to browse</div>
+                    <div className="text-xs text-gray-400 mt-1">PNG, JPG, SVG, WebP · any size</div>
+                  </div>
+                </>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="sr-only"
+                onChange={handleFileChange}
+              />
+            </div>
+
+            {/* Fields */}
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Banner name</label>
+                <input
+                  type="text"
+                  value={uploadName}
+                  onChange={(e) => setUploadName(e.target.value)}
+                  placeholder="e.g. Instagram Story — Launch"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-[#423DF9] focus:ring-2 focus:ring-[#423DF9]/10 transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Category</label>
+                <div className="flex flex-wrap gap-2">
+                  {CATEGORIES.map(cat => (
+                    <button
+                      key={cat}
+                      onClick={() => setUploadCategory(cat)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${uploadCategory === cat ? 'bg-[#423DF9] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {error && <div className="text-xs text-red-500 font-medium">{error}</div>}
+              {success && <div className="text-xs text-emerald-600 font-medium">{success}</div>}
+              <button
+                onClick={handleUpload}
+                disabled={uploading || !selectedFile}
+                className="mt-auto w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                style={{ background: 'linear-gradient(135deg, #423DF9, #7742F1)' }}
+              >
+                {uploading ? 'Uploading…' : 'Upload Banner'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Filter bar */}
+      {banners.length > 0 && (
+        <div className="flex items-center gap-2 mb-5 flex-wrap">
+          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mr-1">Filter:</span>
+          {['All', ...CATEGORIES].map(cat => (
+            <button
+              key={cat}
+              onClick={() => setFilterCat(cat)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${filterCat === cat ? 'bg-[#1D0652] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+            >
+              {cat}
+              {cat === 'All' ? ` (${banners.length})` : banners.filter(b => (b.Category || 'General') === cat).length > 0 ? ` (${banners.filter(b => (b.Category || 'General') === cat).length})` : ''}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Banners grid */}
+      {loading ? (
+        <div className="flex items-center justify-center py-16">
+          <div className="w-8 h-8 border-2 border-[#423DF9] border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-12 text-center">
+          <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-white border border-gray-200 flex items-center justify-center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#423DF9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+          </div>
+          <div className="text-sm font-semibold text-gray-700 mb-1">
+            {filterCat === 'All' ? 'No banners uploaded yet' : `No ${filterCat} banners yet`}
+          </div>
+          <div className="text-xs text-gray-400">Use the upload area above to add your first banner.</div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filtered.map(b => (
+            <BannerCard key={b.id} banner={b} onDelete={handleDelete} />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
+
 export default function BrandPage() {
   const pdfViewUrl = serenities.files.url(BRAND_PDF_ID);
   const pdfDownloadUrl = serenities.files.downloadUrl(BRAND_PDF_ID);
@@ -140,7 +469,7 @@ export default function BrandPage() {
             <div className="text-xs font-bold tracking-[0.2em] uppercase text-[#423DF9] mb-3">Design · Brand</div>
             <h1 className="text-3xl sm:text-5xl font-extrabold text-[#1D0652] mb-4 tracking-tight">AYRO Brand Assets</h1>
             <p className="text-gray-600 text-base sm:text-lg max-w-3xl leading-relaxed">
-              Official brand guidelines, logo files, and app icons. Download assets and follow the guideline PDF for correct usage across product, marketing, and partner materials.
+              Official brand guidelines, logo files, app icons, and marketing banners. Download assets and follow the guideline PDF for correct usage across product, marketing, and partner materials.
             </p>
           </div>
 
@@ -257,24 +586,7 @@ export default function BrandPage() {
             </div>
           </section>
 
-          <section className="mb-8">
-            <SectionHeader
-              eyebrow="06 · Banners"
-              title="Marketing banners"
-              description="Social, web, and partner banners will be uploaded here."
-            />
-            <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-12 text-center">
-              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-white border border-gray-200 flex items-center justify-center">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#423DF9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <polyline points="21 15 16 10 5 21" />
-                </svg>
-              </div>
-              <div className="text-sm font-semibold text-gray-700 mb-1">Coming soon</div>
-              <div className="text-xs text-gray-500">Banners will be added as they're produced.</div>
-            </div>
-          </section>
+          <BannersSection />
         </div>
       </div>
     </div>
