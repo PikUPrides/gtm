@@ -933,7 +933,7 @@ export default function ResearchDocPage() {
 
             {/* 15. EV */}
             <section id="ev" className="mb-20 scroll-mt-32">
-              <SectionHeader num="15" eyebrow="Operations" title="EV & Hybrid Adoption Trends" />
+              <SectionHeader num="14" eyebrow="Operations" title="EV & Hybrid Adoption Trends" />
               <div className="grid sm:grid-cols-3 gap-4 mb-6">
                 <Stat value="+38%" label="EV rise in rideshare" tone="green" />
                 <Stat value="Lower" label="cost per mile" sub="vs ICE" tone="primary" />
@@ -950,7 +950,7 @@ export default function ResearchDocPage() {
 
             {/* 16. Insurance */}
             <section id="insurance" className="mb-20 scroll-mt-32">
-              <SectionHeader num="16" eyebrow="Operations" title="Insurance Cost Trends" />
+              <SectionHeader num="15" eyebrow="Operations" title="Insurance Cost Trends" />
               <div className="grid sm:grid-cols-3 gap-4 mb-6">
                 <Stat value="12–16%" label="annual cost rise" sub="Persistent trend" tone="red" />
                 <Stat value="Multi-period" label="TNC coverage required" sub="P1 / P2 / P3" tone="primary" />
