@@ -1067,7 +1067,7 @@ export default function ResearchDocPage() {
                     <div className="px-5 py-4 bg-gradient-to-r from-emerald-50 to-white border-b border-gray-100 flex items-center gap-3">
                       <div className="text-xs font-extrabold bg-emerald-500 text-white rounded-md w-9 h-9 flex items-center justify-center flex-shrink-0">✓</div>
                       <div>
-                        <div className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest">Section {r.num} · Fully Compliant</div>
+                        <div className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest">Requirement {r.num} · Fully Compliant</div>
                         <div className="font-bold text-[#1D0652]">{r.title}</div>
                       </div>
                     </div>
@@ -1099,7 +1099,7 @@ export default function ResearchDocPage() {
             {/* 19. Recommendations */}
             <section id="recommendations" className="mb-12 scroll-mt-32">
               <SectionHeader
-                num="19"
+                num="18"
                 eyebrow="Action"
                 title="Strategic Recommendations for AYRO"
                 description="The 10 things AYRO should do based on this research. Ranked by impact and urgency."
