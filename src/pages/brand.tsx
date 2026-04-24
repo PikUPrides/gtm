@@ -140,9 +140,6 @@ function SectionHeader({ eyebrow, title, description }) {
 export default function BrandPage() {
   const [urls, setUrls] = useState({});
   const [loading, setLoading] = useState(true);
-  const [pdfBlobUrl, setPdfBlobUrl] = useState(null);
-  const [pdfLoading, setPdfLoading] = useState(true);
-  const [pdfError, setPdfError] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -164,34 +161,6 @@ export default function BrandPage() {
   }, []);
 
   const pdfUrl = urls[BRAND_PDF_ID];
-
-  useEffect(() => {
-    if (!pdfUrl) return;
-    let cancelled = false;
-    let blobUrl = null;
-    setPdfLoading(true);
-    setPdfError(false);
-    fetch(pdfUrl)
-      .then((res) => {
-        if (!res.ok) throw new Error('pdf fetch failed');
-        return res.blob();
-      })
-      .then((blob) => {
-        if (cancelled) return;
-        blobUrl = URL.createObjectURL(blob);
-        setPdfBlobUrl(blobUrl);
-        setPdfLoading(false);
-      })
-      .catch(() => {
-        if (cancelled) return;
-        setPdfError(true);
-        setPdfLoading(false);
-      });
-    return () => {
-      cancelled = true;
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
-    };
-  }, [pdfUrl]);
 
   return (
     <div className="min-h-screen bg-white">
