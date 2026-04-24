@@ -17,6 +17,7 @@ export default function Header({ showBackLink = false }) {
   const dataDropdownRef = useRef(null);
   const competitorsDropdownRef = useRef(null);
   const swordDropdownRef = useRef(null);
+  const designDropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
   const userButtonRef = useRef(null);
   const userButtonMobileRef = useRef(null);
