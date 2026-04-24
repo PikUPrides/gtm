@@ -193,11 +193,22 @@ export default function BrandPage() {
                 </div>
               </div>
               <div className="bg-gray-100" style={{ height: 'min(80vh, 760px)' }}>
-                <iframe
-                  src={pdfViewUrl}
-                  title="AYRO Brand Guideline"
-                  className="w-full h-full border-0"
-                />
+                {pdfState === 'ready' && pdfBlobUrl ? (
+                  <iframe
+                    src={pdfBlobUrl}
+                    title="AYRO Brand Guideline"
+                    className="w-full h-full border-0"
+                  />
+                ) : pdfState === 'error' ? (
+                  <div className="w-full h-full flex flex-col items-center justify-center text-center px-6 gap-2">
+                    <div className="text-sm font-semibold text-gray-700">Couldn't load preview</div>
+                    <div className="text-xs text-gray-500 max-w-sm">Use the Open or Download buttons above.</div>
+                  </div>
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full border-2 border-gray-300 border-t-[#423DF9] animate-spin" />
+                  </div>
+                )}
               </div>
             </div>
           </section>
