@@ -660,8 +660,6 @@ export default function BrandPage() {
               {APP_ICONS.map((i) => <IconCard key={i.id} icon={i} />)}
             </div>
           </section>
-
-          <BannersSection />
         </div>
       </div>
     </div>
