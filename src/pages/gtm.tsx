@@ -302,6 +302,87 @@ html { scroll-behavior: smooth; }
 .gtm-root .close-stat-v { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.5; }
 .gtm-root .close-stat-v strong { color: var(--white); display: block; margin-bottom: 2px; }
 .gtm-root footer.foot { background: #06080F; color: rgba(255,255,255,0.4); text-align: center; padding: 32px 24px; font-size: 12px; letter-spacing: 0.04em; }
+
+@media (max-width: 900px) {
+  .gtm-root .toc-inner { padding: 12px 18px; gap: 20px; }
+  .gtm-root .toc-brand { font-size: 14px; }
+  .gtm-root .toc-links a { font-size: 12px; padding: 5px 10px; }
+  .gtm-root .hero { padding: 130px 20px 90px; }
+  .gtm-root section.block { padding: 70px 20px; scroll-margin-top: 140px; }
+  .gtm-root .thesis { padding: 28px 26px; }
+  .gtm-root .compare-col { padding: 28px 24px; }
+  .gtm-root .persona-head { padding: 24px 24px 18px; }
+  .gtm-root .persona-body { padding: 22px 24px 24px; }
+  .gtm-root .phase { padding: 28px 22px; }
+  .gtm-root .moat-card { padding: 28px 24px; }
+  .gtm-root .risk { padding: 22px 22px; }
+  .gtm-root .econ-chart { padding: 26px 22px; }
+  .gtm-root .econ-aside { padding: 28px 24px; }
+  .gtm-root .influencer-banner { padding: 28px 26px; gap: 18px; }
+  .gtm-root .influencer-head { padding: 24px 22px 20px; gap: 16px; }
+  .gtm-root .influencer-avatar { width: 72px; height: 72px; font-size: 28px; }
+  .gtm-root .influencer-name { font-size: 24px; }
+  .gtm-root .influencer-body { padding: 22px 22px 24px; }
+  .gtm-root .influencers-grid { grid-template-columns: 1fr; }
+  .gtm-root .budget-wrap { overflow-x: auto; }
+  .gtm-root table.budget th, .gtm-root table.budget td { padding: 12px 14px; font-size: 13px; }
+  .gtm-root table.budget th { font-size: 10px; }
+  .gtm-root .stat { padding: 24px 20px; }
+  .gtm-root .stat-grid { gap: 16px; }
+  .gtm-root .close-stats { padding: 36px 0 0; gap: 20px; }
+}
+
+@media (max-width: 600px) {
+  .gtm-root .toc-inner { padding: 10px 14px; gap: 14px; }
+  .gtm-root .toc-links { gap: 2px; }
+  .gtm-root .toc-links a { font-size: 11.5px; padding: 4px 8px; }
+  .gtm-root .hero { padding: 120px 18px 80px; }
+  .gtm-root .hero-meta { gap: 16px; font-size: 11px; }
+  .gtm-root section.block { padding: 56px 18px; scroll-margin-top: 130px; }
+  .gtm-root .section-intro { font-size: 16px; margin-bottom: 40px; }
+  .gtm-root .thesis { padding: 24px 22px; margin-bottom: 36px; }
+  .gtm-root .three-pillars { gap: 16px; margin-top: 36px; }
+  .gtm-root .pillar { padding: 22px 22px 20px; }
+  .gtm-root .compare { gap: 16px; margin-top: 36px; }
+  .gtm-root .compare-col { padding: 24px 20px; }
+  .gtm-root .compare-col.right::after { right: 16px; }
+  .gtm-root .stat { padding: 22px 18px; }
+  .gtm-root .persona-head { padding: 22px 22px 16px; }
+  .gtm-root .persona-body { padding: 20px 22px 22px; }
+  .gtm-root .persona-name { font-size: 26px; }
+  .gtm-root .phases-grid { gap: 18px; }
+  .gtm-root .phase { padding: 24px 20px; }
+  .gtm-root .phase-title { font-size: 26px; }
+  .gtm-root .phase-metrics { gap: 14px; flex-wrap: wrap; }
+  .gtm-root .phase-metric-k { font-size: 22px; }
+  .gtm-root .gate-note { padding: 18px 20px; font-size: 13px; }
+  .gtm-root .influencer-banner { padding: 22px 22px; gap: 14px; }
+  .gtm-root .influencer-banner-title { font-size: 20px; }
+  .gtm-root .influencer-banner-icon { width: 48px; height: 48px; font-size: 24px; }
+  .gtm-root .influencer-head { padding: 20px 20px 18px; gap: 14px; flex-direction: column; align-items: flex-start; }
+  .gtm-root .influencer-avatar { width: 64px; height: 64px; font-size: 26px; }
+  .gtm-root .influencer-name { font-size: 22px; }
+  .gtm-root .influencer-body { padding: 20px 20px 22px; }
+  .gtm-root .influencer-math { padding: 20px 22px; }
+  .gtm-root .channels { gap: 14px; }
+  .gtm-root .channel-top { padding: 16px 20px 14px; }
+  .gtm-root .channel-body { padding: 12px 20px 16px; }
+  .gtm-root .budget-wrap { overflow-x: auto; }
+  .gtm-root table.budget { min-width: 520px; }
+  .gtm-root table.budget th, .gtm-root table.budget td { padding: 10px 12px; }
+  .gtm-root .econ-chart { padding: 22px 18px; }
+  .gtm-root .bar-row { grid-template-columns: 56px 1fr 48px; gap: 8px; }
+  .gtm-root .earn-row { grid-template-columns: 64px 1fr 64px; gap: 8px; }
+  .gtm-root .econ-aside { padding: 24px 22px; }
+  .gtm-root .moat-grid { gap: 14px; }
+  .gtm-root .moat-card { padding: 24px 22px; }
+  .gtm-root .moat-num { font-size: 38px; }
+  .gtm-root .moat-title { font-size: 17px; }
+  .gtm-root .risk { padding: 20px 20px; }
+  .gtm-root .close-big { margin-bottom: 40px; }
+  .gtm-root .close-stats { padding: 28px 0 0; gap: 18px; }
+  .gtm-root .close-stat-v { font-size: 12px; }
+}
 `;
 
 export default function GTM() {
