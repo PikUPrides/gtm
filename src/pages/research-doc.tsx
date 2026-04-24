@@ -851,7 +851,7 @@ export default function ResearchDocPage() {
 
             {/* 12. Suburban vs Urban */}
             <section id="urb-sub" className="mb-20 scroll-mt-32">
-              <SectionHeader num="12" eyebrow="Operations" title="Suburban vs Urban Mobility Study" />
+              <SectionHeader num="11" eyebrow="Operations" title="Suburban vs Urban Mobility Study" />
               <div className="grid sm:grid-cols-2 gap-4">
                 <Card>
                   <div className="text-xs font-bold text-[#423DF9] uppercase tracking-wider mb-2">Urban Rider Patterns</div>
@@ -882,7 +882,7 @@ export default function ResearchDocPage() {
 
             {/* 13. Safety */}
             <section id="safety" className="mb-20 scroll-mt-32">
-              <SectionHeader num="13" eyebrow="Operations" title="Safety Perception Report" />
+              <SectionHeader num="12" eyebrow="Operations" title="Safety Perception Report" />
               <div className="grid sm:grid-cols-2 gap-4 mb-6">
                 <Card>
                   <div className="text-xs font-bold text-red-600 uppercase tracking-wider mb-2">Rider safety concerns</div>
