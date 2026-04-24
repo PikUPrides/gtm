@@ -265,6 +265,39 @@ export default function Header({ showBackLink = false }) {
                   </div>
                 )}
               </div>
+              {/* Design Dropdown */}
+              <div
+                className="relative"
+                ref={designDropdownRef}
+                onMouseEnter={() => { setShowDesignDropdown(true); setShowDataDropdown(false); setShowStrategyDropdown(false); setShowCompetitorsDropdown(false); setShowSwordDropdown(false); }}
+                onMouseLeave={() => setShowDesignDropdown(false)}
+              >
+                <button
+                  onClick={() => setShowDesignDropdown(!showDesignDropdown)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#1D0652] hover:text-[#423DF9] rounded-md hover:bg-[#423DF9]/5 transition-colors"
+                >
+                  Design
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showDesignDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {showDesignDropdown && (
+                  <div className="absolute left-0 mt-0 pt-2 w-48 z-[9999]">
+                    <div className="bg-white rounded-lg shadow-lg border border-gray-200 border-t-2 border-t-[#423DF9] py-2">
+                      {designItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          to={item.href}
+                          onClick={() => setShowDesignDropdown(false)}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
 
             </nav>
           </div>
