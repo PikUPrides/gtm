@@ -352,7 +352,7 @@ export default function ResearchDocPage() {
             <Stat value="$100B+" label="US rideshare GMV" sub="2025 run-rate" tone="primary" />
             <Stat value="76 / 24" label="Uber vs Lyft US share" sub="Bloomberg, Mar 2024" tone="indigo" />
             <Stat value="$9–12B" label="Texas market / yr" sub="10–12% CAGR" tone="green" />
-            <Stat value="~20%" label="of Austin Uber rides" sub="already driverless (Waymo)" tone="red" />
+            <Stat value="~$15.60" label="Uber driver / hr" sub="After expenses — drivers squeezed" tone="red" />
           </div>
         </div>
       </section>
@@ -404,9 +404,9 @@ export default function ResearchDocPage() {
               </p>
               <Callout tone="primary" title="What's new in this April 2026 revision">
                 This edition folds in the <strong>2026 Market Pulse</strong> (updated Uber/Lyft share, pricing, trip volumes)
-                and — critically — a new <strong>AV / Robotaxi Threat</strong> section covering Waymo's 90-sq-mile Austin
-                expansion, Tesla robotaxis in Austin, and Lyft's 2026 Dallas robotaxi launch. This is the single biggest
-                strategic variable AYRO faces in Texas and now has an explicit counter-strategy.
+                and a sharper view of the <strong>driver economics crisis</strong> compounding at Uber/Lyft — rate cuts,
+                opaque deactivations, Prop 22 lawsuits, and rising insurance. The disaffected driver pool is larger and
+                more recruitable than at any point in the last five years. That's AYRO's single biggest tailwind.
               </Callout>
             </section>
 
