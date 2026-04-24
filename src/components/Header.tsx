@@ -10,6 +10,7 @@ export default function Header({ showBackLink = false }) {
   const [showDataDropdown, setShowDataDropdown] = useState(false);
   const [showCompetitorsDropdown, setShowCompetitorsDropdown] = useState(false);
   const [showSwordDropdown, setShowSwordDropdown] = useState(false);
+  const [showDesignDropdown, setShowDesignDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const strategyDropdownRef = useRef(null);
