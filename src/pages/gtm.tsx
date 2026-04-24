@@ -340,7 +340,7 @@ html { scroll-behavior: smooth; }
   .gtm-root .toc-inner { padding: 10px 14px; gap: 14px; }
   .gtm-root .toc-links { gap: 2px; }
   .gtm-root .toc-links a { font-size: 11.5px; padding: 4px 8px; }
-  .gtm-root .hero { padding: 120px 18px 80px; }
+  .gtm-root .hero { padding: 160px 18px 80px; }
   .gtm-root .hero-meta { gap: 16px; font-size: 11px; }
   .gtm-root section.block { padding: 56px 18px; scroll-margin-top: 130px; }
   .gtm-root .section-intro { font-size: 16px; margin-bottom: 40px; }
