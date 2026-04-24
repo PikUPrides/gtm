@@ -431,6 +431,40 @@ export default function GTM() {
     el.scrollBy({ left: dir * 220, behavior: 'smooth' });
   };
 
+  const [activeSection, setActiveSection] = useState(TOC_ITEMS[0].id);
+
+  useEffect(() => {
+    const sections = TOC_ITEMS
+      .map((item) => ({ id: item.id, el: document.getElementById(item.id) }))
+      .filter((s) => s.el);
+    if (!sections.length) return;
+    const ACTIVE_OFFSET = 180;
+    const onScroll = () => {
+      let current = sections[0].id;
+      for (const s of sections) {
+        const top = s.el.getBoundingClientRect().top;
+        if (top - ACTIVE_OFFSET <= 0) current = s.id;
+        else break;
+      }
+      setActiveSection((prev) => (prev === current ? prev : current));
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const el = tocRef.current;
+    if (!el || !activeSection) return;
+    const link = el.querySelector(`a[href="#${activeSection}"]`);
+    if (!link) return;
+    const linkLeft = link.offsetLeft;
+    const linkWidth = link.offsetWidth;
+    const containerWidth = el.clientWidth;
+    const target = Math.max(0, linkLeft - (containerWidth - linkWidth) / 2);
+    el.scrollTo({ left: target, behavior: 'smooth' });
+  }, [activeSection]);
+
   useEffect(() => {
     document.title = 'AYRO · Complete Go-to-Market Strategy';
     let added = false;
