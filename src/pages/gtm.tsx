@@ -324,7 +324,7 @@ export default function GTM() {
       <div className="gtm-root" style={{ paddingTop: 80 }}>
         <nav className="toc">
           <div className="toc-inner">
-            <div className="toc-brand">AYRO · GTM</div>
+            <div className="toc-brand">GTM</div>
             <ul className="toc-links">
               <li><a href="#strategy">Strategy</a></li>
               <li><a href="#market">Market</a></li>
