@@ -103,6 +103,33 @@ function SectionHeader({ eyebrow, title, description }) {
 export default function BrandPage() {
   const pdfViewUrl = serenities.files.url(BRAND_PDF_ID);
   const pdfDownloadUrl = serenities.files.downloadUrl(BRAND_PDF_ID);
+  const [pdfBlobUrl, setPdfBlobUrl] = useState(null);
+  const [pdfState, setPdfState] = useState('loading');
+
+  useEffect(() => {
+    let cancelled = false;
+    let blobUrl = null;
+    setPdfState('loading');
+    fetch(pdfViewUrl, { credentials: 'include' })
+      .then((res) => {
+        if (!res.ok) throw new Error('pdf fetch failed');
+        return res.blob();
+      })
+      .then((blob) => {
+        if (cancelled) return;
+        blobUrl = URL.createObjectURL(blob);
+        setPdfBlobUrl(blobUrl);
+        setPdfState('ready');
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setPdfState('error');
+      });
+    return () => {
+      cancelled = true;
+      if (blobUrl) URL.revokeObjectURL(blobUrl);
+    };
+  }, [pdfViewUrl]);
 
   return (
     <div className="min-h-screen bg-white">
