@@ -44,8 +44,10 @@ const CSS = `
 .gtm-root *, .gtm-root *::before, .gtm-root *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 .gtm-root nav.toc {
-  position: sticky;
+  position: fixed;
   top: 80px;
+  left: 0;
+  right: 0;
   z-index: 50;
   background: rgba(255,255,255,0.92);
   backdrop-filter: saturate(180%) blur(12px);
