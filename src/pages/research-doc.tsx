@@ -967,7 +967,7 @@ export default function ResearchDocPage() {
 
             {/* 17. Gig */}
             <section id="gig" className="mb-20 scroll-mt-32">
-              <SectionHeader num="17" eyebrow="Operations" title="Gig Economy Labor Market" />
+              <SectionHeader num="16" eyebrow="Operations" title="Gig Economy Labor Market" />
               <div className="grid sm:grid-cols-3 gap-4 mb-6">
                 <Stat value="57M" label="Americans in gig economy" tone="primary" />
                 <Stat value="Top 3" label="Rideshare among gig categories" tone="indigo" />
@@ -987,7 +987,7 @@ export default function ResearchDocPage() {
             {/* 18. Regulatory */}
             <section id="regulatory" className="mb-20 scroll-mt-32">
               <SectionHeader
-                num="18"
+                num="17"
                 eyebrow="Compliance"
                 title="Regulatory Environment & AYRO Compliance"
                 description="Texas Occupations Code Chapter 2402 — AYRO's compliance posture against the five core requirements."
