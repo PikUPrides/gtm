@@ -834,7 +834,7 @@ export default function ResearchDocPage() {
 
             {/* 11. Fuel */}
             <section id="fuel" className="mb-20 scroll-mt-32">
-              <SectionHeader num="11" eyebrow="Operations" title="Fuel Price Impact Analysis" />
+              <SectionHeader num="10" eyebrow="Operations" title="Fuel Price Impact Analysis" />
               <div className="grid sm:grid-cols-3 gap-4 mb-6">
                 <Stat value="30–45%" label="of driver operational cost" sub="Fuel alone" tone="amber" />
                 <Stat value="$0.99 → $0.68" label="Uber mileage rate cut" sub="While fuel rose — drivers squeezed" tone="red" />
