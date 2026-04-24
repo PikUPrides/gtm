@@ -55,9 +55,13 @@ html { scroll-behavior: smooth; }
   -webkit-backdrop-filter: saturate(180%) blur(12px);
   border-bottom: 1px solid var(--slate-200);
 }
-.gtm-root .toc-inner { max-width: 1280px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 32px; overflow-x: auto; }
+.gtm-root .toc-inner { max-width: 1280px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 16px; min-width: 0; }
 .gtm-root .toc-brand { font-weight: 700; font-size: 16px; color: var(--indigo); letter-spacing: 0.08em; flex-shrink: 0; }
-.gtm-root .toc-links { display: flex; gap: 4px; list-style: none; flex-wrap: nowrap; overflow-x: auto; }
+.gtm-root .toc-links { display: flex; gap: 4px; list-style: none; flex-wrap: nowrap; overflow-x: auto; flex: 1 1 0; min-width: 0; scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none; }
+.gtm-root .toc-links::-webkit-scrollbar { display: none; }
+.gtm-root .toc-arrow { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--white); border: 1px solid var(--slate-200); color: var(--indigo); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; transition: background 0.15s, border-color 0.15s, opacity 0.2s, transform 0.2s; box-shadow: 0 1px 3px rgba(15,23,42,0.08); }
+.gtm-root .toc-arrow:hover { background: var(--indigo-50); border-color: var(--indigo); }
+.gtm-root .toc-arrow.is-hidden { opacity: 0; pointer-events: none; transform: scale(0.85); }
 .gtm-root .toc-links a { color: var(--slate); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 12px; border-radius: 6px; white-space: nowrap; transition: all 0.15s; }
 .gtm-root .toc-links a:hover { color: var(--indigo); background: var(--indigo-50); }
 
