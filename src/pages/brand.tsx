@@ -214,7 +214,7 @@ export default function BrandPage() {
               description="Use the secondary mark in supporting roles — favicon-style placements, badges, and tighter horizontal layouts."
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {SECONDARY_LOGOS.map((l) => <LogoCard key={l.id} logo={l} />)}
+              {SECONDARY_LOGOS.map((l) => <LogoCard key={l.id} logo={l} dark />)}
             </div>
           </section>
 
