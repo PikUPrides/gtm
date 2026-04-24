@@ -311,8 +311,8 @@ html { scroll-behavior: smooth; }
   .gtm-root .toc-inner { padding: 12px 18px; gap: 20px; }
   .gtm-root .toc-brand { font-size: 14px; }
   .gtm-root .toc-links a { font-size: 12px; padding: 5px 10px; }
-  .gtm-root .hero { padding: 130px 20px 90px; }
-  .gtm-root section.block { padding: 70px 20px; scroll-margin-top: 140px; }
+  .gtm-root .hero { padding: 165px 20px 90px; }
+  .gtm-root section.block { padding: 70px 20px; scroll-margin-top: 160px; }
   .gtm-root .thesis { padding: 28px 26px; }
   .gtm-root .compare-col { padding: 28px 24px; }
   .gtm-root .persona-head { padding: 24px 24px 18px; }
