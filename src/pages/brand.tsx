@@ -34,7 +34,7 @@ const APP_ICONS = [
 ];
 
 function fileUrl(id) {
-  return `/api/files/public/${id}`;
+  return `https://app.serenitiesai.com/api/files/public/${id}`;
 }
 
 function LogoCard({ logo, dark }) {
