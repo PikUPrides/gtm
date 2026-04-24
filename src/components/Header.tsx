@@ -49,6 +49,9 @@ export default function Header({ showBackLink = false }) {
       if (swordDropdownRef.current && !swordDropdownRef.current.contains(event.target)) {
         setShowSwordDropdown(false);
       }
+      if (designDropdownRef.current && !designDropdownRef.current.contains(event.target)) {
+        setShowDesignDropdown(false);
+      }
 
       // Don't close user dropdown if clicking on either profile button
       const isUserButtonClick = 
@@ -102,6 +105,11 @@ export default function Header({ showBackLink = false }) {
   // Data dropdown items
   const dataItems = [
     { href: '/data', label: 'US Market Data' },
+  ];
+
+  // Design dropdown items
+  const designItems = [
+    { href: '/brand', label: 'Brand' },
   ];
 
   // Full header with navigation (for main pages)
