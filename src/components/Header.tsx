@@ -127,8 +127,9 @@ export default function Header({ showBackLink = false }) {
       show: showBrandingDropdown,
       setShow: setShowBrandingDropdown,
       ref: brandingDropdownRef,
-      items: brandingItems,
-      width: 'w-48',
+      items: null,
+      directHref: '/brand',
+      width: '',
     },
   ];
 
