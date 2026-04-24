@@ -914,7 +914,7 @@ export default function ResearchDocPage() {
 
             {/* 14. Earnings */}
             <section id="earnings" className="mb-20 scroll-mt-32">
-              <SectionHeader num="14" eyebrow="Operations" title="Driver Earnings Comparison" />
+              <SectionHeader num="13" eyebrow="Operations" title="Driver Earnings Comparison" />
               <div className="grid sm:grid-cols-3 gap-4 mb-6">
                 <Stat value="$15.60" label="Uber driver /hr" sub="After expenses, pre-tax" tone="red" />
                 <Stat value="~$21.74" label="Gross /hr" sub="Before expenses" tone="amber" />
