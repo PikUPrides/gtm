@@ -37,6 +37,25 @@ function fileUrl(id) {
   return `https://app.serenitiesai.com/api/files/public/${id}`;
 }
 
+async function downloadFile(e, url, filename) {
+  if (e) e.preventDefault();
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('fetch failed');
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 1500);
+  } catch (err) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+}
+
 function LogoCard({ logo, dark }) {
   const url = fileUrl(logo.id);
   return (
