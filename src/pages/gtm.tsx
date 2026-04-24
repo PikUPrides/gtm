@@ -79,6 +79,7 @@ html { scroll-behavior: smooth; }
 .gtm-root .toc-arrow.is-hidden { opacity: 0; pointer-events: none; transform: scale(0.85); }
 .gtm-root .toc-links a { color: var(--slate); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 12px; border-radius: 6px; white-space: nowrap; transition: all 0.15s; }
 .gtm-root .toc-links a:hover { color: var(--indigo); background: var(--indigo-50); }
+.gtm-root .toc-links a.is-active { color: var(--indigo); background: var(--indigo-50); font-weight: 700; box-shadow: inset 0 -2px 0 var(--indigo); }
 
 .gtm-root .hero { position: relative; padding: 150px 24px 140px; background: linear-gradient(135deg, #1E1B4B 0%, #312E81 40%, #4F46E5 100%); overflow: hidden; color: var(--white); }
 .gtm-root .hero::before { content: ''; position: absolute; top: -200px; right: -200px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(167,139,250,0.25), transparent 70%); }
@@ -500,18 +501,11 @@ export default function GTM() {
               </svg>
             </button>
             <ul className="toc-links" ref={tocRef}>
-              <li><a href="#strategy">Strategy</a></li>
-              <li><a href="#market">Market</a></li>
-              <li><a href="#insight">Insight</a></li>
-              <li><a href="#flywheel">Flywheel</a></li>
-              <li><a href="#personas">Personas</a></li>
-              <li><a href="#plan">90-Day Plan</a></li>
-              <li><a href="#influencers">Influencers</a></li>
-              <li><a href="#channels">Channels</a></li>
-              <li><a href="#budget">Budget</a></li>
-              <li><a href="#econ">Unit Economics</a></li>
-              <li><a href="#moat">Moat</a></li>
-              <li><a href="#risks">Risks</a></li>
+              {TOC_ITEMS.map((item) => (
+                <li key={item.id}>
+                  <a href={`#${item.id}`} className={activeSection === item.id ? 'is-active' : ''}>{item.label}</a>
+                </li>
+              ))}
             </ul>
             <button
               type="button"
