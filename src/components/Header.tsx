@@ -1,22 +1,22 @@
 import { user, Link } from '../api/sdk.js';
 import { useState, useEffect, useRef } from 'react';
 
-// Logo image URL - using the uploaded AYRO full logo (blue text)
-const LOGO_FILE_ID = "7d5a824eabbd50883c0fdbf89079d444"; // Ayro_Primary - 2.png (full logo with blue text)
+const LOGO_FILE_ID = "7d5a824eabbd50883c0fdbf89079d444";
 
 export default function Header({ showBackLink = false }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [showStrategyDropdown, setShowStrategyDropdown] = useState(false);
-  const [showDataDropdown, setShowDataDropdown] = useState(false);
+  const [showGTMDropdown, setShowGTMDropdown] = useState(false);
   const [showCompetitorsDropdown, setShowCompetitorsDropdown] = useState(false);
-  const [showSwordDropdown, setShowSwordDropdown] = useState(false);
+  const [showWhyWeWinDropdown, setShowWhyWeWinDropdown] = useState(false);
+  const [showMarketResearchDropdown, setShowMarketResearchDropdown] = useState(false);
   const [showBrandingDropdown, setShowBrandingDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const strategyDropdownRef = useRef(null);
-  const dataDropdownRef = useRef(null);
+
+  const gtmDropdownRef = useRef(null);
   const competitorsDropdownRef = useRef(null);
-  const swordDropdownRef = useRef(null);
+  const whyWeWinDropdownRef = useRef(null);
+  const marketResearchDropdownRef = useRef(null);
   const brandingDropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
   const userButtonRef = useRef(null);
@@ -28,41 +28,21 @@ export default function Header({ showBackLink = false }) {
       try {
         const u = await user.me();
         setCurrentUser(u);
-      } catch (e) {
-        // Not logged in
-      }
+      } catch (e) {}
     };
     fetchUser();
   }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (strategyDropdownRef.current && !strategyDropdownRef.current.contains(event.target)) {
-        setShowStrategyDropdown(false);
-      }
-      if (dataDropdownRef.current && !dataDropdownRef.current.contains(event.target)) {
-        setShowDataDropdown(false);
-      }
-      if (competitorsDropdownRef.current && !competitorsDropdownRef.current.contains(event.target)) {
-        setShowCompetitorsDropdown(false);
-      }
-      if (swordDropdownRef.current && !swordDropdownRef.current.contains(event.target)) {
-        setShowSwordDropdown(false);
-      }
-      if (brandingDropdownRef.current && !brandingDropdownRef.current.contains(event.target)) {
-        setShowBrandingDropdown(false);
-      }
-
-      // Don't close user dropdown if clicking on either profile button
-      const isUserButtonClick = 
-        userButtonRef.current?.contains(event.target) || 
-        userButtonMobileRef.current?.contains(event.target);
-      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target) && !isUserButtonClick) {
-        setShowUserDropdown(false);
-      }
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !event.target.closest('.mobile-menu-btn')) {
-        setIsMobileMenuOpen(false);
-      }
+      if (gtmDropdownRef.current && !gtmDropdownRef.current.contains(event.target)) setShowGTMDropdown(false);
+      if (competitorsDropdownRef.current && !competitorsDropdownRef.current.contains(event.target)) setShowCompetitorsDropdown(false);
+      if (whyWeWinDropdownRef.current && !whyWeWinDropdownRef.current.contains(event.target)) setShowWhyWeWinDropdown(false);
+      if (marketResearchDropdownRef.current && !marketResearchDropdownRef.current.contains(event.target)) setShowMarketResearchDropdown(false);
+      if (brandingDropdownRef.current && !brandingDropdownRef.current.contains(event.target)) setShowBrandingDropdown(false);
+      const isUserButtonClick = userButtonRef.current?.contains(event.target) || userButtonMobileRef.current?.contains(event.target);
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target) && !isUserButtonClick) setShowUserDropdown(false);
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !event.target.closest('.mobile-menu-btn')) setIsMobileMenuOpen(false);
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -73,244 +53,151 @@ export default function Header({ showBackLink = false }) {
     window.location.href = '/login';
   };
 
-  // Navigation links
-  const navLinks = [
+  const closeAll = () => {
+    setShowGTMDropdown(false);
+    setShowCompetitorsDropdown(false);
+    setShowWhyWeWinDropdown(false);
+    setShowMarketResearchDropdown(false);
+    setShowBrandingDropdown(false);
+  };
+
+  const gtmItems = [
+    { href: '/gtm', label: 'GTM Strategy Doc' },
+    { href: '/metrics-dashboard', label: 'Metrics Dashboard' },
+    { href: '/cohort-retention', label: 'Cohort Retention Analysis' },
+    { href: '/unit-economics', label: 'Unit Economics' },
+    { href: '/testimonials', label: 'Customer Testimonials' },
   ];
 
-  // Strategy dropdown items
-  const strategyItems = [
-    { href: '/rider-marketing', label: 'Rider Marketing' },
-    { href: '/driver-marketing', label: 'Driver Marketing' },
-    { href: '/gtm-summary', label: 'GTM Summary' },
-    { href: '/gtm', label: 'GTM' },
-    { href: '/pitch-deck', label: 'How To Pitch Deck' },
-    { href: '/ed-kang-pitch-deck', label: 'Ed Kang Pitch Deck' },
-    { href: '/downloads', label: 'Downloads Strategy' },
-  ];
-
-  // Competitors sub-menu items
   const competitorsItems = [
-    { href: '/documents/ubers-moat', label: "Uber's Moat" },
+    { href: '/documents/ubers-moat', label: "Uber's Margin Trap" },
     { href: '/documents/how-lyft-survived', label: 'How Lyft Survived' },
-    { href: '/documents/counter-strategy', label: 'Counter-Strategy' },
     { href: '/documents/empower-nyc-validation', label: 'Empower NYC Validation' },
+    { href: '/documents/counter-strategy', label: 'Counter Strategy' },
   ];
 
-  // Sword sub-menu items
-  const swordItems = [
-    { href: '/documents/sword', label: 'Sword' },
-    { href: '/documents/slides', label: 'Slide' },
-  ];
-
-  // Data dropdown items
-  const dataItems = [
+  const marketResearchItems = [
     { href: '/data', label: 'US Market Data' },
+    { href: '/research-doc', label: 'Research Doc' },
   ];
 
-  // Branding dropdown items
   const brandingItems = [
-    { href: '/brand', label: 'Brand' },
+    { href: '/brand', label: 'Logo' },
+    { href: '/brand', label: 'Brand Guideline' },
+    { href: '/brand', label: 'Assets' },
+    { href: '/brand', label: 'Banners' },
   ];
 
-  // Full header with navigation (for main pages)
+  const navItems = [
+    {
+      label: 'GTM',
+      show: showGTMDropdown,
+      setShow: setShowGTMDropdown,
+      ref: gtmDropdownRef,
+      items: gtmItems,
+      width: 'w-64',
+    },
+    {
+      label: 'Competitors',
+      show: showCompetitorsDropdown,
+      setShow: setShowCompetitorsDropdown,
+      ref: competitorsDropdownRef,
+      items: competitorsItems,
+      width: 'w-56',
+    },
+    {
+      label: 'Why we WIN',
+      show: showWhyWeWinDropdown,
+      setShow: setShowWhyWeWinDropdown,
+      ref: whyWeWinDropdownRef,
+      items: null,
+      directHref: '/documents/sword',
+      width: '',
+    },
+    {
+      label: 'Market Research',
+      show: showMarketResearchDropdown,
+      setShow: setShowMarketResearchDropdown,
+      ref: marketResearchDropdownRef,
+      items: marketResearchItems,
+      width: 'w-52',
+    },
+    {
+      label: 'Branding',
+      show: showBrandingDropdown,
+      setShow: setShowBrandingDropdown,
+      ref: brandingDropdownRef,
+      items: brandingItems,
+      width: 'w-48',
+    },
+  ];
+
   if (!showBackLink) {
     return (
       <header className="fixed top-0 left-0 right-0 z-[10000] border-b-2 border-[#423DF9]/20 px-4 py-2 sm:px-6 sm:py-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 bg-white shadow-sm">
-        {/* Left side: Logo + Navigation */}
         <div className="flex items-center justify-between w-full sm:w-auto">
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center gap-2">
               <img src={serenities.files.url(LOGO_FILE_ID)} alt="AYRO" className="h-16 w-auto object-contain" />
             </Link>
-            {/* Desktop Navigation - aligned left */}
-            <nav className="hidden sm:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 rounded-md hover:bg-gray-100 transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
-              {/* Strategy Dropdown */}
-              <div
-                className="relative"
-                ref={strategyDropdownRef}
-                onMouseEnter={() => { setShowStrategyDropdown(true); setShowDataDropdown(false); }}
-                onMouseLeave={() => setShowStrategyDropdown(false)}
-              >
-                <button
-                  onClick={() => setShowStrategyDropdown(!showStrategyDropdown)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#1D0652] hover:text-[#423DF9] rounded-md hover:bg-[#423DF9]/5 transition-colors"
-                >
-                  Strategy
-                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showStrategyDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {showStrategyDropdown && (
-                  <div className="absolute left-0 mt-0 pt-2 w-56 z-[9999]">
-                    <div className="bg-white rounded-lg shadow-lg border border-gray-200 border-t-2 border-t-[#423DF9] py-2">
-                      {strategyItems.map((item) => (
-                        <Link
-                          key={item.href}
-                          to={item.href}
-                          onClick={() => setShowStrategyDropdown(false)}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-              {/* Competitors Sub-Menu */}
-              <div
-                className="relative"
-                ref={competitorsDropdownRef}
-                onMouseEnter={() => { setShowCompetitorsDropdown(true); setShowDataDropdown(false); setShowSwordDropdown(false); }}
-                onMouseLeave={() => setShowCompetitorsDropdown(false)}
-              >
-                <button
-                  onClick={() => setShowCompetitorsDropdown(!showCompetitorsDropdown)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#1D0652] hover:text-[#423DF9] rounded-md hover:bg-[#423DF9]/5 transition-colors"
-                >
-                  Competitors
-                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showCompetitorsDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {showCompetitorsDropdown && (
-                  <div className="absolute left-0 mt-0 pt-2 w-56 z-[9999]">
-                    <div className="bg-white rounded-lg shadow-lg border border-gray-200 border-t-2 border-t-[#423DF9] py-2">
-                      {competitorsItems.map((item) => (
-                        <Link
-                          key={item.href}
-                          to={item.href}
-                          onClick={() => setShowCompetitorsDropdown(false)}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-              {/* Sword Sub-Menu */}
-              <div
-                className="relative"
-                ref={swordDropdownRef}
-                onMouseEnter={() => { setShowSwordDropdown(true); setShowDataDropdown(false); setShowCompetitorsDropdown(false); }}
-                onMouseLeave={() => setShowSwordDropdown(false)}
-              >
-                <button
-                  onClick={() => setShowSwordDropdown(!showSwordDropdown)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#1D0652] hover:text-[#423DF9] rounded-md hover:bg-[#423DF9]/5 transition-colors"
-                >
-                  Sword
-                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showSwordDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {showSwordDropdown && (
-                  <div className="absolute left-0 mt-0 pt-2 w-56 z-[9999]">
-                    <div className="bg-white rounded-lg shadow-lg border border-gray-200 border-t-2 border-t-[#423DF9] py-2">
-                      {swordItems.map((item) => (
-                        <Link
-                          key={item.href}
-                          to={item.href}
-                          onClick={() => setShowSwordDropdown(false)}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-              {/* Data Dropdown */}
-              <div
-                className="relative"
-                ref={dataDropdownRef}
-                onMouseEnter={() => { setShowDataDropdown(true); setShowStrategyDropdown(false); }}
-                onMouseLeave={() => setShowDataDropdown(false)}
-              >
-                <button
-                  onClick={() => setShowDataDropdown(!showDataDropdown)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#1D0652] hover:text-[#423DF9] rounded-md hover:bg-[#423DF9]/5 transition-colors"
-                >
-                  Data
-                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showDataDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {showDataDropdown && (
-                  <div className="absolute left-0 mt-0 pt-2 w-48 z-[9999]">
-                    <div className="bg-white rounded-lg shadow-lg border border-gray-200 border-t-2 border-t-[#423DF9] py-2">
-                      {dataItems.map((item) => (
-                        <Link
-                          key={item.href}
-                          to={item.href}
-                          onClick={() => setShowDataDropdown(false)}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-              {/* Branding Dropdown */}
-              <div
-                className="relative"
-                ref={brandingDropdownRef}
-                onMouseEnter={() => { setShowBrandingDropdown(true); setShowDataDropdown(false); setShowStrategyDropdown(false); setShowCompetitorsDropdown(false); setShowSwordDropdown(false); }}
-                onMouseLeave={() => setShowBrandingDropdown(false)}
-              >
-                <button
-                  onClick={() => setShowBrandingDropdown(!showBrandingDropdown)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#1D0652] hover:text-[#423DF9] rounded-md hover:bg-[#423DF9]/5 transition-colors"
-                >
-                  Branding
-                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${showBrandingDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {showBrandingDropdown && (
-                  <div className="absolute left-0 mt-0 pt-2 w-48 z-[9999]">
-                    <div className="bg-white rounded-lg shadow-lg border border-gray-200 border-t-2 border-t-[#423DF9] py-2">
-                      {brandingItems.map((item) => (
-                        <Link
-                          key={item.href}
-                          to={item.href}
-                          onClick={() => setShowBrandingDropdown(false)}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
 
+            {/* Desktop Nav */}
+            <nav className="hidden sm:flex items-center gap-1">
+              {navItems.map((nav) =>
+                nav.directHref ? (
+                  <Link
+                    key={nav.label}
+                    to={nav.directHref}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#1D0652] hover:text-[#423DF9] rounded-md hover:bg-[#423DF9]/5 transition-colors"
+                  >
+                    {nav.label}
+                  </Link>
+                ) : (
+                  <div
+                    key={nav.label}
+                    className="relative"
+                    ref={nav.ref}
+                    onMouseEnter={() => { closeAll(); nav.setShow(true); }}
+                    onMouseLeave={() => nav.setShow(false)}
+                  >
+                    <button
+                      onClick={() => { closeAll(); nav.setShow(!nav.show); }}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#1D0652] hover:text-[#423DF9] rounded-md hover:bg-[#423DF9]/5 transition-colors"
+                    >
+                      {nav.label}
+                      <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${nav.show ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    {nav.show && nav.items && (
+                      <div className={`absolute left-0 mt-0 pt-2 ${nav.width} z-[9999]`}>
+                        <div className="bg-white rounded-lg shadow-lg border border-gray-200 border-t-2 border-t-[#423DF9] py-2">
+                          {nav.items.map((item) => (
+                            <Link
+                              key={item.href + item.label}
+                              to={item.href}
+                              onClick={() => nav.setShow(false)}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                            >
+                              {item.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )
+              )}
             </nav>
           </div>
-          {/* Mobile: hamburger + profile on same line */}
+
+          {/* Mobile: hamburger + profile */}
           <div className="flex items-center gap-2 sm:hidden">
             {currentUser && (
               <div className="relative" ref={userDropdownRef}>
                 <button
                   ref={userButtonMobileRef}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowUserDropdown(!showUserDropdown);
-                  }}
+                  onClick={(e) => { e.stopPropagation(); setShowUserDropdown(!showUserDropdown); }}
                   className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
@@ -325,20 +212,12 @@ export default function Header({ showBackLink = false }) {
                       <p className="text-xs text-gray-500">Signed in as</p>
                       <p className="text-sm font-medium text-gray-900 truncate">{currentUser.email}</p>
                     </div>
-                    <button
-                      onClick={handleSignOut}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                    >
-                      Sign out
-                    </button>
+                    <button onClick={handleSignOut} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">Sign out</button>
                   </div>
                 )}
               </div>
             )}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-md hover:bg-gray-100 mobile-menu-btn"
-            >
+            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 rounded-md hover:bg-gray-100 mobile-menu-btn">
               {isMobileMenuOpen ? (
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -351,80 +230,39 @@ export default function Header({ showBackLink = false }) {
             </button>
           </div>
         </div>
-        
-        {/* Mobile Navigation Menu */}
+
+        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <nav ref={mobileMenuRef} className="sm:hidden flex flex-col gap-1 pb-2 border-t border-gray-100 pt-3">
-            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Marketing</div>
-            {strategyItems.slice(0, 2).map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-              >
-                {item.label}
-              </Link>
+            {navItems.map((nav) => (
+              <div key={nav.label}>
+                <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">{nav.label}</div>
+                {nav.directHref ? (
+                  <Link
+                    to={nav.directHref}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors block"
+                  >
+                    {nav.label}
+                  </Link>
+                ) : (
+                  nav.items?.map((item) => (
+                    <Link
+                      key={item.href + item.label}
+                      to={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors block"
+                    >
+                      {item.label}
+                    </Link>
+                  ))
+                )}
+              </div>
             ))}
-            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Strategy</div>
-            {strategyItems.slice(2).map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
-            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Competitors</div>
-            {competitorsItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
-            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Sword</div>
-            {swordItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
-            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Data</div>
-            {dataItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
-            <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Branding</div>
-            {brandingItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
-
           </nav>
         )}
 
+        {/* Desktop user dropdown */}
         {currentUser && (
           <div
             className="relative hidden sm:block"
@@ -434,10 +272,7 @@ export default function Header({ showBackLink = false }) {
           >
             <button
               ref={userButtonRef}
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowUserDropdown(!showUserDropdown);
-              }}
+              onClick={(e) => { e.stopPropagation(); setShowUserDropdown(!showUserDropdown); }}
               className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
             >
               <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
@@ -456,12 +291,7 @@ export default function Header({ showBackLink = false }) {
                     <p className="text-xs text-gray-500">Signed in as</p>
                     <p className="text-sm font-medium text-gray-900 truncate">{currentUser.email}</p>
                   </div>
-                  <button
-                    onClick={handleSignOut}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                  >
-                    Sign out
-                  </button>
+                  <button onClick={handleSignOut} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">Sign out</button>
                 </div>
               </div>
             )}
@@ -471,7 +301,6 @@ export default function Header({ showBackLink = false }) {
     );
   }
 
-  // Simple header with Back link (for other pages)
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-4 px-4 sm:px-6 py-3 bg-white border-b border-gray-200">
       <div className="flex items-center gap-4">
