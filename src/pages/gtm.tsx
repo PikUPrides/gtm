@@ -435,7 +435,18 @@ export default function GTM() {
         <nav className="toc">
           <div className="toc-inner">
             <div className="toc-brand">GTM</div>
-            <ul className="toc-links">
+            <button
+              type="button"
+              className={`toc-arrow toc-arrow-left${showLeftArrow ? '' : ' is-hidden'}`}
+              onClick={() => scrollToc(-1)}
+              aria-label="Scroll nav left"
+              tabIndex={showLeftArrow ? 0 : -1}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <ul className="toc-links" ref={tocRef}>
               <li><a href="#strategy">Strategy</a></li>
               <li><a href="#market">Market</a></li>
               <li><a href="#insight">Insight</a></li>
@@ -449,6 +460,17 @@ export default function GTM() {
               <li><a href="#moat">Moat</a></li>
               <li><a href="#risks">Risks</a></li>
             </ul>
+            <button
+              type="button"
+              className={`toc-arrow toc-arrow-right${showRightArrow ? '' : ' is-hidden'}`}
+              onClick={() => scrollToc(1)}
+              aria-label="Scroll nav right"
+              tabIndex={showRightArrow ? 0 : -1}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
           </div>
         </nav>
 
