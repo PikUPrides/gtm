@@ -60,7 +60,7 @@ const CSS = `
 .gtm-root .toc-links a { color: var(--slate); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 12px; border-radius: 6px; white-space: nowrap; transition: all 0.15s; }
 .gtm-root .toc-links a:hover { color: var(--indigo); background: var(--indigo-50); }
 
-.gtm-root .hero { position: relative; padding: 100px 24px 140px; background: linear-gradient(135deg, #1E1B4B 0%, #312E81 40%, #4F46E5 100%); overflow: hidden; color: var(--white); }
+.gtm-root .hero { position: relative; padding: 150px 24px 140px; background: linear-gradient(135deg, #1E1B4B 0%, #312E81 40%, #4F46E5 100%); overflow: hidden; color: var(--white); }
 .gtm-root .hero::before { content: ''; position: absolute; top: -200px; right: -200px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(167,139,250,0.25), transparent 70%); }
 .gtm-root .hero::after { content: ''; position: absolute; bottom: -300px; left: -200px; width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(20,184,166,0.12), transparent 70%); }
 .gtm-root .hero-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
