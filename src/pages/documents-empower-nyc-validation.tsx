@@ -1,232 +1,184 @@
+
 import React from 'react';
 import Header from '../components/Header.jsx';
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#fafafe]" style={{ fontFamily: "'Open Sans', sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap');`}</style>
       <Header />
-      <div className="max-w-4xl mx-auto px-6 py-16 pt-32">
-        <h2 className="text-2xl font-bold mb-4">EMPOWER NYC VALIDATION</h2>
-        <p className="text-gray-600 mb-6">What's happening right now in NYC.</p>
-        
-        <section className="mb-6">
-          <h3 className="text-xl font-bold mb-3">What Empower Is</h3>
-          <p className="mb-2">A rideshare app where drivers keep 100% of fares, set their own prices, pay $50–$350/month subscription instead of per-ride commission.</p>
-          <ul className="list-disc pl-5 text-gray-600">
-            <li>Ride from Bushwick to SoHo: $28 via Empower vs $68 Uber vs $60 Lyft</li>
-            <li>Tens of thousands of rides per week in NYC</li>
-            <li>Drivers set their own rates, get 100%</li>
-            <li>25-60% cheaper than Uber</li>
-          </ul>
-        </section>
-        
-        <hr className="my-6" />
-        
-        <section className="mb-6 bg-red-50 p-4 rounded-lg">
-          <h3 className="text-xl font-bold mb-3 text-red-800">THE BIG PROBLEM</h3>
-          <p className="mb-2">NYC officials say the rides are illegal.</p>
-          <ul className="list-disc pl-5 text-red-700">
-            <li>TLC warns trips may not be insured</li>
-            <li>Dedicated website warning New Yorkers</li>
-            <li>Drivers face fines up to $500</li>
-          </ul>
-        </section>
-        
-        <hr className="my-6" />
-        
-        <section className="mb-6">
-          <h3 className="text-xl font-bold mb-3">EMPOWER vs AYRO</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="text-left p-2 border"></th>
-                  <th className="text-left p-2 border">Empower</th>
-                  <th className="text-left p-2 border">AYRO</th>
+
+      <div className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1D0652 0%, #423DF9 60%, #08D9C4 100%)' }}>
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 right-20 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, #08D9C4 0%, transparent 70%)' }} />
+        </div>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-28 pb-12 relative z-10">
+          <p className="text-[#08D9C4] text-xs font-bold uppercase tracking-[0.2em] mb-2">Competitors · Validation</p>
+          <h1 className="text-white text-3xl sm:text-4xl font-extrabold mb-2 leading-tight">Empower NYC Validation</h1>
+          <p className="text-white/70 text-base max-w-xl">What's happening right now in NYC — and what it proves for AYRO.</p>
+        </div>
+        <div className="h-1" style={{ background: 'linear-gradient(90deg, #423DF9, #08D9C4, #7742F1)' }} />
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+
+        {/* What Empower Is */}
+        <div className="mb-8">
+          <div className="text-xs font-bold tracking-[0.2em] uppercase mb-1 text-[#423DF9]">01 · What It Is</div>
+          <h2 className="text-2xl font-extrabold text-[#1D0652] mb-3">What Empower Is</h2>
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <p className="text-gray-600 text-sm mb-3">A rideshare app where drivers keep 100% of fares, set their own prices, pay $50–$350/month subscription instead of per-ride commission.</p>
+            <div className="space-y-1.5 text-sm text-gray-600">
+              <p>• Ride from Bushwick to SoHo: <strong className="text-[#1D0652]">$28</strong> via Empower vs <strong className="text-red-500">$68</strong> Uber vs <strong className="text-red-500">$60</strong> Lyft</p>
+              <p>• Tens of thousands of rides per week in NYC</p>
+              <p>• Drivers set their own rates, get 100%</p>
+              <p>• 25-60% cheaper than Uber</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Problem */}
+        <div className="mb-8">
+          <div className="text-xs font-bold tracking-[0.2em] uppercase mb-1 text-[#EF4444]">02 · The Big Problem</div>
+          <h2 className="text-2xl font-extrabold text-[#1D0652] mb-3">NYC Officials Say It's Illegal</h2>
+          <div className="bg-white rounded-xl border border-red-200 p-5">
+            <div className="space-y-1.5 text-sm text-gray-700">
+              <p>• TLC warns trips may not be insured</p>
+              <p>• Dedicated website warning New Yorkers</p>
+              <p>• Drivers face fines up to $500</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Comparison */}
+        <div className="mb-8">
+          <div className="text-xs font-bold tracking-[0.2em] uppercase mb-1 text-[#423DF9]">03 · Comparison</div>
+          <h2 className="text-2xl font-extrabold text-[#1D0652] mb-3">Empower vs AYRO</h2>
+          <div className="bg-white rounded-xl border border-gray-200 overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100">
+                  <th className="text-left px-5 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider"></th>
+                  <th className="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Empower</th>
+                  <th className="text-left px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#08D9C4]">AYRO</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="p-2 border">Driver Commission</td>
-                  <td className="p-2 border">0%</td>
-                  <td className="p-2 border">5%</td>
-                </tr>
-                <tr>
-                  <td className="p-2 border">Who Sets Price</td>
-                  <td className="p-2 border">Driver</td>
-                  <td className="p-2 border">AYRO (flat rate)</td>
-                </tr>
-                <tr>
-                  <td className="p-2 border">Regulatory</td>
-                  <td className="p-2 border">❌ Illegal</td>
-                  <td className="p-2 border">✅ Licensed</td>
-                </tr>
-                <tr>
-                  <td className="p-2 border">Insurance</td>
-                  <td className="p-2 border">⚠️ May not be</td>
-                  <td className="p-2 border">✅ Handled</td>
-                </tr>
+                {[['Driver Commission', '0%', '5%'], ['Who Sets Price', 'Driver', 'AYRO (flat rate)'], ['Regulatory', '❌ Illegal', '✅ Licensed'], ['Insurance', '⚠️ May not be', '✅ Handled']].map(([label, emp, ayro], i) => (
+                  <tr key={label} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}>
+                    <td className="px-5 py-3 font-semibold text-gray-700">{label}</td>
+                    <td className="px-4 py-3 text-gray-500">{emp}</td>
+                    <td className="px-4 py-3 font-semibold text-[#1D0652]">{ayro}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
-        </section>
-        
-        <hr className="my-6" />
-        
-        <section className="mb-6">
-          <h3 className="text-xl font-bold mb-3">WHAT AYRO LEARNS</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-green-50 p-4 rounded-lg">
-              <h4 className="font-bold text-green-800 mb-2">✅ PROVES</h4>
-              <ul className="list-disc pl-5 text-green-700">
-                <li>Demand is massive</li>
-                <li>Drivers switch immediately</li>
-                <li>Price goes viral ($28 vs $68)</li>
-                <li>Uber IS scared</li>
-              </ul>
-            </div>
-            <div className="bg-red-50 p-4 rounded-lg">
-              <h4 className="font-bold text-red-800 mb-2">❌ GOT WRONG</h4>
-              <ul className="list-disc pl-5 text-red-700">
-                <li>Launched without license</li>
-                <li>Drivers set own prices</li>
-                <li>Subscription punishes low-volume</li>
-                <li>Insurance gap</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-        
-        <hr className="my-6" />
-        
-        <div className="bg-blue-50 p-4 rounded-lg">
-          <h3 className="text-lg font-bold mb-2">PITCH FOR INVESTORS</h3>
-          <p>"Empower proved our thesis in NYC — tens of thousands of rides at 50-60% less than Uber, despite being illegal. AYRO is the same economics with three fixes: full compliance, consistent pricing, and insurance. We're Empower done right."</p>
         </div>
 
-        {/* INSURANCE SECTION */}
-        <section className="mt-12">
-          <div className="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-6 md:p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="text-3xl">⚠️</span>
-              <h3 className="text-2xl md:text-3xl font-bold text-red-800">CONFIRMED: Empower Does NOT Provide Insurance</h3>
-            </div>
-            
-            <p className="text-red-700 mb-6 text-lg">From Empower's own FAQ page: "Empower does not currently provide insurance to drivers; however, we are working on establishing relationships with insurance carriers to help provide drivers with the most affordable options."</p>
-            
-            {/* Source Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-              <div className="bg-white border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xl">📄</span>
-                  <span className="font-bold text-red-800">Empower FAQ</span>
-                </div>
-                <p className="text-gray-600 text-sm">"Empower does not currently provide insurance to drivers; however, we are working on establishing relationships with insurance carriers..."</p>
-              </div>
-              
-              <div className="bg-white border-l-4 border-red-600 p-4 rounded-r-lg shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xl">⚖️</span>
-                  <span className="font-bold text-red-800">Class Action Lawsuit (Dec 2022)</span>
-                </div>
-                <p className="text-gray-600 text-sm">"The suit claims that Empower neither supplies auto insurance to its drivers nor requires them to maintain any coverage of their own, and purportedly conducts no background checks of any kind on its drivers."</p>
-              </div>
-              
-              <div className="bg-white border-l-4 border-red-700 p-4 rounded-r-lg shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xl">🏛️</span>
-                  <span className="font-bold text-red-800">DC City Council</span>
-                </div>
-                <p className="text-gray-600 text-sm">Empower agreed to suspend ride operations in Washington, D.C. after regulatory pressure.</p>
-              </div>
-              
-              <div className="bg-white border-l-4 border-orange-500 p-4 rounded-r-lg shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xl">🚕</span>
-                  <span className="font-bold text-red-800">NYC TLC Warning</span>
-                </div>
-                <p className="text-gray-600 text-sm">NYC TLC set up a dedicated warning website. Drivers face $500 fines, vehicle owners up to $10,000.</p>
-              </div>
-              
-              <div className="bg-white border-l-4 border-orange-600 p-4 rounded-r-lg shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xl">💼</span>
-                  <span className="font-bold text-red-800">Injury Law Firms</span>
-                </div>
-                <p className="text-gray-600 text-sm">"Uber and Lyft carry $1 million in bodily injury and property damage liability coverage when a driver is picking up or transporting a passenger. Empower carries none of this."</p>
-              </div>
-              
-              <div className="bg-white border-l-4 border-orange-700 p-4 rounded-r-lg shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xl">📱</span>
-                  <span className="font-bold text-red-800">Rideshare Guy Review</span>
-                </div>
-                <p className="text-gray-600 text-sm">"Empower does not provide insurance to drivers (you'll have to find your own rideshare insurance for now)."</p>
+        {/* What AYRO Learns */}
+        <div className="mb-8">
+          <div className="text-xs font-bold tracking-[0.2em] uppercase mb-1 text-[#423DF9]">04 · Lessons</div>
+          <h2 className="text-2xl font-extrabold text-[#1D0652] mb-3">What AYRO Learns</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <div className="text-xs font-bold uppercase tracking-widest mb-2 text-[#10B981]">✅ Proves</div>
+              <div className="space-y-1.5 text-sm text-gray-600">
+                <p>• Demand is massive</p>
+                <p>• Drivers switch immediately</p>
+                <p>• Price goes viral ($28 vs $68)</p>
+                <p>• Uber IS scared</p>
               </div>
             </div>
-            
-            {/* Summary Table */}
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
-              <div className="bg-red-100 px-4 py-3 border-b border-red-200">
-                <h4 className="font-bold text-red-800">Summary: How Empower's Insurance (Non-)Model Works</h4>
-              </div>
-              <table className="w-full text-sm">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="text-left p-3 border-b">Question</th>
-                    <th className="text-left p-3 border-b">Answer</th>
-                    <th className="text-left p-3 border-b">Source</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b">
-                    <td className="p-3">Does Empower carry a TNC commercial policy?</td>
-                    <td className="p-3 font-bold text-red-600">No</td>
-                    <td className="p-3 text-gray-500">Empower FAQ, Class action lawsuit</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-3">Does Empower require drivers to have rideshare insurance?</td>
-                    <td className="p-3 font-bold text-red-600">No — doesn't require OR verify</td>
-                    <td className="p-3 text-gray-500">Class action: "neither supplies nor requires"</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-3">Does Empower do background checks?</td>
-                    <td className="p-3 font-bold text-red-600">No</td>
-                    <td className="p-3 text-gray-500">Class action lawsuit</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-3">What happens in an accident?</td>
-                    <td className="p-3 font-bold text-red-600">Rider and driver are on their own</td>
-                    <td className="p-3 text-gray-500">TLC, injury attorneys, class action</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-3">Has this caused legal trouble?</td>
-                    <td className="p-3 font-bold text-red-600">Yes — class action in DC, shut down in DC, fighting NYC TLC</td>
-                    <td className="p-3 text-gray-500">Multiple sources</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3">Is Empower working on adding insurance?</td>
-                    <td className="p-3 font-bold text-orange-600">They say they're "working on it"</td>
-                    <td className="p-3 text-gray-500">Empower FAQ</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            
-            {/* What This Means for AYRO */}
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-6">
-              <h4 className="text-xl font-bold text-green-800 mb-3">🎯 What This Means for AYRO</h4>
-              <p className="text-green-700 text-lg leading-relaxed mb-4">
-                This is 100% confirmed. Empower's low prices are partly because they skip insurance entirely. That's a ticking time bomb — one fatal accident with no coverage and it's company-ending litigation.
-              </p>
-              <div className="bg-white border border-green-400 rounded-lg p-4">
-                <p className="text-lg font-semibold text-green-900">
-                  <span className="text-green-600">AYRO's positioning:</span> "Empower proved the demand for half-price rides. But they did it by skipping insurance — no coverage, no background checks, and they got shut down in DC and sued in a class action. AYRO delivers the same pricing but with full TNC insurance, full transparency, and full compliance. We're Empower's economics done legally."
-                </p>
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <div className="text-xs font-bold uppercase tracking-widest mb-2 text-[#EF4444]">❌ Got Wrong</div>
+              <div className="space-y-1.5 text-sm text-gray-600">
+                <p>• Launched without license</p>
+                <p>• Drivers set own prices</p>
+                <p>• Subscription punishes low-volume</p>
+                <p>• Insurance gap</p>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+
+        {/* Investor pitch */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
+          <div className="text-xs font-bold uppercase tracking-widest mb-2 text-[#423DF9]">Pitch for Investors</div>
+          <p className="text-sm text-[#1D0652] font-semibold">"Empower proved our thesis in NYC — tens of thousands of rides at 50-60% less than Uber, despite being illegal. AYRO is the same economics with three fixes: full compliance, consistent pricing, and insurance. We're Empower done right."</p>
+        </div>
+
+        {/* Insurance deep-dive */}
+        <div className="mb-8">
+          <div className="text-xs font-bold tracking-[0.2em] uppercase mb-1 text-[#EF4444]">05 · Insurance</div>
+          <h2 className="text-2xl font-extrabold text-[#1D0652] mb-3">Confirmed: Empower Does NOT Provide Insurance</h2>
+          <div className="bg-white rounded-xl border border-gray-200 p-5 mb-4">
+            <p className="text-gray-600 text-sm italic">"Empower does not currently provide insurance to drivers; however, we are working on establishing relationships with insurance carriers to help provide drivers with the most affordable options."</p>
+            <p className="text-xs text-gray-400 mt-2">— Empower FAQ</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            {[
+              ['Empower FAQ', '"Empower does not currently provide insurance to drivers..."'],
+              ['Class Action Lawsuit (Dec 2022)', '"The suit claims Empower neither supplies auto insurance nor requires drivers to maintain coverage, and conducts no background checks."'],
+              ['DC City Council', 'Empower agreed to suspend ride operations in Washington, D.C. after regulatory pressure.'],
+              ['NYC TLC Warning', 'NYC TLC set up a dedicated warning website. Drivers face $500 fines, vehicle owners up to $10,000.'],
+              ['Injury Law Firms', '"Uber and Lyft carry $1 million in bodily injury and property damage liability coverage. Empower carries none of this."'],
+              ['Rideshare Guy Review', '"Empower does not provide insurance to drivers (you\'ll have to find your own rideshare insurance for now)."'],
+            ].map(([title, desc], i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="h-1 w-full bg-red-400" />
+                <div className="p-4">
+                  <div className="text-xs font-bold text-red-500 mb-1">{title}</div>
+                  <p className="text-gray-600 text-sm">{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Summary table */}
+          <div className="bg-white rounded-xl border border-gray-200 overflow-x-auto mb-6">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100">
+                  <th className="text-left px-5 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Question</th>
+                  <th className="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Answer</th>
+                  <th className="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Source</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Does Empower carry a TNC commercial policy?', 'No', 'Empower FAQ, Class action lawsuit'],
+                  ['Does Empower require drivers to have rideshare insurance?', 'No — doesn\'t require OR verify', 'Class action'],
+                  ['Does Empower do background checks?', 'No', 'Class action lawsuit'],
+                  ['What happens in an accident?', 'Rider and driver are on their own', 'TLC, injury attorneys'],
+                  ['Has this caused legal trouble?', 'Yes — class action in DC, shut down in DC, fighting NYC TLC', 'Multiple sources'],
+                  ['Is Empower working on adding insurance?', 'They say they\'re "working on it"', 'Empower FAQ'],
+                ].map(([q, a, s], i) => (
+                  <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}>
+                    <td className="px-5 py-3 text-gray-700">{q}</td>
+                    <td className="px-4 py-3 font-semibold text-red-500">{a}</td>
+                    <td className="px-4 py-3 text-gray-400">{s}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* AYRO positioning */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
+          <div className="text-xs font-bold uppercase tracking-widest mb-2 text-[#10B981]">What This Means for AYRO</div>
+          <p className="text-gray-600 text-sm mb-3">Empower's low prices are partly because they skip insurance entirely. That's a ticking time bomb — one fatal accident with no coverage and it's company-ending litigation.</p>
+          <p className="text-sm font-semibold text-[#1D0652]">"Empower proved the demand for half-price rides. But they did it by skipping insurance. AYRO delivers the same pricing but with full TNC insurance, full transparency, and full compliance. We're Empower's economics done legally."</p>
+        </div>
+
+        <div className="rounded-xl overflow-hidden" style={{ background: 'linear-gradient(135deg, #423DF9 0%, #08D9C4 100%)' }}>
+          <div className="p-8 text-center">
+            <h3 className="text-xl font-extrabold text-white mb-2">Empower Done Right</h3>
+            <p className="text-white/80 text-sm">Same economics. Full compliance. Full insurance. That's AYRO.</p>
+          </div>
+        </div>
       </div>
     </div>
   );
