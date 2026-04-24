@@ -58,6 +58,7 @@ async function downloadFile(e, url, filename) {
 
 function LogoCard({ logo, dark }) {
   const url = fileUrl(logo.id);
+  const filename = `${logo.name.replace(/\s+/g, '_')}.png`;
   return (
     <div className="group rounded-xl overflow-hidden border border-gray-200 bg-white flex flex-col">
       <div className={`flex-1 flex items-center justify-center p-8 min-h-[180px] ${dark ? 'bg-[#1D0652]' : 'bg-gray-50'}`}>
@@ -67,7 +68,8 @@ function LogoCard({ logo, dark }) {
         <div className="text-sm font-medium text-gray-700 truncate">{logo.name}</div>
         <a
           href={url}
-          download
+          download={filename}
+          onClick={(e) => downloadFile(e, url, filename)}
           className="ml-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#423DF9] hover:text-[#1D0652] px-2.5 py-1.5 rounded-md hover:bg-[#423DF9]/5 transition-colors"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -84,6 +86,7 @@ function LogoCard({ logo, dark }) {
 
 function IconCard({ icon }) {
   const url = fileUrl(icon.id);
+  const filename = `${icon.name.replace(/\s+/g, '_')}.png`;
   return (
     <div className="group rounded-xl overflow-hidden border border-gray-200 bg-white flex flex-col">
       <div className="flex-1 flex items-center justify-center p-6 min-h-[160px] bg-gray-50">
@@ -93,7 +96,8 @@ function IconCard({ icon }) {
         <div className="text-sm font-medium text-gray-700 truncate">{icon.name}</div>
         <a
           href={url}
-          download
+          download={filename}
+          onClick={(e) => downloadFile(e, url, filename)}
           className="ml-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#423DF9] hover:text-[#1D0652] px-2.5 py-1.5 rounded-md hover:bg-[#423DF9]/5 transition-colors"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
