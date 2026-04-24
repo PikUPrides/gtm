@@ -1,79 +1,84 @@
+
 import Header from '../components/Header.jsx';
 
-export default function Sword() {
+export default function WhyWeWin() {
   const advantages = [
     {
-      icon: "💰",
-      title: "Half the price",
-      description: "Our competitive pricing model ensures customers pay significantly less than traditional alternatives."
+      num: '01',
+      title: 'Half the price',
+      description: "Our competitive pricing model ensures customers pay significantly less than traditional alternatives.",
+      color: '#423DF9',
+      icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 10v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
     },
     {
-      icon: "📊",
-      title: "No surge pricing",
-      description: "Consistent, predictable pricing with no unexpected spikes during high-demand periods."
+      num: '02',
+      title: 'No surge pricing',
+      description: "Consistent, predictable pricing with no unexpected spikes during high-demand periods.",
+      color: '#08D9C4',
+      icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6',
     },
     {
-      icon: "🔍",
-      title: "Transparency",
-      description: "Clear, upfront pricing with no hidden fees or surprise charges ever."
+      num: '03',
+      title: 'Transparency',
+      description: "Clear, upfront pricing with no hidden fees or surprise charges ever.",
+      color: '#10B981',
+      icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
     },
     {
-      icon: "📦",
-      title: "Low margin, high volume",
-      description: "Efficient operations allow us to maintain low margins while serving more customers."
-    }
+      num: '04',
+      title: 'Low margin, high volume',
+      description: "Efficient operations allow us to maintain low margins while serving more customers.",
+      color: '#7742F1',
+      icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+    <div className="min-h-screen bg-[#fafafe]" style={{ fontFamily: "'Open Sans', sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap');`}</style>
       <Header />
-      
-      <div className="max-w-6xl mx-auto px-6 py-16 pt-28">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full text-blue-700 text-sm font-medium mb-6">
-            <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
-            Competitive Advantage
-          </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-4 tracking-tight">
-            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Sword</span>
-          </h1>
-          <p className="text-xl text-slate-500 max-w-2xl mx-auto">
-            AYRO's four pillars of competitive advantage that set us apart in the market
-          </p>
-        </div>
 
-        {/* Cards Grid */}
-        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {advantages.map((item, index) => (
-            <div 
-              key={index}
-              className="group bg-white rounded-2xl p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_40px_-8px_rgba(59,130,246,0.2)] transition-all duration-300 border border-slate-100 hover:border-blue-100"
-            >
-              <div className="flex items-start gap-5">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300">
-                  {item.icon}
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-slate-500 leading-relaxed">
-                    {item.description}
-                  </p>
+      {/* Hero */}
+      <div className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1D0652 0%, #423DF9 60%, #08D9C4 100%)' }}>
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 right-20 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, #08D9C4 0%, transparent 70%)' }} />
+          <div className="absolute bottom-10 left-20 w-48 h-48 rounded-full" style={{ background: 'radial-gradient(circle, #7742F1 0%, transparent 70%)' }} />
+        </div>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-28 pb-12 relative z-10">
+          <p className="text-[#08D9C4] text-xs font-bold uppercase tracking-[0.2em] mb-2">Competitive Advantage</p>
+          <h1 className="text-white text-3xl sm:text-4xl font-extrabold mb-2 leading-tight">Why We WIN</h1>
+          <p className="text-white/70 text-base max-w-xl">AYRO's four pillars of competitive advantage that set us apart in the market.</p>
+        </div>
+        <div className="h-1" style={{ background: 'linear-gradient(90deg, #423DF9, #08D9C4, #7742F1)' }} />
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+        <div className="grid md:grid-cols-2 gap-6 mb-10">
+          {advantages.map((item) => (
+            <div key={item.num} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:shadow-[#423DF9]/8 hover:-translate-y-1 transition-all duration-200">
+              <div className="h-1 w-full" style={{ background: item.color }} />
+              <div className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: item.color + '15' }}>
+                    <svg className="w-5 h-5" style={{ color: item.color }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                      <path d={item.icon} />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: item.color }}>{item.num}</div>
+                    <h3 className="text-lg font-extrabold text-[#1D0652] mb-2">{item.title}</h3>
+                    <p className="text-gray-500 text-sm leading-relaxed">{item.description}</p>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Bottom Accent */}
-        <div className="mt-16 text-center">
-          <div className="inline-flex items-center gap-3 text-slate-400 text-sm">
-            <span className="w-12 h-px bg-gradient-to-r from-transparent to-slate-300"></span>
-            <span>Four pillars. One mission.</span>
-            <span className="w-12 h-px bg-gradient-to-l from-transparent to-slate-300"></span>
-          </div>
+        <div className="text-center text-gray-400 text-sm flex items-center justify-center gap-3">
+          <span className="w-12 h-px bg-gray-200" />
+          Four pillars. One mission.
+          <span className="w-12 h-px bg-gray-200" />
         </div>
       </div>
     </div>
