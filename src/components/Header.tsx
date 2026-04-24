@@ -76,8 +76,8 @@ export default function Header({ showBackLink = false }) {
   const strategyItems = [
     { href: '/rider-marketing', label: 'Rider Marketing' },
     { href: '/driver-marketing', label: 'Driver Marketing' },
-    { href: '/gtm', label: 'GTM Summary' },
-    { href: '/ayro-orbit', label: 'AYRO Orbit' },
+    { href: '/gtm-summary', label: 'GTM Summary' },
+    { href: '/gtm', label: 'GTM' },
     { href: '/pitch-deck', label: 'How To Pitch Deck' },
     { href: '/ed-kang-pitch-deck', label: 'Ed Kang Pitch Deck' },
     { href: '/downloads', label: 'Downloads Strategy' },
