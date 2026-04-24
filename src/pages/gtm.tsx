@@ -321,7 +321,7 @@ export default function GTM() {
     <div className="min-h-screen bg-white">
       <Header />
       <style>{CSS}</style>
-      <div className="gtm-root" style={{ paddingTop: 80 }}>
+      <div className="gtm-root">
         <nav className="toc">
           <div className="toc-inner">
             <div className="toc-brand">GTM</div>
