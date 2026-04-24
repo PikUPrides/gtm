@@ -751,7 +751,7 @@ export default function ResearchDocPage() {
                 <PersonaCard icon="🌙" name='"Safety-Seeker"' title="Night driver" traits={['Works late shifts', 'Safety-conscious', 'Loves dashcams']} fit="Mandatory dashcams = loyalty" />
                 <PersonaCard icon="🏡" name='"Low-Demand Zone"' title="Suburban driver" traits={['Hates long empty waits', 'Wants predictable zones', 'Frustrated on Uber/Lyft']} fit="Subscription model solves this" />
                 <PersonaCard icon="🎓" name='"Freedom Driver"' title="Student" traits={['Between classes', 'Flexibility first', 'Low-cost model']} fit="AYRO gives freedom" />
-                <PersonaCard icon="⚡" name='"AV Refugee"' title="Displaced by robotaxis" traits={['Earnings dropping in AV cities', 'Actively seeking new platforms', 'Frustrated with Uber/Lyft']} fit="NEW 2026: biggest recruiting pool" />
+                <PersonaCard icon="⚡" name='"Earnings-Crunched"' title="Disaffected Uber/Lyft driver" traits={['Earnings down vs 2 yrs ago', 'Fed up with opaque deactivations', 'Actively seeking alternatives']} fit="Biggest recruiting pool in 2026" />
               </div>
             </section>
 
