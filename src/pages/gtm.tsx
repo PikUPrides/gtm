@@ -3,6 +3,21 @@ import Header from '../components/Header.jsx';
 
 const FONT_HREF = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap';
 
+const TOC_ITEMS = [
+  { id: 'strategy', label: 'Strategy' },
+  { id: 'market', label: 'Market' },
+  { id: 'insight', label: 'Insight' },
+  { id: 'flywheel', label: 'Flywheel' },
+  { id: 'personas', label: 'Personas' },
+  { id: 'plan', label: '90-Day Plan' },
+  { id: 'influencers', label: 'Influencers' },
+  { id: 'channels', label: 'Channels' },
+  { id: 'budget', label: 'Budget' },
+  { id: 'econ', label: 'Unit Economics' },
+  { id: 'moat', label: 'Moat' },
+  { id: 'risks', label: 'Risks' },
+];
+
 const CSS = `
 html { scroll-behavior: smooth; }
 .gtm-root {
