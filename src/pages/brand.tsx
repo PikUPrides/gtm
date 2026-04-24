@@ -140,6 +140,8 @@ function SectionHeader({ eyebrow, title, description }) {
 export default function BrandPage() {
   const [urls, setUrls] = useState({});
   const [loading, setLoading] = useState(true);
+  const [pdfBlobUrl, setPdfBlobUrl] = useState(null);
+  const [pdfState, setPdfState] = useState('loading');
 
   useEffect(() => {
     let cancelled = false;
@@ -161,6 +163,32 @@ export default function BrandPage() {
   }, []);
 
   const pdfUrl = urls[BRAND_PDF_ID];
+
+  useEffect(() => {
+    if (!pdfUrl) return;
+    let cancelled = false;
+    let blobUrl = null;
+    setPdfState('loading');
+    fetch(pdfUrl)
+      .then((res) => {
+        if (!res.ok) throw new Error('pdf fetch failed');
+        return res.blob();
+      })
+      .then((blob) => {
+        if (cancelled) return;
+        blobUrl = URL.createObjectURL(blob);
+        setPdfBlobUrl(blobUrl);
+        setPdfState('ready');
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setPdfState('error');
+      });
+    return () => {
+      cancelled = true;
+      if (blobUrl) URL.revokeObjectURL(blobUrl);
+    };
+  }, [pdfUrl]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -225,18 +253,20 @@ export default function BrandPage() {
                   </button>
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-[#423DF9]/5 to-[#1D0652]/10 px-6 py-12 text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-white shadow-md border border-[#423DF9]/20 flex items-center justify-center">
-                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#423DF9" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                    <line x1="16" y1="13" x2="8" y2="13" />
-                    <line x1="16" y1="17" x2="8" y2="17" />
-                    <polyline points="10 9 9 9 8 9" />
-                  </svg>
-                </div>
-                <div className="text-base font-semibold text-[#1D0652] mb-1">Open in a new tab to view</div>
-                <p className="text-sm text-gray-600 max-w-md mx-auto">PDFs cannot be embedded directly here. Use Open or Download above.</p>
+              <div className="bg-gray-100" style={{ height: 'min(80vh, 760px)' }}>
+                {loading ? (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full border-2 border-gray-300 border-t-[#423DF9] animate-spin" />
+                  </div>
+                ) : pdfUrl ? (
+                  <iframe
+                    src={pdfUrl}
+                    title="AYRO Brand Guideline"
+                    className="w-full h-full border-0"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-sm text-gray-500">Unable to load PDF</div>
+                )}
               </div>
             </div>
           </section>
