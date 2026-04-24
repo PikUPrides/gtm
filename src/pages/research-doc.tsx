@@ -1141,22 +1141,24 @@ export default function ResearchDocPage() {
               <div className="mt-12 rounded-2xl bg-gradient-to-br from-[#423DF9] to-[#1D0652] p-8 text-white">
                 <div className="text-xs font-bold uppercase tracking-[0.2em] text-white/70 mb-3">Bottom line</div>
                 <h3 className="text-xl sm:text-2xl font-extrabold mb-3 leading-tight">
-                  AYRO wins if it moves <em>now</em>, in Houston first, with an unambiguous pro-driver brand.
+                  AYRO wins if it moves <em>now</em>, in DFW first, with an unambiguous pro-driver brand.
                 </h3>
                 <p className="text-sm sm:text-base text-white/90 leading-relaxed max-w-2xl">
-                  The market is bigger, pricier, and more vulnerable than the October 2025 snapshot suggested. The driver
-                  pool is more recruitable than ever. The suburbs are still wide open. The AV threat is real in Austin
-                  but a tailwind elsewhere. The window is open — it won't stay open past 2027.
+                  The market is bigger, pricier, and more vulnerable than the October 2025 snapshot suggested. Driver
+                  anger at Uber and Lyft is at a multi-year high, and riders are actively looking for a transparent,
+                  surge-free alternative. The suburbs are still wide open. The window is open — execute the 90-day
+                  plan and own DFW before extending to Houston and Austin.
                 </p>
               </div>
               <div className="mt-12 pt-6 border-t border-gray-200 text-xs text-gray-500 leading-relaxed">
                 <div className="font-bold text-gray-700 mb-1">About this document</div>
                 <p>
                   Base source: <em>Market Research.docx</em>, AYRO Inc., October 28, 2025.
-                  April 2026 update adds: 2026 Market Pulse (Section 02), AV / Robotaxi Threat (Section 09), refreshed
-                  market-share / pricing / driver-earnings figures throughout, and a restructured Strategic Recommendations list (Section 19).
+                  April 2026 update refreshes the <strong>2026 Market Pulse</strong> (Section 02) with updated
+                  market-share, pricing, and driver-earnings figures, and restructures the <strong>Strategic Recommendations</strong> (Section 18)
+                  around the DFW launch and the disaffected-driver recruiting opportunity.
                   Data sources referenced inline (Bloomberg Second Measure, Uber/Lyft FY 2024 earnings, Mordor Intelligence,
-                  TechCrunch, Fast Company, Insurance Journal, TX Occupations Code Ch. 2402).
+                  TX Occupations Code Ch. 2402).
                 </p>
               </div>
             </section>
