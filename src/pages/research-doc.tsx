@@ -522,7 +522,7 @@ export default function ResearchDocPage() {
                     { label: 'Airports', value: 'IAH + Hobby' },
                     { label: 'Rank', value: '#4 US city' },
                     { label: 'Suburbs', value: 'Under-served' },
-                    { label: 'AV threat', value: 'None yet' },
+                    { label: 'Demand', value: 'Oil & gas corp' },
                   ]}
                   highlights={[
                     'Huge airport + oil & gas corporate mobility demand',
@@ -539,12 +539,12 @@ export default function ResearchDocPage() {
                     { label: 'Airport', value: '#2 US busiest' },
                     { label: 'Fortune 500', value: 'Many HQs' },
                     { label: 'Suburbs', value: 'Dense, affluent' },
-                    { label: 'AV threat', value: 'Lyft 2026' },
+                    { label: 'Events', value: 'Heavy surge pain' },
                   ]}
                   highlights={[
                     'Plano / Frisco / Irving / McKinney high-frequency suburban usage',
                     'Sports / Cowboys / Mavs → stable pricing wins',
-                    '⚠️ Lyft robotaxis launching here in 2026',
+                    'Corporate travel + expense-friendly receipts',
                   ]}
                 />
                 <CityCard
@@ -556,12 +556,12 @@ export default function ResearchDocPage() {
                     { label: 'Passengers', value: '21M / yr' },
                     { label: 'Events', value: 'SXSW / ACL / F1' },
                     { label: 'Demo', value: 'App-first young' },
-                    { label: 'AV threat', value: 'HIGH' },
+                    { label: 'Nightlife', value: 'Major demand' },
                   ]}
                   highlights={[
                     'Top-3 US tech city, app-first consumer base',
                     'High alcohol-related incidents → safe-ride demand',
-                    '⚠️ Waymo (90 sq mi) + Tesla robotaxis already operating',
+                    'SXSW / ACL / F1 surge pricing is a perennial rider complaint',
                   ]}
                 />
                 <CityCard
