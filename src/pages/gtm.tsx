@@ -386,6 +386,32 @@ html { scroll-behavior: smooth; }
 `;
 
 export default function GTM() {
+  const tocRef = useRef(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
+
+  useEffect(() => {
+    const el = tocRef.current;
+    if (!el) return;
+    const update = () => {
+      setShowLeftArrow(el.scrollLeft > 4);
+      setShowRightArrow(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+    };
+    update();
+    el.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      el.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  }, []);
+
+  const scrollToc = (dir) => {
+    const el = tocRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * 220, behavior: 'smooth' });
+  };
+
   useEffect(() => {
     document.title = 'AYRO · Complete Go-to-Market Strategy';
     let added = false;
