@@ -4,6 +4,7 @@ import Header from '../components/Header.jsx';
 const FONT_HREF = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap';
 
 const CSS = `
+html { scroll-behavior: smooth; }
 .gtm-root {
   --ink: #0B1020;
   --ink-2: #1A1F3A;
