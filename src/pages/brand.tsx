@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 import serenities from '../api/sdk';
 import Header from '../components/Header.jsx';
@@ -100,44 +101,88 @@ function SectionHeader({ eyebrow, title, description }) {
   );
 }
 
-// ─── Banner Upload Section ────────────────────────────────────────────────────
+// ─── Banner Card ──────────────────────────────────────────────────────────────
 
-const BANNER_TABLE = 'Banners';
-
-function BannerCard({ banner, onDelete }) {
+function BannerCard({ banner, onDelete, onRename }) {
   const viewUrl = serenities.files.url(banner.FileId);
   const downloadUrl = serenities.files.downloadUrl(banner.FileId);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editName, setEditName] = useState(banner.Name);
+  const [saving, setSaving] = useState(false);
 
   const handleDelete = async () => {
     setDeleting(true);
-    try {
-      await serenities.files.delete(banner.FileId);
-    } catch (e) { /* file may already be gone */ }
-    try {
-      await serenities.entities[BANNER_TABLE].delete(banner.id);
-    } catch (e) { /* ignore */ }
+    try { await serenities.files.delete(banner.FileId); } catch (e) {}
+    try { await serenities.entities.Banners.delete(banner.id); } catch (e) {}
     onDelete(banner.id);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editName.trim()) return;
+    setSaving(true);
+    try {
+      await serenities.entities.Banners.update(banner.id, { Name: editName.trim() });
+      onRename(banner.id, editName.trim());
+      setEditing(false);
+    } catch (e) {}
+    setSaving(false);
   };
 
   return (
     <div className="group rounded-xl overflow-hidden border border-gray-200 bg-white flex flex-col hover:shadow-md transition-shadow">
-      <div className="flex-1 bg-gray-50 flex items-center justify-center min-h-[180px] overflow-hidden">
+      <div className="flex-1 bg-gray-50 flex items-center justify-center min-h-[180px] overflow-hidden relative">
         <img
           src={viewUrl}
           alt={banner.Name}
           className="max-h-48 max-w-full object-contain p-4"
         />
+        <span className="absolute top-2 right-2 text-xs font-semibold bg-white/90 border border-gray-200 text-gray-500 rounded-full px-2.5 py-0.5 shadow-sm">
+          {banner.Category || 'General'}
+        </span>
       </div>
       <div className="px-4 py-3 border-t border-gray-100">
-        <div className="flex items-center justify-between gap-2 mb-1">
-          <div className="text-sm font-semibold text-gray-800 truncate">{banner.Name}</div>
-          <span className="text-xs text-gray-400 flex-shrink-0">
-            {banner.Category || 'General'}
-          </span>
-        </div>
-        <div className="flex items-center gap-2 mt-2">
+        {editing ? (
+          <div className="flex items-center gap-2 mb-2">
+            <input
+              type="text"
+              value={editName}
+              onChange={e => setEditName(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter') handleSaveEdit(); if (e.key === 'Escape') setEditing(false); }}
+              className="flex-1 px-2.5 py-1.5 rounded-lg border border-[#423DF9] text-sm text-gray-800 outline-none focus:ring-2 focus:ring-[#423DF9]/10"
+              autoFocus
+            />
+            <button
+              onClick={handleSaveEdit}
+              disabled={saving}
+              className="px-2.5 py-1.5 rounded-md text-xs font-bold text-white bg-[#423DF9] hover:bg-[#1D0652] disabled:opacity-50 transition-colors"
+            >
+              {saving ? '…' : 'Save'}
+            </button>
+            <button
+              onClick={() => setEditing(false)}
+              className="px-2 py-1.5 rounded-md text-xs text-gray-400 hover:text-gray-600"
+            >
+              ✕
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <div className="text-sm font-semibold text-gray-800 truncate">{banner.Name}</div>
+            <button
+              onClick={() => { setEditName(banner.Name); setEditing(true); }}
+              className="flex-shrink-0 text-gray-300 hover:text-[#423DF9] transition-colors"
+              title="Rename"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+            </button>
+          </div>
+        )}
+        <div className="flex items-center gap-2">
           <a
             href={downloadUrl}
             download={banner.Name}
@@ -187,6 +232,8 @@ function BannerCard({ banner, onDelete }) {
 
 const CATEGORIES = ['Social', 'Web', 'Email', 'Print', 'Partner', 'General'];
 
+// ─── Banners Section ──────────────────────────────────────────────────────────
+
 function BannersSection() {
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -198,19 +245,17 @@ function BannersSection() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [filterCat, setFilterCat] = useState('All');
+  const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
 
-  useEffect(() => {
-    loadBanners();
-  }, []);
+  useEffect(() => { loadBanners(); }, []);
 
   const loadBanners = async () => {
     setLoading(true);
     try {
-      const rows = await serenities.entities[BANNER_TABLE].list('-createdAt');
+      const rows = await serenities.entities.Banners.list('-createdAt');
       setBanners(rows || []);
     } catch (e) {
-      // table may not exist yet — start empty
       setBanners([]);
     }
     setLoading(false);
@@ -219,11 +264,10 @@ function BannersSection() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    if (!file.type.startsWith('image/')) { setError('Please select an image file.'); return; }
     setSelectedFile(file);
-    // Set default name from filename
     const nameWithoutExt = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
     setUploadName(nameWithoutExt);
-    // Preview
     const reader = new FileReader();
     reader.onload = (ev) => setPreview(ev.target.result);
     reader.readAsDataURL(file);
@@ -232,13 +276,10 @@ function BannersSection() {
 
   const handleDrop = (e) => {
     e.preventDefault();
+    setDragOver(false);
     const file = e.dataTransfer.files[0];
     if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      setError('Please drop an image file.');
-      return;
-    }
-    // Trigger the same flow
+    if (!file.type.startsWith('image/')) { setError('Please drop an image file.'); return; }
     const dt = new DataTransfer();
     dt.items.add(file);
     fileInputRef.current.files = dt.files;
@@ -248,14 +289,13 @@ function BannersSection() {
   const handleUpload = async () => {
     if (!selectedFile) { setError('Please select a file first.'); return; }
     if (!uploadName.trim()) { setError('Please enter a banner name.'); return; }
-
     setUploading(true);
     setError('');
     try {
       const result = await serenities.files.upload(selectedFile);
-      if (!result?.file?.id) throw new Error('Upload failed');
+      if (!result?.file?.id) throw new Error('Upload failed — no file ID returned');
 
-      await serenities.entities[BANNER_TABLE].create({
+      await serenities.entities.Banners.create({
         Name: uploadName.trim(),
         FileId: result.file.id,
         Category: uploadCategory,
@@ -263,7 +303,7 @@ function BannersSection() {
         MimeType: selectedFile.type,
       });
 
-      setSuccess(`"${uploadName}" uploaded successfully!`);
+      setSuccess(`"${uploadName.trim()}" uploaded successfully!`);
       setSelectedFile(null);
       setPreview(null);
       setUploadName('');
@@ -272,14 +312,13 @@ function BannersSection() {
       await loadBanners();
       setTimeout(() => setSuccess(''), 4000);
     } catch (e) {
-      setError('Upload failed. ' + (e?.message || ''));
+      setError('Upload failed. ' + (e?.message || 'Please try again.'));
     }
     setUploading(false);
   };
 
-  const handleDelete = (id) => {
-    setBanners(prev => prev.filter(b => b.id !== id));
-  };
+  const handleDelete = (id) => setBanners(prev => prev.filter(b => b.id !== id));
+  const handleRename = (id, newName) => setBanners(prev => prev.map(b => b.id === id ? { ...b, Name: newName } : b));
 
   const filtered = filterCat === 'All' ? banners : banners.filter(b => (b.Category || 'General') === filterCat);
 
@@ -308,13 +347,21 @@ function BannersSection() {
           <div className="grid sm:grid-cols-2 gap-5">
             {/* Drop zone */}
             <div
-              onDragOver={(e) => e.preventDefault()}
+              onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+              onDragLeave={() => setDragOver(false)}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className="relative cursor-pointer rounded-xl border-2 border-dashed border-gray-200 hover:border-[#423DF9]/50 hover:bg-[#423DF9]/2 transition-colors flex flex-col items-center justify-center min-h-[180px] gap-3 bg-gray-50"
+              className={`relative cursor-pointer rounded-xl border-2 border-dashed transition-all flex flex-col items-center justify-center min-h-[180px] gap-3
+                ${dragOver ? 'border-[#423DF9] bg-[#423DF9]/5 scale-[1.01]' : preview ? 'border-[#423DF9]/40 bg-white' : 'border-gray-200 bg-gray-50 hover:border-[#423DF9]/50 hover:bg-[#423DF9]/2'}`}
             >
               {preview ? (
-                <img src={preview} alt="Preview" className="max-h-40 max-w-full object-contain rounded-lg p-2" />
+                <div className="relative w-full h-full flex items-center justify-center p-3">
+                  <img src={preview} alt="Preview" className="max-h-40 max-w-full object-contain rounded-lg" />
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setPreview(null); setSelectedFile(null); if (fileInputRef.current) fileInputRef.current.value = ''; }}
+                    className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-red-500 shadow-sm text-xs font-bold"
+                  >✕</button>
+                </div>
               ) : (
                 <>
                   <div className="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-sm">
@@ -325,7 +372,7 @@ function BannersSection() {
                     </svg>
                   </div>
                   <div className="text-center">
-                    <div className="text-sm font-semibold text-gray-700">Drop image here or click to browse</div>
+                    <div className="text-sm font-semibold text-gray-700">{dragOver ? 'Drop to upload' : 'Drop image here or click to browse'}</div>
                     <div className="text-xs text-gray-400 mt-1">PNG, JPG, SVG, WebP · any size</div>
                   </div>
                 </>
@@ -347,6 +394,7 @@ function BannersSection() {
                   type="text"
                   value={uploadName}
                   onChange={(e) => setUploadName(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleUpload()}
                   placeholder="e.g. Instagram Story — Launch"
                   className="w-full px-3.5 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-[#423DF9] focus:ring-2 focus:ring-[#423DF9]/10 transition-all"
                 />
@@ -365,15 +413,38 @@ function BannersSection() {
                   ))}
                 </div>
               </div>
-              {error && <div className="text-xs text-red-500 font-medium">{error}</div>}
-              {success && <div className="text-xs text-emerald-600 font-medium">{success}</div>}
+              {error && (
+                <div className="flex items-center gap-2 text-xs text-red-600 font-medium bg-red-50 border border-red-100 rounded-lg px-3 py-2">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  {error}
+                </div>
+              )}
+              {success && (
+                <div className="flex items-center gap-2 text-xs text-emerald-700 font-medium bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  {success}
+                </div>
+              )}
               <button
                 onClick={handleUpload}
                 disabled={uploading || !selectedFile}
-                className="mt-auto w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                className="mt-auto w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 style={{ background: 'linear-gradient(135deg, #423DF9, #7742F1)' }}
               >
-                {uploading ? 'Uploading…' : 'Upload Banner'}
+                {uploading ? (
+                  <>
+                    <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10" strokeOpacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" /></svg>
+                    Uploading…
+                  </>
+                ) : (
+                  <>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" />
+                      <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
+                    </svg>
+                    Upload Banner
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -391,7 +462,11 @@ function BannersSection() {
               className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${filterCat === cat ? 'bg-[#1D0652] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
             >
               {cat}
-              {cat === 'All' ? ` (${banners.length})` : banners.filter(b => (b.Category || 'General') === cat).length > 0 ? ` (${banners.filter(b => (b.Category || 'General') === cat).length})` : ''}
+              {cat === 'All'
+                ? ` (${banners.length})`
+                : banners.filter(b => (b.Category || 'General') === cat).length > 0
+                  ? ` (${banners.filter(b => (b.Category || 'General') === cat).length})`
+                  : ''}
             </button>
           ))}
         </div>
@@ -419,7 +494,7 @@ function BannersSection() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map(b => (
-            <BannerCard key={b.id} banner={b} onDelete={handleDelete} />
+            <BannerCard key={b.id} banner={b} onDelete={handleDelete} onRename={handleRename} />
           ))}
         </div>
       )}
