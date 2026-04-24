@@ -430,17 +430,17 @@ export default function ResearchDocPage() {
               <Callout tone="success" title="Tailwinds for AYRO">
                 <ul className="space-y-1.5">
                   <li>• Rising rider prices (+7.5% YoY) make AYRO's no-surge transparent-fare pitch sharper than ever.</li>
-                  <li>• Driver churn is accelerating as rate cuts, opaque deactivations, and AV competition compound frustration.</li>
+                  <li>• Driver churn is accelerating as rate cuts, opaque deactivations, and rising fuel / insurance compound frustration.</li>
                   <li>• 72% of Americans still don't use rideshare at all — the category has massive headroom.</li>
-                  <li>• Regulatory momentum is shifting toward gig-worker protection (EU Platform Worker Directive, Dec 2026; CA Prop 22 lawsuits, April 2026).</li>
+                  <li>• Regulatory momentum is shifting toward gig-worker protection (EU Platform Worker Directive, Dec 2026; CA Prop 22 lawsuits, April 2026) — validating AYRO's fair-treatment positioning.</li>
                 </ul>
               </Callout>
               <Callout tone="danger" title="Headwinds AYRO must plan for">
                 <ul className="space-y-1.5">
-                  <li>• <strong>Robotaxis are here.</strong> Waymo covers 90 sq mi of Austin and already runs ~20% of Uber rides in that territory.</li>
-                  <li>• <strong>Tesla launched paid robotaxis in Austin</strong> (early 2026) — a second AV competitor in AYRO's launch metro.</li>
-                  <li>• <strong>Lyft is launching robotaxis in Dallas in 2026</strong> — AYRO's Phase 2 city.</li>
-                  <li>• Uber/Lyft are weaponizing AV partnerships to depress wages and extract more from human drivers — the window to recruit disaffected drivers is open, but closing.</li>
+                  <li>• <strong>Trust deficit across the category.</strong> Uber/Lyft safety and surge scandals have eroded rider goodwill — AYRO must earn trust, not assume it.</li>
+                  <li>• <strong>Insurance costs rising 12–16% per year.</strong> TNC-specific coverage is a material P&L line; dashcam-led claim defensibility is essential.</li>
+                  <li>• <strong>Driver operational squeeze.</strong> Fuel is 30–45% of driver cost; when gas spikes, marginal drivers go offline on every platform — AYRO needs fuel partnerships and EV incentives ready at launch.</li>
+                  <li>• <strong>Incumbent discounting.</strong> Uber/Lyft will respond to an AYRO launch with rider promo pushes. AYRO's defense is driver loyalty (they don't churn) and transparent pricing (riders don't get tricked back).</li>
                 </ul>
               </Callout>
             </section>
