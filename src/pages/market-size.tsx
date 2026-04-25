@@ -308,7 +308,7 @@ export default function MarketSizeAnalogy() {
                   {
                     icon: '🔄',
                     title: 'Driver Churn Death Spiral',
-                    desc: '50-60% of new rideshare drivers quit within 12 months. Austin\'s labor pool (~2.6M) is 13x smaller than Texas (~31.7M). You\'re constantly replacing half your drivers from a tiny pool.',
+                    desc: 'A Stanford/Uber study found 68% of drivers quit within 6 months. Austin\'s labor pool (~2.6M) is 12x smaller than Texas (~31.7M). You\'re constantly replacing most of your drivers from a tiny pool.',
                   },
                   {
                     icon: '⏱️',
