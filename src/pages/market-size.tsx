@@ -238,8 +238,8 @@ export default function MarketSizeAnalogy() {
         {activeSlide === 0 && (
           <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
             <div className="px-6 sm:px-10 pt-8 pb-4 border-b border-gray-100">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#1D0652]">The Perceived Problem</h2>
-              <p className="text-[#423DF9] text-lg mt-1 italic">"You're launching in one city against a global giant"</p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#1D0652]">The Investor's Suggestion</h2>
+              <p className="text-[#423DF9] text-lg mt-1 italic">"Just start with one city — prove it there first"</p>
             </div>
 
             <div className="px-6 sm:px-10 py-12">
@@ -257,15 +257,15 @@ export default function MarketSizeAnalogy() {
                   <AntSVG size={32} color="#94A3B8" />
                   <div className="mt-4 text-center">
                     <div className="text-base font-bold text-gray-400">AYRO</div>
-                    <div className="text-sm text-gray-400">One city?</div>
-                    <div className="text-xs text-gray-300 mt-1">"How can you compete?"</div>
+                    <div className="text-sm text-gray-400">Austin only</div>
+                    <div className="text-xs text-gray-300 mt-1">~2.6M people</div>
                   </div>
                 </div>
               </div>
 
               <div className="bg-red-50 border border-red-200 rounded-xl px-6 py-4 max-w-lg mx-auto text-center">
                 <p className="text-red-700 text-sm font-medium">
-                  This is what investors picture when they hear "we're launching in one city"
+                  Launching in one city makes AYRO an ant competing against an elephant. Why limit ourselves when Texas gives us a much bigger play?
                 </p>
               </div>
             </div>
