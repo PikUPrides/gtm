@@ -64,6 +64,7 @@ export default function Header({ showBackLink = false }) {
   const gtmItems = [
     { href: '/gtm', label: 'GTM Strategy Doc' },
     { href: '/flywheel', label: 'The Flywheel' },
+    { href: '/market-size', label: 'Market Size Analogy' },
     { href: '/metrics-dashboard', label: 'Metrics Dashboard' },
     { href: '/cohort-retention', label: 'Cohort Retention Analysis' },
     { href: '/unit-economics', label: 'Unit Economics' },
