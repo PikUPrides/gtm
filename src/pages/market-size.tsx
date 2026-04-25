@@ -234,20 +234,20 @@ export default function MarketSizeAnalogy() {
 
         {/* Bottom narrative */}
         <div className="mt-10 bg-gradient-to-r from-[#1D0652] to-[#423DF9] rounded-2xl px-6 sm:px-10 py-8 text-white">
-          <h3 className="text-xl font-bold mb-3">The Strategy: Dominate, Then Expand</h3>
+          <h3 className="text-xl font-bold mb-3">The Strategy: Own Texas, Then Go National</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
             <div className="flex gap-3">
               <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 text-sm font-bold">1</div>
               <div>
-                <div className="font-semibold">Win Austin</div>
-                <div className="text-white/70 mt-1">Prove the model, build density, own the city</div>
+                <div className="font-semibold">Launch in Texas</div>
+                <div className="text-white/70 mt-1">Austin, Houston, Dallas, San Antonio — a 30M+ person market from day one</div>
               </div>
             </div>
             <div className="flex gap-3">
               <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 text-sm font-bold">2</div>
               <div>
-                <div className="font-semibold">Expand Across Texas</div>
-                <div className="text-white/70 mt-1">Houston, Dallas, San Antonio — 30M+ market</div>
+                <div className="font-semibold">Dominate the State</div>
+                <div className="text-white/70 mt-1">Build density, prove unit economics, become the Texas rideshare brand</div>
               </div>
             </div>
             <div className="flex gap-3">
