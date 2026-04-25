@@ -269,6 +269,86 @@ export default function MarketSizeAnalogy() {
                 </p>
               </div>
             </div>
+
+            {/* What Could Go Wrong */}
+            <div className="px-6 sm:px-10 py-8 border-t border-gray-100">
+              <h3 className="text-lg font-bold text-[#1D0652] mb-1">What Happens When You Launch in One City?</h3>
+              <p className="text-xs text-gray-500 mb-6">Every single-city rideshare competitor in the US has failed. Here's why.</p>
+
+              {/* Graveyard */}
+              <div className="mb-6">
+                <div className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-3">The Single-City Graveyard</div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {[
+                    { name: 'Ride Austin', city: 'Austin', years: '2016–2020', detail: 'Gained 300K users when Uber/Lyft left Austin. When HB 100 brought them back in 2017, market share collapsed. COVID finished it off.' },
+                    { name: 'Fasten', city: 'Boston & Austin', years: '2016–2017', detail: 'Charged drivers flat $0.99/ride. Expanded to Austin during Uber/Lyft absence. Shut down within months of their return.' },
+                    { name: 'Juno', city: 'NYC', years: '2016–2019', detail: 'Raised $30M+, offered better driver splits. Even NYC wasn\'t big enough. Acquired at distressed value, shut down Nov 2019.' },
+                    { name: 'Bridj', city: 'Kansas City & Boston', years: '2014–2017', detail: 'Microtransit in 2 cities. Raised $11M. Never reached density for reliable service. Shut down April 2017.' },
+                  ].map((c) => (
+                    <div key={c.name} className="bg-red-50/50 border border-red-100 rounded-xl p-4">
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="text-sm font-bold text-[#1D0652]">{c.name}</div>
+                        <div className="text-[10px] text-red-400 font-medium">{c.years}</div>
+                      </div>
+                      <div className="text-[10px] text-red-500 font-medium mb-1.5">{c.city}</div>
+                      <div className="text-xs text-gray-500 leading-relaxed">{c.detail}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Risk Categories */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                {[
+                  {
+                    icon: '⚔️',
+                    title: 'Uber Will Crush You',
+                    desc: 'Uber has a proven playbook: surge driver bonuses, rider discounts, below-cost pricing. They can sustain losses in one city indefinitely — offsetting with revenue from hundreds of others. A single-city startup cannot match this.',
+                  },
+                  {
+                    icon: '🔄',
+                    title: 'Driver Churn Death Spiral',
+                    desc: '50-60% of new rideshare drivers quit within 12 months. Austin\'s labor pool (~2.6M) is 13x smaller than Texas (~31.7M). You\'re constantly replacing half your drivers from a tiny pool.',
+                  },
+                  {
+                    icon: '⏱️',
+                    title: 'Network Density Trap',
+                    desc: 'Riders need ETAs under 5 minutes. Austin is 300+ sq miles. With a limited driver fleet, wait times in South Austin, East Austin, and suburbs will be too long. Bad ETAs → riders leave → fewer rides → drivers leave.',
+                  },
+                  {
+                    icon: '⚖️',
+                    title: 'One Regulation Away from Death',
+                    desc: 'Austin Prop 1 (2016) forced Uber/Lyft out overnight. One city council vote, one unfavorable ruling = your entire business is threatened. No fallback markets.',
+                  },
+                  {
+                    icon: '💸',
+                    title: 'Fixed Costs Don\'t Scale Down',
+                    desc: 'Engineering, product, support, insurance, legal, compliance — these costs stay the same whether you\'re in 1 city or 20. Austin\'s revenue ceiling is too low to cover them profitably.',
+                  },
+                  {
+                    icon: '📉',
+                    title: 'Austin-Specific Macro Risk',
+                    desc: 'Austin\'s tech boom slowed in 2023-2024. Dell, Meta, Google, Amazon all cut Austin jobs. Growth is moderating. All eggs in one basket with no hedge against a local downturn.',
+                  },
+                ].map((risk) => (
+                  <div key={risk.title} className="flex gap-3 py-1">
+                    <span className="text-lg flex-shrink-0">{risk.icon}</span>
+                    <div>
+                      <div className="text-sm font-semibold text-[#1D0652]">{risk.title}</div>
+                      <div className="text-xs text-gray-500 mt-0.5 leading-relaxed">{risk.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Austin Prop 1 callout */}
+              <div className="mt-6 bg-gradient-to-r from-red-900 to-red-700 rounded-xl px-5 py-4 text-white">
+                <div className="text-sm font-semibold mb-1">The Austin Cautionary Tale</div>
+                <div className="text-xs text-white/80 leading-relaxed">
+                  In 2016, Austin passed Prop 1 requiring fingerprint-based background checks. Uber and Lyft <strong>left the city entirely</strong>. Local startups (Ride Austin, Fasten, GetMe, Fare) rushed in. When Texas passed HB 100 in 2017 preempting local rules, Uber/Lyft returned within days. <strong>Every single local competitor was marginalized or destroyed.</strong> Austin is literally the worst city in America to bet on as a single-market rideshare play.
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
