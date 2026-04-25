@@ -280,10 +280,10 @@ export default function MarketSizeAnalogy() {
                 <div className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-3">The Single-City Graveyard</div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {[
-                    { name: 'Ride Austin', city: 'Austin', years: '2016–2020', detail: 'Gained 300K users when Uber/Lyft left Austin. When HB 100 brought them back in 2017, market share collapsed. COVID finished it off.' },
-                    { name: 'Fasten', city: 'Boston & Austin', years: '2016–2017', detail: 'Charged drivers flat $0.99/ride. Expanded to Austin during Uber/Lyft absence. Shut down within months of their return.' },
-                    { name: 'Juno', city: 'NYC', years: '2016–2019', detail: 'Raised $30M+, offered better driver splits. Even NYC wasn\'t big enough. Acquired at distressed value, shut down Nov 2019.' },
-                    { name: 'Bridj', city: 'Kansas City & Boston', years: '2014–2017', detail: 'Microtransit in 2 cities. Raised $11M. Never reached density for reliable service. Shut down April 2017.' },
+                    { name: 'Ride Austin', city: 'Austin', years: '2016–2020', detail: 'Nonprofit launched after Uber/Lyft left. Delivered nearly 3M rides. Volume dropped 62% in the first week after Uber/Lyft returned (May 2017). Permanently shut down June 2020.' },
+                    { name: 'Fasten', city: 'Boston & Austin', years: '2015–2018', detail: 'Charged drivers flat $0.99/ride. Expanded to Austin during Uber/Lyft absence. Couldn\'t compete after their return — acquired by Russian firm Vezet, US ops ceased March 2018.' },
+                    { name: 'Juno', city: 'NYC', years: '2016–2019', detail: 'Raised ~$30M, acquired by Gett for $200M in 2017. Even in the biggest US city, it was losing ~$1M/day. Filed Chapter 11 bankruptcy Nov 2019.' },
+                    { name: 'Bridj', city: 'Boston, KC & others', years: '2014–2017', detail: 'Raised $11M for microtransit. Kansas City pilot got only ~1,480 riders in a year vs. projected 200/day. Shut down April 2017 when Toyota deal fell through.' },
                   ].map((c) => (
                     <div key={c.name} className="bg-red-50/50 border border-red-100 rounded-xl p-4">
                       <div className="flex items-center justify-between mb-1">
