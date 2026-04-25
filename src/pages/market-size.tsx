@@ -55,25 +55,132 @@ const AntSVG = ({ size = 36, color = '#94A3B8' }) => (
   </svg>
 );
 
-const TexasMapSVG = ({ size = 120, color = '#423DF9' }) => (
-  <svg width={size} height={size * 0.9} viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M60 10 L100 10 L105 5 L115 5 L120 10 L160 10 L165 15 L165 40 L180 55 L185 70 L175 85 L165 100 L155 120 L140 135 L130 155 L115 165 L100 170 L85 165 L70 155 L55 140 L40 125 L30 105 L25 85 L30 65 L40 45 L50 25 Z" fill={color} opacity="0.15" stroke={color} strokeWidth="2" />
-    <circle cx="95" cy="70" r="4" fill={color} />
-    <text x="95" y="62" textAnchor="middle" fontSize="8" fill={color} fontWeight="bold">DFW</text>
-    <circle cx="110" cy="105" r="4" fill={color} />
-    <text x="110" y="97" textAnchor="middle" fontSize="8" fill={color} fontWeight="bold">AUS</text>
-    <circle cx="130" cy="115" r="4" fill={color} />
-    <text x="143" y="118" textAnchor="middle" fontSize="8" fill={color} fontWeight="bold">HOU</text>
-    <circle cx="85" cy="110" r="4" fill={color} />
-    <text x="72" y="113" textAnchor="middle" fontSize="8" fill={color} fontWeight="bold">SA</text>
-    {/* Route lines */}
-    <line x1="95" y1="70" x2="110" y2="105" stroke={color} strokeWidth="1" strokeDasharray="4 3" opacity="0.4" />
-    <line x1="95" y1="70" x2="130" y2="115" stroke={color} strokeWidth="1" strokeDasharray="4 3" opacity="0.4" />
-    <line x1="110" y1="105" x2="85" y2="110" stroke={color} strokeWidth="1" strokeDasharray="4 3" opacity="0.4" />
-    <line x1="110" y1="105" x2="130" y2="115" stroke={color} strokeWidth="1" strokeDasharray="4 3" opacity="0.4" />
-    <line x1="85" y1="110" x2="130" y2="115" stroke={color} strokeWidth="1" strokeDasharray="4 3" opacity="0.4" />
-  </svg>
-);
+const TEXAS_METROS = [
+  { name: 'Dallas-Fort Worth', lat: 32.7767, lng: -96.7970, pop: '8.1M' },
+  { name: 'Houston', lat: 29.7604, lng: -95.3698, pop: '7.5M' },
+  { name: 'San Antonio', lat: 29.4241, lng: -98.4936, pop: '2.8M' },
+  { name: 'Austin', lat: 30.2672, lng: -97.7431, pop: '2.6M' },
+];
+
+const TEXAS_GEOJSON_URL = 'https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json';
+
+function TexasMap() {
+  const mapRef = useRef(null);
+  const mapInstance = useRef(null);
+
+  useEffect(() => {
+    if (mapInstance.current) return;
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(link);
+
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.onload = () => {
+      const L = window.L;
+      const map = L.map(mapRef.current, {
+        center: [31.0, -97.5],
+        zoom: 6,
+        minZoom: 5,
+        maxZoom: 9,
+        zoomControl: false,
+        scrollWheelZoom: false,
+      });
+
+      L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 19,
+      }).addTo(map);
+
+      fetch(TEXAS_GEOJSON_URL)
+        .then(r => r.json())
+        .then(geojson => {
+          const texas = geojson.features.find(f => f.properties.name === 'Texas');
+          if (texas) {
+            L.geoJSON(texas, {
+              style: {
+                fillColor: '#423DF9',
+                fillOpacity: 0.08,
+                weight: 2.5,
+                color: '#423DF9',
+                opacity: 0.5,
+              },
+            }).addTo(map);
+          }
+        });
+
+      const routes = [];
+      for (let i = 0; i < TEXAS_METROS.length; i++) {
+        for (let j = i + 1; j < TEXAS_METROS.length; j++) {
+          routes.push([
+            [TEXAS_METROS[i].lat, TEXAS_METROS[i].lng],
+            [TEXAS_METROS[j].lat, TEXAS_METROS[j].lng],
+          ]);
+        }
+      }
+      routes.forEach(coords => {
+        L.polyline(coords, {
+          color: '#423DF9',
+          weight: 2,
+          opacity: 0.3,
+          dashArray: '8 6',
+        }).addTo(map);
+      });
+
+      TEXAS_METROS.forEach(metro => {
+        const popNum = parseFloat(metro.pop);
+        const radius = Math.max(12, popNum * 4);
+
+        L.circleMarker([metro.lat, metro.lng], {
+          radius: radius,
+          fillColor: '#423DF9',
+          fillOpacity: 0.2,
+          color: '#423DF9',
+          weight: 2,
+          opacity: 0.6,
+        }).addTo(map);
+
+        L.circleMarker([metro.lat, metro.lng], {
+          radius: 5,
+          fillColor: '#423DF9',
+          fillOpacity: 1,
+          color: '#fff',
+          weight: 2,
+        }).addTo(map);
+
+        const icon = L.divIcon({
+          className: 'texas-metro-label',
+          html: '<div style="background:white;border:1.5px solid #423DF9;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;color:#1D0652;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.12);">' + metro.name + ' <span style="color:#423DF9;">' + metro.pop + '</span></div>',
+          iconSize: [0, 0],
+          iconAnchor: [-10, 12],
+        });
+        L.marker([metro.lat, metro.lng], { icon }).addTo(map);
+      });
+
+      mapInstance.current = map;
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      if (mapInstance.current) {
+        mapInstance.current.remove();
+        mapInstance.current = null;
+      }
+    };
+  }, []);
+
+  return (
+    <div>
+      <style>{'.texas-metro-label { background: none !important; border: none !important; box-shadow: none !important; }'}</style>
+      <div ref={mapRef} style={{ width: '100%', height: '360px', borderRadius: '12px' }} />
+    </div>
+  );
+}
 
 const StatCard = ({ value, label, sublabel, accent = false }) => (
   <div className={`rounded-xl p-5 text-center ${accent ? 'bg-[#423DF9]/5 border border-[#423DF9]/15' : 'bg-gray-50'}`}>
