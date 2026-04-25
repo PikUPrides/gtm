@@ -1,5 +1,5 @@
 import Header from '../components/Header.jsx';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const ElephantSVG = ({ size = 200, color = '#1D0652' }) => (
   <svg width={size} height={size * 0.8} viewBox="0 0 240 192" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -326,10 +326,8 @@ export default function MarketSizeAnalogy() {
                 <p className="text-gray-500 text-sm mt-1">Texas HB 100 gives one $5K statewide permit — zero reason to go city-by-city</p>
               </div>
               <div className="px-6 sm:px-10 py-8">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-center">
-                  <div className="flex justify-center">
-                    <TexasMapSVG size={180} color="#423DF9" />
-                  </div>
+                <div className="space-y-6">
+                  <TexasMap />
                   <div className="space-y-4">
                     {[
                       { city: 'Dallas-Fort Worth', pop: '8.1M', growth: '+123K/yr', gdp: '$650B+', note: 'Larger economy than Colombia' },
