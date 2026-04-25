@@ -345,7 +345,7 @@ export default function MarketSizeAnalogy() {
               <div className="mt-6 bg-gradient-to-r from-red-900 to-red-700 rounded-xl px-5 py-4 text-white">
                 <div className="text-sm font-semibold mb-1">The Austin Cautionary Tale</div>
                 <div className="text-xs text-white/80 leading-relaxed">
-                  In 2016, Austin passed Prop 1 requiring fingerprint-based background checks. Uber and Lyft <strong>left the city entirely</strong>. Local startups (Ride Austin, Fasten, GetMe, Fare) rushed in. When Texas passed HB 100 in 2017 preempting local rules, Uber/Lyft returned within days. <strong>Every single local competitor was marginalized or destroyed.</strong> Austin is literally the worst city in America to bet on as a single-market rideshare play.
+                  In December 2015, Austin City Council mandated fingerprint-based background checks for rideshare drivers. On May 7, 2016, voters rejected Prop 1 (Uber/Lyft's repeal attempt, despite their $9M campaign). <strong>Both left Austin on May 9.</strong> Local startups rushed in — Ride Austin, Fasten, GetMe, Fare, Arcade City, InstaRyde. Then Governor Abbott signed HB 100 on May 29, 2017. <strong>Lyft went live at 10:40 AM that day. Uber followed at noon.</strong> Ride Austin's volume dropped 62% in the first week. Fasten sold to a Russian firm. Every local competitor was marginalized or destroyed.
                 </div>
               </div>
             </div>
