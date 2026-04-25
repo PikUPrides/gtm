@@ -66,6 +66,12 @@ const TexasMapSVG = ({ size = 120, color = '#423DF9' }) => (
     <text x="143" y="118" textAnchor="middle" fontSize="8" fill={color} fontWeight="bold">HOU</text>
     <circle cx="85" cy="110" r="4" fill={color} />
     <text x="72" y="113" textAnchor="middle" fontSize="8" fill={color} fontWeight="bold">SA</text>
+    {/* Route lines */}
+    <line x1="95" y1="70" x2="110" y2="105" stroke={color} strokeWidth="1" strokeDasharray="4 3" opacity="0.4" />
+    <line x1="95" y1="70" x2="130" y2="115" stroke={color} strokeWidth="1" strokeDasharray="4 3" opacity="0.4" />
+    <line x1="110" y1="105" x2="85" y2="110" stroke={color} strokeWidth="1" strokeDasharray="4 3" opacity="0.4" />
+    <line x1="110" y1="105" x2="130" y2="115" stroke={color} strokeWidth="1" strokeDasharray="4 3" opacity="0.4" />
+    <line x1="85" y1="110" x2="130" y2="115" stroke={color} strokeWidth="1" strokeDasharray="4 3" opacity="0.4" />
   </svg>
 );
 
@@ -74,6 +80,20 @@ const StatCard = ({ value, label, sublabel, accent = false }) => (
     <div className={`text-2xl sm:text-3xl font-bold ${accent ? 'text-[#423DF9]' : 'text-[#1D0652]'}`}>{value}</div>
     <div className="text-xs text-gray-500 mt-1 font-medium">{label}</div>
     {sublabel && <div className="text-[10px] text-gray-400 mt-0.5">{sublabel}</div>}
+  </div>
+);
+
+const RouteRow = ({ from, to, distance, drive, type, note }) => (
+  <div className={`flex items-center gap-3 py-3 px-4 rounded-lg ${type === 'cross' ? 'bg-[#423DF9]/5' : 'bg-gray-50'}`}>
+    <div className={`w-2 h-2 rounded-full flex-shrink-0 ${type === 'cross' ? 'bg-[#423DF9]' : 'bg-gray-400'}`} />
+    <div className="flex-1 min-w-0">
+      <div className="text-sm font-semibold text-[#1D0652]">{from} → {to}</div>
+      {note && <div className="text-[10px] text-gray-400">{note}</div>}
+    </div>
+    <div className="text-right flex-shrink-0">
+      <div className={`text-sm font-bold ${type === 'cross' ? 'text-[#423DF9]' : 'text-gray-600'}`}>{distance}</div>
+      <div className="text-[10px] text-gray-400">{drive}</div>
+    </div>
   </div>
 );
 
@@ -205,10 +225,10 @@ export default function MarketSizeAnalogy() {
                   </div>
                   <div className="space-y-4">
                     {[
-                      { city: 'Dallas-Fort Worth', pop: '8.48M', growth: '+123K/yr', gdp: '$710B', note: 'Larger economy than Poland' },
-                      { city: 'Houston', pop: '7.9M', growth: '+127K/yr', gdp: '$642B', note: 'Larger economy than Argentina' },
+                      { city: 'Dallas-Fort Worth', pop: '8.1M', growth: '+123K/yr', gdp: '$650B+', note: 'Larger economy than Colombia' },
+                      { city: 'Houston', pop: '7.5M', growth: '+90K/yr', gdp: '$620B+', note: 'Comparable to Argentina' },
                       { city: 'San Antonio', pop: '2.8M', growth: '+38K/yr', gdp: '', note: '7th largest US city' },
-                      { city: 'Austin', pop: '2.62M', growth: '+54K/yr', gdp: '', note: 'Top-5 US tech hub' },
+                      { city: 'Austin', pop: '2.6M', growth: '+45K/yr', gdp: '', note: 'Top-5 US tech hub' },
                     ].map((m) => (
                       <div key={m.city} className="flex items-start gap-3">
                         <div className="w-2.5 h-2.5 rounded-full bg-[#423DF9] mt-1.5 flex-shrink-0" />
@@ -219,9 +239,62 @@ export default function MarketSizeAnalogy() {
                       </div>
                     ))}
                     <div className="pt-2 border-t border-gray-100">
-                      <div className="text-sm font-bold text-[#423DF9]">Combined: 21.8M people in 4 metros</div>
+                      <div className="text-sm font-bold text-[#423DF9]">Combined: 21M+ people in 4 metros</div>
                       <div className="text-xs text-gray-500">All under one single regulatory permit</div>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Cross-City vs Within-City Drives */}
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+              <div className="px-6 sm:px-10 pt-8 pb-4 border-b border-gray-100">
+                <h2 className="text-xl font-bold text-[#1D0652]">Cross-City vs Within-City Drives</h2>
+                <p className="text-gray-500 text-sm mt-1">Texas metros are close enough for intercity rides — a network advantage city-only players can't capture</p>
+              </div>
+              <div className="px-6 sm:px-10 py-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {/* Cross-city routes */}
+                  <div>
+                    <div className="text-xs font-semibold text-[#423DF9] uppercase tracking-wider mb-3">Cross-City Routes (Intercity Revenue)</div>
+                    <div className="space-y-2">
+                      <RouteRow from="Austin" to="San Antonio" distance="80 mi" drive="~1h 15m" type="cross" note="I-35 corridor — high commuter & event traffic" />
+                      <RouteRow from="Austin" to="Houston" distance="165 mi" drive="~2h 30m" type="cross" note="Airport transfers, business travel" />
+                      <RouteRow from="Dallas" to="Houston" distance="240 mi" drive="~3h 30m" type="cross" note="Busiest Texas corridor — $50-80+ fares" />
+                      <RouteRow from="Dallas" to="Austin" distance="195 mi" drive="~3h" type="cross" note="Tech corridor — frequent business travel" />
+                      <RouteRow from="San Antonio" to="Houston" distance="200 mi" drive="~3h" type="cross" note="Medical & military travel corridor" />
+                      <RouteRow from="Dallas" to="San Antonio" distance="275 mi" drive="~4h" type="cross" note="Event & family travel" />
+                    </div>
+                  </div>
+
+                  {/* Within-city context */}
+                  <div>
+                    <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Within-City Drives (Comparison)</div>
+                    <div className="space-y-2">
+                      <RouteRow from="North Dallas" to="South Dallas" distance="30 mi" drive="~40m" type="within" note="Typical cross-metro ride" />
+                      <RouteRow from="Katy" to="Downtown Houston" distance="28 mi" drive="~35m" type="within" note="Suburb to downtown" />
+                      <RouteRow from="Round Rock" to="Downtown Austin" distance="20 mi" drive="~25m" type="within" note="Tech corridor commute" />
+                      <RouteRow from="Avg within-city ride" to="" distance="5-8 mi" drive="~15m" type="within" note="$12-18 avg fare" />
+                    </div>
+
+                    <div className="mt-4 bg-[#423DF9]/5 border border-[#423DF9]/15 rounded-lg px-4 py-3">
+                      <div className="text-xs font-semibold text-[#1D0652] mb-1">The math:</div>
+                      <div className="text-xs text-gray-600 space-y-1">
+                        <div>Avg within-city ride: <strong>$15</strong></div>
+                        <div>Cross-city ride (Austin→SA): <strong>$80-120</strong></div>
+                        <div>Cross-city ride (DFW→Houston): <strong>$200-300</strong></div>
+                      </div>
+                      <div className="text-[10px] text-[#423DF9] font-medium mt-2">One cross-city ride = revenue of 5-20 within-city rides</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Key insight */}
+                <div className="mt-6 bg-gradient-to-r from-[#1D0652] to-[#423DF9] rounded-xl px-5 py-4 text-white">
+                  <div className="text-sm font-semibold mb-1">Why this matters for AYRO:</div>
+                  <div className="text-xs text-white/80 leading-relaxed">
+                    A city-only rideshare app can't serve the Austin→San Antonio rider. AYRO can — because one Texas permit covers every city. Cross-city rides are <strong>higher fare, higher margin</strong>, and create network lock-in: once a rider knows AYRO works between cities, they use it within cities too.
                   </div>
                 </div>
               </div>
@@ -299,7 +372,7 @@ export default function MarketSizeAnalogy() {
                   ))}
                 </div>
                 <div className="mt-4 bg-[#423DF9]/5 border border-[#423DF9]/15 rounded-lg px-4 py-3 text-center">
-                  <p className="text-xs text-[#1D0652] font-medium">Even Waymo validated this: announced 2026 expansion into Dallas, Houston, and San Antonio simultaneously.</p>
+                  <p className="text-xs text-[#1D0652] font-medium">Waymo is also expanding across Texas — validating the multi-city state approach.</p>
                 </div>
               </div>
             </div>
@@ -312,7 +385,7 @@ export default function MarketSizeAnalogy() {
                   <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 text-sm font-bold">1</div>
                   <div>
                     <div className="font-semibold">Launch in Texas</div>
-                    <div className="text-white/70 mt-1">Austin, Houston, Dallas, San Antonio — 21.8M people across 4 metros, one permit</div>
+                    <div className="text-white/70 mt-1">Austin, Houston, Dallas, San Antonio — 21M+ people across 4 metros, one permit</div>
                   </div>
                 </div>
                 <div className="flex gap-3">
