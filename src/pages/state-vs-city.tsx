@@ -350,14 +350,15 @@ export default function MarketSizeAnalogy() {
               </div>
             </div>
 
+          </div>
+
             {/* Conclusion */}
-            <div className="px-6 sm:px-10 py-6 bg-gray-900 rounded-b-2xl">
+            <div className="bg-gray-900 rounded-2xl px-6 sm:px-10 py-6">
               <div className="text-xs font-semibold text-red-400 uppercase tracking-wider mb-2">Conclusion</div>
               <p className="text-white text-sm leading-relaxed">
                 A single-city launch puts AYRO in the same position as every failed rideshare startup — Ride Austin, Fasten, Juno. One city means one point of failure, a tiny driver pool, and an ant-sized market that Uber can crush overnight. <strong>History says this doesn't work.</strong>
               </p>
             </div>
-          </div>
         )}
 
         {/* ===== SLIDE 2: REALITY ===== */}
