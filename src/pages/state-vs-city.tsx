@@ -359,6 +359,12 @@ export default function MarketSizeAnalogy() {
               <p className="text-white text-sm leading-relaxed">
                 A single-city launch puts AYRO in the same position as every failed rideshare startup — Ride Austin, Fasten, Juno. One city means one point of failure, a tiny driver pool, and an ant-sized market that Uber can crush overnight. <strong>History says this doesn't work.</strong>
               </p>
+              <div className="mt-4 pt-4 border-t border-white/10">
+                <div className="text-xs font-semibold text-red-400 uppercase tracking-wider mb-2">Moral of the Story</div>
+                <p className="text-white/80 text-sm leading-relaxed">
+                  Launching in one city means putting an ant in a room with an elephant — <strong>not visible, not noticeable</strong>, and giving the incumbent every opportunity to crush us because we're too small. The smaller we are, the easier it is for them.
+                </p>
+              </div>
             </div>
           </div>
         )}
