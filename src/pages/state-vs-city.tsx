@@ -613,6 +613,12 @@ export default function MarketSizeAnalogy() {
               <p className="text-white text-sm leading-relaxed">
                 Texas gives AYRO a $3–4B market, 21M+ people across 4 metros, one $5K permit, no state income tax for drivers, and a proven playbook — H-E-B, Whataburger, Buc-ee's all won by dominating Texas first. We're not competing nationally against Uber. <strong>We're becoming the rideshare brand Texans choose. The baby elephant that grows up.</strong>
               </p>
+              <div className="mt-4 pt-4 border-t border-white/10">
+                <div className="text-xs font-semibold text-[#08D9C4] uppercase tracking-wider mb-2">Moral of the Story</div>
+                <p className="text-white/80 text-sm leading-relaxed">
+                  Launching in an entire state means putting a baby elephant in a room with an elephant — <strong>visible, noticeable, and it's national news</strong>. Incumbents have to make radical changes to counter us, creating a domino effect on their 2 million trips in Texas. Since Uber is too big, we have to think at least Texas-size big to counter them and make a real dent in their market share.
+                </p>
+              </div>
             </div>
           </div>
         )}
