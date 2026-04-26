@@ -255,7 +255,7 @@ export default function MarketSizeAnalogy() {
                 </div>
                 <div className="text-2xl font-bold text-gray-300 mb-20 sm:mb-24">vs</div>
                 <div className="flex flex-col items-center mb-4">
-                  <AntSVG size={32} color="#94A3B8" />
+                  <AntSVG size={32} color="#EF4444" />
                   <div className="mt-4 text-center">
                     <div className="text-base font-bold text-gray-400">AYRO</div>
                     <div className="text-sm text-gray-400">Austin only</div>
