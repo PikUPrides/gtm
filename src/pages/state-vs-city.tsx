@@ -236,6 +236,7 @@ export default function MarketSizeAnalogy() {
 
         {/* ===== SLIDE 1: PERCEPTION ===== */}
         {activeSlide === 0 && (
+          <div className="space-y-6">
           <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
             <div className="px-6 sm:px-10 pt-8 pb-4 border-b border-gray-100">
               <h2 className="text-2xl sm:text-3xl font-bold text-[#1D0652]">The Investor's Suggestion</h2>
