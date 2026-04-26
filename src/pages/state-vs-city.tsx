@@ -253,7 +253,7 @@ export default function MarketSizeAnalogy() {
                     <div className="text-xs text-gray-400 mt-1">76% market share &bull; $28.5B market</div>
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-gray-300 mb-20 sm:mb-24">vs</div>
+                <div className="text-2xl font-bold text-gray-500 mb-20 sm:mb-24">vs</div>
                 <div className="flex flex-col items-center mb-4">
                   <AntSVG size={32} color="#EF4444" />
                   <div className="mt-4 text-center">
