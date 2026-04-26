@@ -360,6 +360,7 @@ export default function MarketSizeAnalogy() {
                 A single-city launch puts AYRO in the same position as every failed rideshare startup — Ride Austin, Fasten, Juno. One city means one point of failure, a tiny driver pool, and an ant-sized market that Uber can crush overnight. <strong>History says this doesn't work.</strong>
               </p>
             </div>
+          </div>
         )}
 
         {/* ===== SLIDE 2: REALITY ===== */}
