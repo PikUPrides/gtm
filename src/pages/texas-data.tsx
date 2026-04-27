@@ -155,16 +155,16 @@ export default function TexasGTMData() {
   useEffect(() => {
     async function load() {
       try {
-        const [dmaRes, countyRes, cityRes, zipRes] = await Promise.all([
-          serenities.entities['Metro Areas'].list({ limit: 100 }),
-          serenities.entities.Counties.list({ limit: 100 }),
-          serenities.entities.Cities.list({ limit: 100 }),
-          serenities.entities['Zip Codes'].list({ limit: 200 }),
+        const [dmaRows, countyRows, cityRows, zipRows] = await Promise.all([
+          serenities.entities['Metro Areas'].list(null, 100),
+          serenities.entities.Counties.list(null, 100),
+          serenities.entities.Cities.list(null, 100),
+          serenities.entities['Zip Codes'].list(null, 200),
         ]);
-        setDmas((dmaRes.items || []).sort((a, b) => (Number(b.Population) || 0) - (Number(a.Population) || 0)));
-        setCounties(countyRes.items || []);
-        setCities(cityRes.items || []);
-        setZips(zipRes.items || []);
+        setDmas((dmaRows || []).sort((a, b) => (Number(b.Population) || 0) - (Number(a.Population) || 0)));
+        setCounties(countyRows || []);
+        setCities(cityRows || []);
+        setZips(zipRows || []);
       } catch (e) {
         console.error('Failed to load Texas data:', e);
       } finally {
