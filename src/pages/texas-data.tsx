@@ -161,10 +161,11 @@ export default function TexasGTMData() {
           serenities.entities.Cities.list(null, 100),
           serenities.entities['Zip Codes'].list(null, 200),
         ]);
-        setDmas((dmaRows || []).sort((a, b) => (Number(b.Population) || 0) - (Number(a.Population) || 0)));
-        setCounties(countyRows || []);
-        setCities(cityRows || []);
-        setZips(zipRows || []);
+        const txDmas = (dmaRows || []).filter(d => d.States && d.States.split(',').some(s => s.trim() === 'TX'));
+        setDmas(txDmas.sort((a, b) => (Number(b.Population) || 0) - (Number(a.Population) || 0)));
+        setCounties((countyRows || []).filter(c => c.State === 'Texas'));
+        setCities((cityRows || []).filter(c => c.State === 'Texas'));
+        setZips((zipRows || []).filter(z => z.State === 'Texas' || z.State === 'TX'));
       } catch (e) {
         console.error('Failed to load Texas data:', e);
       } finally {
